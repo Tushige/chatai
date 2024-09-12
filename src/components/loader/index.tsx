@@ -1,12 +1,18 @@
 'use client'
 import React from 'react'
 import {motion} from 'framer-motion'
+import { cn } from '@/lib/utils'
 
-const Loader = () => {
+type Props = {
+  className?: string
+}
+const Loader = ({
+  className
+}: Props) => {
   return (
     <div className="w-full h-full flex justify-center items-center">
       <motion.div
-        className="w-[100px] h-[100px] bg-fuchsia-900"
+        className={cn("w-[100px] h-[100px] bg-foreground", className)}
         animate={{
           scale: [1, 2, 2, 1, 1],
           rotate: [0, 0, 270, 270, 0],

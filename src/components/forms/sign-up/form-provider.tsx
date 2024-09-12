@@ -30,8 +30,6 @@ const SignupFormProvider = ({children}: Props) => {
   })
   const {formState: {errors}} = methods;
   const handleSubmit = async (data: UserRegistrationProps) => {
-    console.log("HANDLE SUBMIT CALLED")
-    console.log(data)
     if (!isLoaded) return
 
     try {
@@ -39,20 +37,14 @@ const SignupFormProvider = ({children}: Props) => {
       const res = await signUp.attemptEmailAddressVerification({
         code: data.otp
       })
-      console.log('[FORM] Complete')
-      console.log(res)
       if (res.status === COMPLETE) {
         if (!signUp.createdUserId) return
-        console.log('[FORM] creating user in db')
         const registered = await createUser(
           data.fullname,
           signUp.createdUserId,
           data.type
         )
-        console.log('user created')
-        console.log(registered)
         if (registered?.status === 200 && registered?.user) {
-          console.log(`setting active session`)
           await setActive({
             session: res.createdSessionId
           })

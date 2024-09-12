@@ -11,7 +11,7 @@ const Layout = async ({children}: {
   const authUser = await getAuthUser(clerkUser.id)
   return (
     <div className="flex h-screen w-full">
-      <AppSideBar domains={authUser.domain} />
+      <AppSideBar domains={authUser.domains} />
       <div className="w-full h-screen flex flex-col pl-20 md:pl-4">
         {children}
       </div>

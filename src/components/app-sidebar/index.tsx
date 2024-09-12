@@ -8,13 +8,14 @@ import {
   ChatBubbleOvalLeftIcon,
   Cog6ToothIcon,
   PencilSquareIcon,
-  SquaresPlusIcon,
-  PlusIcon
+  SquaresPlusIcon
 } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { Button } from '../ui/button'
+import { DomainMenu } from './domain/domain'
+import { Domain } from '@/schemas/domain.schema'
 
 type LinkProp = {
   label: string,
@@ -56,11 +57,7 @@ const links: LinkProp[] = [
 ]
 
 type Props = {
-  domains: {
-    id: string,
-    name: string,
-    icon: string
-  }[] | null | undefined
+  domains: Domain[] | null | undefined
 }
 const AppSideBar = ({
   domains
@@ -75,7 +72,7 @@ const AppSideBar = ({
         </div>
       </h2>
      <Menu pathname={pathname}/>
-     <DomainMenu />
+     <DomainMenu domains={domains}/>
      <MenuOptions />
     </div>
   )
@@ -118,16 +115,6 @@ function MenuItem({link, pathname}: {
         </span>
       </Link>
     </li>
-  )
-}
-function DomainMenu() {
-  return (
-    <div className="flex justify-center md:justify-between items-center p-4">
-      <span className="hidden md:inline-block">Domains</span>
-      <Button className="bg-background rounded-full hover:bg-muted">
-        <PlusIcon className="w-6 text-foreground" />
-      </Button>
-    </div>
   )
 }
 function MenuOptions() {
