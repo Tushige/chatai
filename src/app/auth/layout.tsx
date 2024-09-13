@@ -1,15 +1,16 @@
+import { AuthContext } from '@/context/use-auth-context'
 import { currentUser } from '@clerk/nextjs'
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
-import React from 'react'
+import React, { useContext } from 'react'
 
 const layout = async ({
   children
 }: {
   children: React.ReactNode
 }) => {
-  const user = await currentUser()
-  if (user) redirect('/')
+  const {authuser} = useContext(AuthContext)
+  if (authuser) redirect('/')
   return (
     <div className="h-screen flex w-full justify-center">
       <div className="w-[600px] flex flex-col items-start p-6">

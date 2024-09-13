@@ -4,7 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSignIn } from "@clerk/nextjs"
 import { useRouter } from "next/navigation"
-import { AuthContextProvider } from '@/context/use-auth-context'
+import { StepsContextProvider } from '@/context/use-steps-context'
 import {UserRegistrationProps, UserRegistrationSchema, UserSigninProps, UserSigninSchema} from '@/schemas/auth.schema'
 import { useToast } from '@/hooks/use-toast'
 import { onCompleteUserRegistration } from '@/actions/user'
@@ -57,7 +57,7 @@ const SigninFormProvider = ({children}: Props) => {
     }
   }
   return (
-    <AuthContextProvider>
+    <FormStepsProvider>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(handleSubmit)} className="h-full">
           {
@@ -69,7 +69,7 @@ const SigninFormProvider = ({children}: Props) => {
           }
         </form>
       </FormProvider>
-    </AuthContextProvider>
+    </FormStepsProvider>
   )
 }
 

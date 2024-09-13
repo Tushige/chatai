@@ -1,14 +1,14 @@
 import React from 'react'
 import FormBuilder from '../form-builder'
 import { useFormContext } from 'react-hook-form'
-import { useAuthContext } from '@/context/use-auth-context'
+import { useStepsContext } from '@/context/use-steps-context'
 import { Button } from '@/components/ui/button'
 import { useSignUp } from '@clerk/nextjs'
 import { useToast } from '@/hooks/use-toast'
 
 const UserDetailsForm = () => {
   const {toast} = useToast()
-  const { setCurrentStep } = useAuthContext()
+  const { setCurrentStep } = useStepsContext()
   const { signUp, isLoaded } = useSignUp()
   const {register, formState, getFieldState, getValues} = useFormContext() 
   const {isDirty: fullnameDirty} = getFieldState('fullname', formState)

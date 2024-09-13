@@ -1,9 +1,9 @@
 'use client'
-import { useAuthContext } from "@/context/use-auth-context"
+import { useStepsContext } from "@/context/use-steps-context"
 import { cn } from "@/lib/utils"
 
 const FormProgressBar = () => {
-  const {currentStep} = useAuthContext()
+  const {currentStep} = useStepsContext()
 
   return (
     <div className="grid grid-cols-3 gap-3 w-full">

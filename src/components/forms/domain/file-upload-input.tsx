@@ -28,6 +28,7 @@ const FileUploadInput = ({
           type="file"
           id="upload-button"
           name="icon"
+          defaultValue={undefined}
           // className="hidden"
         />
       </Label>

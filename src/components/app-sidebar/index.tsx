@@ -122,7 +122,7 @@ function MenuOptions() {
     <div className="bg-background p-4 absolute bottom-0 w-full">
       <Button className="w-full bg-background rounded-md flex flex-row gap-2 flex-start hover:bg-muted">
         <ArrowLeftEndOnRectangleIcon className="w-6 text-foreground" />
-        <Link href="/sign-out" className="text-foreground text-medium">
+        <Link href="/auth/sign-out" className="text-foreground text-medium hidden md:inline-block">
           Sign Out
         </Link>
       </Button>

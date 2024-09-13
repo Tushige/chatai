@@ -6,7 +6,7 @@ import { auth, currentUser, redirectToSignIn} from '@clerk/nextjs'
 /*
  create a user in the database
 */
-export const createUser = async (
+const createUser = async (
   fullname: string,
   clerkId: string,
   type: string
@@ -40,7 +40,7 @@ export const createUser = async (
   }
 }
 
-export const getAuthUser = async(clerkId: string) => {
+const getAuthUser = async(clerkId: string) => {
   try {
     const user = await client.user.findUnique({
       where: {
@@ -71,12 +71,13 @@ export const getAuthUser = async(clerkId: string) => {
     })
     return user;
   } catch (err) {
+    console.error(err)
     return {
-      status: 400
+      status: 400,
+      message: err
     }
   }
 }
-
 type createDomainReturn = {
   status: number,
   message: string
@@ -84,7 +85,7 @@ type createDomainReturn = {
 /**
  * add a Domain document to the User
  */
-export const createDomain = async({
+const createDomain = async({
   name,
   icon,
   welcomeMessage
@@ -173,4 +174,10 @@ export const createDomain = async({
       message: 'Failed creating Domain'
     }
   }
+}
+
+export {
+  createUser,
+  getAuthUser,
+  createDomain
 }

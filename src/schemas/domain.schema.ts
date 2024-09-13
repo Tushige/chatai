@@ -3,19 +3,20 @@ import { z, ZodType } from "zod";
 export const MAX_UPLOAD_SIZE = 1024 * 1024 * 2 // 2MB
 export const ACCEPTED_FILE_TYPES = ['image/png', 'image/jpg', 'image/jpeg']
 
-export interface Domain {
-  id: string,
+
+/**
+ * fields you need to CREATE a Domain record
+ */
+export interface DomainProps {
   name: string,
-  icon: string // Upload Care image id
+  icon?: any,
 }
 
 /**
- * fields you need to create a Domain record
+ * fields you need to UPDATE a Domain record
  */
-export type DomainProps = {
-  name: string,
-  icon?: any,
-  welcomeMessage?: string
+export interface DomainUpdateProps extends DomainProps {
+  welcomeMessage: string
 }
 
 export const DomainSchema: ZodType<DomainProps> = z
@@ -28,12 +29,17 @@ export const DomainSchema: ZodType<DomainProps> = z
     ),
     icon: z
       .any()
+      .optional()
       .refine((files) => {
+        if (!files) return true
         return files?.[0]?.size <= MAX_UPLOAD_SIZE
       }, {
         message: `Your file size must be less then 2MB. Your size`,
       })
-      .refine((files) => ACCEPTED_FILE_TYPES.includes(files?.[0]?.type), {
+      .refine((files) => {
+        if (!files) return true
+        return ACCEPTED_FILE_TYPES.includes(files?.[0]?.type)
+      }, {
         message: 'Only JPG, JPEG & PNG are accepted file formats',
       }),
     welcomeMessage:  z

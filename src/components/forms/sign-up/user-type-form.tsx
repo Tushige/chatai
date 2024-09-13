@@ -12,11 +12,11 @@ import { UserType } from '@/schemas/auth.schema'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { useAuthContext } from '@/context/use-auth-context'
+import { useStepsContext } from '@/context/use-steps-context'
 
 const UserTypeForm = () => {
   const { register } = useFormContext()
-  const { setCurrentStep, currentStep } = useAuthContext()
+  const { setCurrentStep, currentStep } = useStepsContext()
   const [userType, setUserType] = useState<UserType>('individual')
   return (
     <div>

@@ -4,7 +4,6 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSignUp } from "@clerk/nextjs"
 import { useRouter } from "next/navigation"
-import { AuthContextProvider } from '@/context/use-auth-context'
 import {UserRegistrationProps, UserRegistrationSchema} from '@/schemas/auth.schema'
 import { useToast } from '@/hooks/use-toast'
 import { createUser } from '@/actions/user'
@@ -70,19 +69,17 @@ const SignupFormProvider = ({children}: Props) => {
     }
   }
   return (
-    <AuthContextProvider>
-      <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(handleSubmit)} className="h-full">
-          {
-            loading ? (
-              <Loader />
-            ) : (
-              children
-            )
-          }
-        </form>
-      </FormProvider>
-    </AuthContextProvider>
+    <FormProvider {...methods}>
+      <form onSubmit={methods.handleSubmit(handleSubmit)} className="h-full">
+        {
+          loading ? (
+            <Loader />
+          ) : (
+            children
+          )
+        }
+      </form>
+    </FormProvider>
   )
 }
 

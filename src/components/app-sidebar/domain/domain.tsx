@@ -24,9 +24,11 @@ function DomainMenu({
         {
           domains?.map(domain => {
             return (
-              <li className="m-auto p-8 w-fit md:w-full cursor-pointer hover:bg-muted">
+              <li
+                key={domain.id}
+                className="m-auto p-8 w-fit rounded-full md:rounded-none md:w-full cursor-pointer hover:bg-muted">
                 <Link
-                  href={`/settings/${domain.name.split('.')[1]}`}
+                  href={`/domains/${domain.id}`}
                   className="flex flex-row justify-center md:justify-start gap-2"
                 >
                   <Image

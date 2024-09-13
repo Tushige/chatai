@@ -1,37 +1,37 @@
+
 'use client'
-import React, {useState, createContext, useContext} from 'react'
+import { getAuthId } from "@/actions/auth"
+import { createContext, useEffect, useState } from "react"
 
-type InitialValuesProps = {
-  currentStep: number,
-  setCurrentStep: React.Dispatch<React.SetStateAction<number>>
+type AuthContextProps = {
+  authId: string,
+  loading: boolean
 }
+const AuthContext = createContext<AuthContextProps | null>(null)
 
-const InitialValues: InitialValuesProps = {
-  currentStep: 1,
-  setCurrentStep: () => undefined
-}
-
-const authContext = createContext(InitialValues)
-
-const { Provider } = authContext
- 
-export const AuthContextProvider = ({children} : {
+const AuthProvider = ({children}: {
   children: React.ReactNode
 }) => {
-  const [currentStep, setCurrentStep] = useState<number>(InitialValues.currentStep)
+  const [authId, setAuthId] = useState<string | null>(null)
+  const [loading, setLoading] = useState<boolean>(true)
+  useEffect(() => {
+    const fetchUser = async () => {
+      setLoading(true)
+      const userId = await getAuthId()
+      setAuthId(userId)
+      setLoading(false)
+    }
+    fetchUser()
+  }, [])
 
-  const values = {
-    currentStep,
-    setCurrentStep
-  }
   return (
-    <Provider value={values}>
+    <AuthContext.Provider value={{authId, loading}}>
       {children}
-    </Provider>
+    </AuthContext.Provider>
   )
 }
 
-export const useAuthContext = () => {
-  const state = useContext(authContext)
-  return state
+export {
+  AuthProvider,
+  AuthContext
 }

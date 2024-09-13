@@ -1,41 +1,44 @@
 'use client'
-import { createDomain } from '@/actions/user'
+import { updateDomain } from '@/actions/domain'
 import Loader from '@/components/loader'
 import { useToast } from '@/hooks/use-toast'
 import { uploadCareUpload } from '@/lib/upload-care'
-import { DomainProps, DomainSchema } from '@/schemas/domain.schema'
+import { DomainSchema, DomainUpdateProps } from '@/schemas/domain.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-const DomainAddFormProvider = ({initialData, children}: {
-  initialData?: DomainProps
+const DomainUpdateFormProvider = ({domainId, initialData, children}: {
+  domainId: string,
+  initialData?: DomainUpdateProps
   children: React.ReactNode
 }) => {
   const {toast} = useToast()
+  const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
-  
-  const methods = useForm<DomainProps>({
+  const methods = useForm<DomainUpdateProps>({
     resolver: zodResolver(DomainSchema),
-    defaultValues: initialData
+    defaultValues: {
+      ...initialData,
+      icon: undefined
+    }
   })
-  const handleSubmit = async (data: DomainProps) => {
+  const handleSubmit = async (data: DomainUpdateProps) => {
     try {
       setLoading(true)
-      // 1. upload the icon to Upload Care
-      let iconId = null
       if (data.icon) {
         const uploadCareImage = await uploadCareUpload(data.icon[0])
-        iconId = uploadCareImage.uuid
+        data.icon = uploadCareImage.uuid
       }
-      const {status, message} = await createDomain({
-        name: data.name,
-        icon: iconId
-      })
+      const cleanedData = Object.fromEntries(
+        Object.entries(data).filter(([key, value]) => value !== null && value !== undefined)
+      );
+      const {status, message} = await updateDomain(domainId, cleanedData)
       if (status === 200) {
         toast({
           title: 'Success',
-          description: `${data.name} successfully added`
+          description: `${data.name} successfully updated`
         })
       } else {
         toast({
@@ -43,8 +46,9 @@ const DomainAddFormProvider = ({initialData, children}: {
           description: message
         })
       }
+      router.refresh()
     } catch (err) {
-      console.error('failed creating domain with error: ', err)
+      console.error('failed updating domain with error: ', err)
       toast({
         title: 'Error',
         description: 'Something went wrong! Please try again.'
@@ -72,4 +76,4 @@ const DomainAddFormProvider = ({initialData, children}: {
   )
 }
 
-export default DomainAddFormProvider
+export default DomainUpdateFormProvider
