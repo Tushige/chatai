@@ -5,14 +5,17 @@ import { useToast } from '@/hooks/use-toast'
 import { uploadCareUpload } from '@/lib/upload-care'
 import { DomainProps, DomainSchema } from '@/schemas/domain.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-const DomainAddFormProvider = ({initialData, children}: {
-  initialData?: DomainProps
+const DomainAddFormProvider = ({initialData, onSuccess, children}: {
+  initialData?: DomainProps,
+  onSuccess: Function,
   children: React.ReactNode
 }) => {
   const {toast} = useToast()
+  const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
   
   const methods = useForm<DomainProps>({
@@ -37,6 +40,8 @@ const DomainAddFormProvider = ({initialData, children}: {
           title: 'Success',
           description: `${data.name} successfully added`
         })
+        onSuccess()
+        router.refresh()
       } else {
         toast({
           title: 'Error',

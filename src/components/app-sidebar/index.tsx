@@ -14,8 +14,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { Button } from '../ui/button'
-import { DomainMenu } from './domain/domain'
-import { Domain } from '@/schemas/domain.schema'
+import { DomainMenu } from './domain/domain-menu'
+import { Domain } from '@prisma/client'
 
 type LinkProp = {
   label: string,

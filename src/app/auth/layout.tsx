@@ -9,8 +9,9 @@ const layout = async ({
 }: {
   children: React.ReactNode
 }) => {
-  const {authuser} = useContext(AuthContext)
-  if (authuser) redirect('/')
+  // TODO - uncomment this to prevent authenticated users from accessing the auth flow
+  // const {authId} = useContext(AuthContext)
+  // if (authId) redirect('/')
   return (
     <div className="h-screen flex w-full justify-center">
       <div className="w-[600px] flex flex-col items-start p-6">

@@ -6,8 +6,15 @@ import FileUploadInput from './file-upload-input'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
+import { cn } from '@/lib/utils'
 
-const DomainUpdateForm = () => {
+
+type Props = {
+  className?: string
+}
+const DomainUpdateForm = ({
+  className
+}: Props) => {
   const {register, formState, getFieldState} = useFormContext()
   const {errors} = formState
 
@@ -16,7 +23,7 @@ const DomainUpdateForm = () => {
   const {isDirty: welcomeMessageDirty} = getFieldState('welcomeMessage', formState)
 
   return (
-    <div className="w-[400px]">
+    <div className={cn(className)}>
       <FormBuilder
         type="text"
         inputType="input"
@@ -32,6 +39,9 @@ const DomainUpdateForm = () => {
       <div className="mt-2">
         <Label htmlFor="welcomeMessage">
           Greeting Message
+          <p className="text-sm text-muted">
+            The message the chatbot will greet clients with.
+          </p>
           <Textarea
             id="welcomeMessage"
             className="mt-2"

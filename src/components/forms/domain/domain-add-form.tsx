@@ -4,7 +4,9 @@ import { useFormContext } from 'react-hook-form'
 import FileUploadInput from './file-upload-input'
 import { Button } from '@/components/ui/button'
 
-const DomainAddForm = () => {
+const DomainAddForm = ({
+  closeDrawer
+}) => {
   const {register, formState} = useFormContext()
   const {errors} = formState
   return (
@@ -21,9 +23,18 @@ const DomainAddForm = () => {
       <div className="mt-4">
         <FileUploadInput register={register} errors={errors}/>
       </div>
-      <Button type="submit" className="w-full mt-4 bg-background text-foreground text-medium rounded-md flex flex-row gap-2 flex-start hover:bg-muted">
-        Add Domain
-      </Button>
+      <div className="flex justify-between items-end gap-2">
+        <Button
+          type="button"
+          onClick={closeDrawer}
+          className="bg-transparent text-foreground border-none shadow-none hover:bg-transparent "
+        >
+          Cancel
+        </Button>
+        <Button type="submit" className="w-full mt-4 bg-background text-foreground text-medium rounded-md flex flex-row gap-2 flex-start hover:bg-muted hover:text-black">
+          Add Domain
+        </Button>
+      </div>
     </div>
   )
 }

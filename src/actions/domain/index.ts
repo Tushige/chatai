@@ -86,9 +86,32 @@ const updateDomain = async (id, {
     }
   }
 }
-
+const deleteDomain = async (id) => {
+  try {
+    const deleted = await client.domain.delete({
+      where: {
+        id
+      }
+    })
+    if (deleted) {
+      return {
+        status: 200,
+        message: 'successfully deleted domain'
+      }
+    } else {
+      throw Error('failed to delete domain')
+    }
+  } catch (err) {
+    console.error(err) 
+    return {
+      status: 400,
+      message: err
+    }
+  }
+}
 export {
   getDomain,
-  updateDomain
+  updateDomain,
+  deleteDomain
 }
 

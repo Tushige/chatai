@@ -5,11 +5,13 @@
 'use client'
 import DomainAddForm from "@/components/forms/domain/domain-add-form"
 import DomainAddFormProvider from "@/components/forms/domain/domain-add-form-provider"
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer"
-import { Domain } from "@/schemas/domain.schema"
+import { Button } from "@/components/ui/button"
+import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from "@/components/ui/drawer"
 import { PlusIcon } from "@heroicons/react/24/outline"
+import { Domain } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
+import { useState } from "react"
 
 
 function DomainMenu({
@@ -52,13 +54,14 @@ function DomainMenu({
 }
 
 function DomainCreateForm() {
+  const [open, setOpen] = useState(false)
   return (
-    <Drawer>
+    <Drawer open={open}>
       <div className="flex justify-center md:justify-between items-center p-4">
         <span className="hidden md:inline-block">Domains</span>
-        <DrawerTrigger className="bg-background rounded-full hover:bg-muted p-2">
+        <Button className="bg-background rounded-full hover:bg-muted p-2" onClick={() => setOpen(true)}>
           <PlusIcon className="w-6 text-foreground" />
-        </DrawerTrigger>
+        </Button>
       </div>
       <DrawerContent className="pb-12">
         <div className="mx-auto w-full max-w-sm">
@@ -69,8 +72,8 @@ function DomainCreateForm() {
             <DrawerDescription>
               Each chatbot will be associated with a domain
             </DrawerDescription>
-            <DomainAddFormProvider>
-              <DomainAddForm />
+            <DomainAddFormProvider onSuccess={() => setOpen(false)}>
+              <DomainAddForm closeDrawer={() => setOpen(false)} />
             </DomainAddFormProvider>
           </DrawerHeader>
         </div>

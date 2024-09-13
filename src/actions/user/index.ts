@@ -17,7 +17,7 @@ const createUser = async (
         fullname,
         clerkId,
         type,
-        subscription: {
+        billing: {
           create: {}
         }
       },
@@ -106,7 +106,7 @@ const createDomain = async({
             domains: true
           }
         },
-        subscription: {
+        billing: {
           select: {
             plan: true
           }
@@ -129,7 +129,7 @@ const createDomain = async({
         message: 'Domain already exists'
       }
     }
-    const planType = user?.subscription?.plan
+    const planType = user?.billing?.plan
     // return early if user has reached their max capacity
     if (
       (planType === 'PRO' && user._count.domains > 7) ||
