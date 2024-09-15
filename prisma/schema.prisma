@@ -49,6 +49,7 @@ model Domain {
 
 model ChatBot {
   id             String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  chatBotKitId   String
   welcomeMessage String?
   icon           String?
   background     String?

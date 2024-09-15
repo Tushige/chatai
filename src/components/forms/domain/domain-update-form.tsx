@@ -38,7 +38,7 @@ const DomainUpdateForm = ({
       </div>
       <div className="mt-2">
         <Label htmlFor="welcomeMessage">
-          Greeting Message
+          Chatbot Greeting Message
           <p className="text-sm text-muted">
             The message the chatbot will greet clients with.
           </p>

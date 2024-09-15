@@ -1,5 +1,6 @@
 'use client'
-import { useClerk } from '@clerk/nextjs'
+import { getAuthId } from '@/actions/auth'
+import { currentUser, useClerk } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 
@@ -8,7 +9,12 @@ const Page = () => {
   const router = useRouter()
   useEffect(() => {
     const doSignOut = async () => {
-      await signOut(() => router.push('/'))
+      const a= await signOut()
+      // console.log('signout response')
+      // console.log(a)
+      const user = await getAuthId()
+      // console.log('this is id')
+      // console.log(user)
     }
     doSignOut()
   }, [])

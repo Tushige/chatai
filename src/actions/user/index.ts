@@ -2,6 +2,8 @@
 import { client } from '@/lib/prisma'
 import { DomainProps } from '@/schemas/domain.schema'
 import { auth, currentUser, redirectToSignIn} from '@clerk/nextjs'
+import { createChatbotForDomain } from '../chatbot.action'
+import ChatBotKit from '@chatbotkit/sdk'
 
 /*
  create a user in the database
@@ -87,6 +89,7 @@ type createDomainReturn = {
  */
 const createDomain = async({
   name,
+  botName,
   icon,
   welcomeMessage
 }: DomainProps): Promise<createDomainReturn> => {
@@ -140,6 +143,10 @@ const createDomain = async({
           message: "You've reached the maximum number of domains. Upgrade your plan to add more domains."
         }
     }
+    const bot = await createChatbotForDomain(botName)
+    if (!bot) {
+      throw new Error('Failed to create Bot')
+    }
     const createdDomain = await client.user.update({
       where: {
         clerkId: authUser.id
@@ -151,7 +158,8 @@ const createDomain = async({
             icon,
             chatBot: {
               create: {
-                welcomeMessage: "Hi, how are you? Do you have any questions for us?"
+                welcomeMessage: "Hi, how are you? Do you have any questions for us?",
+                chatBotKitId: bot?.id
               }
             }
           }

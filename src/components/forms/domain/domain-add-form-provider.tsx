@@ -33,6 +33,7 @@ const DomainAddFormProvider = ({initialData, onSuccess, children}: {
       }
       const {status, message} = await createDomain({
         name: data.name,
+        botName: data.botName,
         icon: iconId
       })
       if (status === 200) {

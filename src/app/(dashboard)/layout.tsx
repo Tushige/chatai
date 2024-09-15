@@ -1,18 +1,25 @@
+import { getAuthId } from '@/actions/auth'
 import { getAuthUser } from '@/actions/user'
 import AppSideBar from '@/components/app-sidebar'
 import { currentUser } from '@clerk/nextjs'
+import { redirect } from 'next/navigation'
 import React from 'react'
 
 const Layout = async ({children}: {
   children: React.ReactNode
 }) => {
-  const clerkUser = await currentUser()
-  if (!clerkUser) return
-  const authUser = await getAuthUser(clerkUser.id)
+  const clerkId = await getAuthId()
+  if (!clerkId) return
+  const authUser = await getAuthUser(clerkId)
+  if (!authUser) {
+    redirect('/')
+  }
   return (
-    <div className="flex h-screen w-full">
-      <AppSideBar domains={authUser.domains} />
-      <div className="w-full h-screen flex flex-col pl-20 md:pl-4">
+    <div className="flex h-screen w-full overflow-hidden">
+      <div className="sticky top-0 left-0">
+        <AppSideBar domains={authUser.domains} />
+      </div>
+      <div className="w-full h-screen flex flex-col pl-2 md:pl-4 overflow-y-scroll pb-12">
         {children}
       </div>
     </div>

@@ -28,10 +28,10 @@ function DomainMenu({
             return (
               <li
                 key={domain.id}
-                className="m-auto p-8 w-fit rounded-full md:rounded-none md:w-full cursor-pointer hover:bg-muted">
+                className="m-auto p-4 w-fit rounded-full lg:rounded-none lg:w-full cursor-pointer hover:bg-muted">
                 <Link
                   href={`/domains/${domain.id}`}
-                  className="flex flex-row justify-center md:justify-start gap-2"
+                  className="flex flex-row justify-center lg:justify-start gap-2"
                 >
                   <Image
                     src={`https://ucarecdn.com/${domain.icon}/-/preview/64x64`}
@@ -40,7 +40,7 @@ function DomainMenu({
                     alt={`logo for the domain ${domain.name}`}
                     unoptimized
                   />
-                  <span className="hidden md:inline-block">
+                  <span className="hidden lg:inline-block">
                     {domain.name}
                   </span>
                 </Link>
@@ -57,8 +57,8 @@ function DomainCreateForm() {
   const [open, setOpen] = useState(false)
   return (
     <Drawer open={open}>
-      <div className="flex justify-center md:justify-between items-center p-4">
-        <span className="hidden md:inline-block">Domains</span>
+      <div className="flex justify-center lg:justify-between items-center p-4">
+        <span className="hidden lg:inline-block">Domains</span>
         <Button className="bg-background rounded-full hover:bg-muted p-2" onClick={() => setOpen(true)}>
           <PlusIcon className="w-6 text-foreground" />
         </Button>

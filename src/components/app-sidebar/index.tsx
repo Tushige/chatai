@@ -64,10 +64,11 @@ const AppSideBar = ({
 }: Props) => {
   const pathname = usePathname()
   return (
-    <div className="bg-background min-w-[100px] md:min-w-[300px] relative">
-      <h2 className="flex items-center justify-center md:justify-start row gap-4 p-4 w-full">
+    <div className="bg-background min-w-[100px] lg:min-w-[300px] h-full"
+    >
+      <h2 className="flex items-center justify-center lg:justify-start row gap-4 p-4 w-full">
         <AppLogo/>
-        <div className="text-2xl font-black hidden md:block">
+        <div className="text-2xl font-black hidden lg:block">
           ENVISION <span className="font-medium">AI</span>
         </div>
       </h2>
@@ -107,10 +108,10 @@ function MenuItem({link, pathname}: {
     >
       <Link 
         href={link.href}
-        className={cn("w-full justify-center md:justify-start flex h-[48px] grow items-center gap-2 rounded-md p-3 text-sm font-medium")}
+        className={cn("w-full justify-center lg:justify-start flex h-[48px] grow items-center gap-2 rounded-md p-3 text-sm font-medium")}
       >
         <Icon className="w-6"/>
-        <span className="hidden md:block">
+        <span className="hidden lg:block">
           {link.label}
         </span>
       </Link>
@@ -122,7 +123,7 @@ function MenuOptions() {
     <div className="bg-background p-4 absolute bottom-0 w-full">
       <Button className="w-full bg-background rounded-md flex flex-row gap-2 flex-start hover:bg-muted">
         <ArrowLeftEndOnRectangleIcon className="w-6 text-foreground" />
-        <Link href="/auth/sign-out" className="text-foreground text-medium hidden md:inline-block">
+        <Link href="/auth/sign-out" className="text-foreground text-medium hidden lg:inline-block">
           Sign Out
         </Link>
       </Button>

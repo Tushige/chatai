@@ -1,5 +1,7 @@
 import {getDomain} from '@/actions/domain'
 import { Separator } from '@/components/ui/separator'
+import ChatWindow from '@/ui/chat-window'
+import DomainCodeIntegration from '@/ui/domain/domain-code-integration'
 import DomainSettings from '@/ui/domain/domain-settings'
 import { redirect } from 'next/navigation'
 import React from 'react'
@@ -20,13 +22,9 @@ const DomainSettingsPage = async ({params}) => {
           Modify domain and chatbox settings
         </p>
       </div>
-      <div>
-        <h2>
-          Domain Settings
-        </h2>
-        <Separator className="mb-8"/>
-        <DomainSettings domain={domain} />
-      </div>
+      <DomainCodeIntegration domain={domain}/>
+      <DomainSettings domain={domain} />
+      <ChatWindow domain={domain}/>
     </div>
   )
 }

@@ -21,14 +21,20 @@ body {
 
 @layer base {
   :root {
-    --background: #F5EBEB;
-    --foreground: #867070;
+    /* 1->4 = dark -> light*/
+    --color-1: #674636;
+    --color-2: #AAB396;
+    --color-3: #F7EED3;
+    --color-4: #FFF8E8;
 
-    --card: #F5EBEB;
-    --card-foreground: #867070;
+    --background: var(--color-4);
+    --foreground: var(--color-1);
 
-    --popover: #F5EBEB;
-    --popover-foreground: #867070;
+    --card: var(--color-4);
+    --card-foreground: var(--color-1);
+
+    --popover: var(--color-4);
+    --popover-foreground: var(--color-1);
 
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
@@ -36,8 +42,8 @@ body {
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
-    --muted: #E4D0D0;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: var(--color-3);
+    --muted-foreground: var(--color-1);
 
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
@@ -48,8 +54,10 @@ body {
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: "#867070";
-
     --radius: 0.5rem;
+
+    --text: var(--color-1);
+    --text-hover: white;
   }
 
   .dark {

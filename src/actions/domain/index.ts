@@ -20,7 +20,8 @@ const getDomain = async(domainId: string) => {
           select: {
             id: true,
             welcomeMessage: true,
-            icon: true
+            icon: true,
+            chatBotKitId: true
           }
         },
         user: {

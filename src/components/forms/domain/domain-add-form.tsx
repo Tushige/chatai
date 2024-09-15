@@ -20,6 +20,16 @@ const DomainAddForm = ({
         register={register}
         errors={errors}
       />
+      <FormBuilder
+        type="text"
+        inputType="input"
+        label="ChatBot Name"
+        placeholder="What do you wanna name your bot?"
+        name="botName"
+        register={register}
+        errors={errors}
+        className="mt-2"
+      />
       <div className="mt-4">
         <FileUploadInput register={register} errors={errors}/>
       </div>

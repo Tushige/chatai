@@ -5,6 +5,7 @@ import { ErrorMessage } from '@hookform/error-message'
 import React from 'react'
 import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form'
 import { Textarea } from '@/components/ui/textarea'
+import { cn } from '@/lib/utils'
 
 type Props = {
   type: 'text' | 'email' | 'password'
@@ -17,7 +18,8 @@ type Props = {
   errors: FieldErrors<FieldValues>
   lines?: number
   form?: string
-  defaultValue?: string
+  defaultValue?: string,
+  className?: string
 }
 
 const FormBuilder = ({
@@ -32,13 +34,14 @@ const FormBuilder = ({
   label,
   lines,
   options,
+  className
 }: Props) => {
   switch (inputType) {
     case 'input':
     default:
       return (
         <Label
-          className="flex flex-col gap-2"
+          className={cn("flex flex-col gap-2", className)}
           htmlFor={`input-${label}`}
         >
           {label && label}
@@ -63,7 +66,7 @@ const FormBuilder = ({
       )
     case 'select':
       return (
-        <Label htmlFor={`select-${label}`}>
+        <Label htmlFor={`select-${label}`} className={cn(className)}>
           {label && label}
           <select
             form={form}
@@ -94,7 +97,7 @@ const FormBuilder = ({
     case 'textarea':
       return (
         <Label
-          className="flex flex-col gap-2"
+          className={cn("flex flex-col gap-2", className)}
           htmlFor={`input-${label}`}
         >
           {label && label}
