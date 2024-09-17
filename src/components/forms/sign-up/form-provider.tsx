@@ -6,7 +6,7 @@ import { useSignUp } from "@clerk/nextjs"
 import { useRouter } from "next/navigation"
 import {UserRegistrationProps, UserRegistrationSchema} from '@/schemas/auth.schema'
 import { useToast } from '@/hooks/use-toast'
-import { createUser } from '@/actions/user'
+import { createUser } from '@/actions/user.action'
 import Loader from '@/components/loader'
 
 type Props = {

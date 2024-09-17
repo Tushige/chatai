@@ -1,4 +1,4 @@
-import {getDomain} from '@/actions/domain'
+import {getDomain} from '@/actions/domain.action'
 import { Separator } from '@/components/ui/separator'
 import ChatWindow from '@/ui/chat-window'
 import DomainCodeIntegration from '@/ui/domain/domain-code-integration'

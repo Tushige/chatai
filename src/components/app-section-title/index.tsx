@@ -1,15 +1,18 @@
+import { cn } from '@/lib/utils'
 import React from 'react'
 
 type Props = {
   title: string,
-  description: string
+  description?: string,
+  className?: string
 }
 const SectionTitle = ({
   title,
-  description
-}) => {
+  description,
+  className
+}: Props) => {
   return (
-    <div>
+    <div className={cn(className)}>
       <h2 className="font-medium text-2xl">{title}</h2>
       <p>{description}</p>
     </div>

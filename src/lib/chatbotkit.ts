@@ -13,7 +13,11 @@ export {
 export const client = new ChatBotKit({
   secret: process.env.CHATBOTKIT_API_KEY!
 })
-
+/**
+ * 
+ * @param userId 
+ * @returns 
+ */
 export function getCBKUserClient(userId: string) {
   return new ChatBotKit({
     secret: process.env.CHATBOTKIT_API_KEY!,

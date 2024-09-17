@@ -15,7 +15,7 @@ type UserAuthType = {
 const getAuthId = async () => {
   // const clerkUser = await currentUser()
   // return clerkUser?.id || null
-  const {userId} = auth()
+  const {userId} = await auth()
   return userId
 }
 

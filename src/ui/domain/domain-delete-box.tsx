@@ -1,5 +1,5 @@
 'use client'
-import { deleteDomain } from '@/actions/domain'
+import { deleteDomain } from '@/actions/domain.action'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
 import { cn } from '@/lib/utils'

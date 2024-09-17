@@ -48,15 +48,16 @@ model Domain {
 }
 
 model ChatBot {
-  id             String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   chatBotKitId   String
   welcomeMessage String?
+  conversations  String[] @default([])
   icon           String?
   background     String?
   textColor      String?
-  helpdesk       Boolean @default(false)
-  domain         Domain? @relation(fields: [domainId], references: [id], onDelete: Cascade)
-  domainId       String? @unique @db.Uuid
+  helpdesk       Boolean  @default(false)
+  domain         Domain?  @relation(fields: [domainId], references: [id], onDelete: Cascade)
+  domainId       String?  @unique @db.Uuid
 }
 
 model Billings {

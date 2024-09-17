@@ -1,5 +1,5 @@
 'use client'
-import { createDomain } from '@/actions/user'
+import { createDomain } from '@/actions/user.action'
 import Loader from '@/components/loader'
 import { useToast } from '@/hooks/use-toast'
 import { uploadCareUpload } from '@/lib/upload-care'

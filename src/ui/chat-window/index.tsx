@@ -22,7 +22,7 @@ const ChatWindow = async ({domain}) => {
         </p>
       </div>
       <Separator />
-      <ChatForm bot={bot} />
+      <ChatForm bot={bot} botId={domain.chatBot.id}/>
     </div>
   )
 }

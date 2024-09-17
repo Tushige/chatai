@@ -1,5 +1,5 @@
 'use client'
-import {getDomain} from '@/actions/domain'
+import {getDomain} from '@/actions/domain.action'
 import Loader from '@/components/loader'
 import { Separator } from '@/components/ui/separator'
 import { AuthContext } from '@/context/use-auth-context'

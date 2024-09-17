@@ -1,5 +1,5 @@
 import { getAuthId } from '@/actions/auth'
-import { getAuthUser } from '@/actions/user'
+import { getAuthUser } from '@/actions/user.action'
 import AppSideBar from '@/components/app-sidebar'
 import { currentUser } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
@@ -19,7 +19,7 @@ const Layout = async ({children}: {
       <div className="sticky top-0 left-0">
         <AppSideBar domains={authUser.domains} />
       </div>
-      <div className="w-full h-screen flex flex-col pl-2 md:pl-4 overflow-y-scroll pb-12">
+      <div className="w-full h-screen flex flex-col pl-2 md:pl-4 overflow-y-scroll">
         {children}
       </div>
     </div>

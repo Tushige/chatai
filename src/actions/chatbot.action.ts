@@ -1,4 +1,6 @@
+'use server'
 import ChatBotKit from "@chatbotkit/sdk"
+import { client } from '@/lib/prisma'
 import { getUserAuth } from "./auth"
 import cbk, { getCBKUserClient } from '@/lib/chatbotkit'
 import { clerkClient } from "@clerk/nextjs/server"
@@ -50,10 +52,50 @@ async function createChatbotForDomain(name: string) {
     return null;
   }
 }
-
-
+/**
+ * when user initiates a conversation, we create a conversation on chatbotkit then save the id in our db
+ */
+const addConversation = async (id: string, conversationId: string) => {
+  try {
+    const updatedChatBot = await client.chatBot.update({
+      where: {
+        id
+      },
+      data: {
+        conversations: {
+          push: conversationId
+        },
+        textColor: 'red'
+      }
+    })
+    if (!updatedChatBot) {
+      throw new Error('Failed to add conversation id to the chatbot')
+    }
+    return {
+      status: 200,
+      message: 'success'
+    }
+  } catch (err) {
+    console.error(err)
+    return {
+      status: 400,
+      message: err
+    }
+  }
+}
+const getMessages = async (conversationId: string) => {
+  try {
+    // const cbk = await getChatBotKitUserClient()
+    const messages = await cbk.conversation.message.list(conversationId)
+    return messages
+  } catch (err) {
+    console.error(err)
+  }
+}
 export {
   getChatBotKitUserClient,
   createChatbotForDomain,
-  getChatbot
+  getChatbot,
+  getMessages,
+  addConversation
 }

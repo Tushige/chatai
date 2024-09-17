@@ -1,7 +1,7 @@
 'use server'
 import { client } from '@/lib/prisma'
 import { DomainProps } from '@/schemas/domain.schema'
-import { auth, currentUser, redirectToSignIn} from '@clerk/nextjs'
+import { getAuthId } from './auth'
 
 /**
  * fetches domain record for the /domains/:id page 
@@ -47,6 +47,48 @@ const getDomain = async(domainId: string) => {
     }
   }
 }
+
+/**
+ * we use this in conversations page to display all conversations for each domain
+ */
+const getAllDomains = async () => {
+  const authId = await getAuthId()
+  if (!authId) return
+  try {
+    const user = await client.user.findUnique({
+      where: {
+        clerkId: authId
+      },
+      select: {
+        id: true,
+        domains: {
+          select: {
+            id: true,
+            name: true,
+            icon: true,
+            chatBot: {
+              select: {
+                chatBotKitId: true,
+                conversations: true
+              }
+            }
+          }
+        }
+      }
+    })
+    return user.domains
+  } catch (err) {
+    console.error(err)
+    return {
+      status: 400,
+      message: 'Failed to fetch all domains'
+    }
+  }
+}
+
+/**
+ * update domain settings in the Domain Settings UI
+ */
 const updateDomain = async (id, {
   name,
   icon,
@@ -110,9 +152,11 @@ const deleteDomain = async (id) => {
     }
   }
 }
+
 export {
   getDomain,
+  getAllDomains,
   updateDomain,
-  deleteDomain
+  deleteDomain,
 }
 

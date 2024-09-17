@@ -2,8 +2,8 @@
 import { client } from '@/lib/prisma'
 import { DomainProps } from '@/schemas/domain.schema'
 import { auth, currentUser, redirectToSignIn} from '@clerk/nextjs'
-import { createChatbotForDomain } from '../chatbot.action'
 import ChatBotKit from '@chatbotkit/sdk'
+import { createChatbotForDomain } from './chatbot.action'
 
 /*
  create a user in the database

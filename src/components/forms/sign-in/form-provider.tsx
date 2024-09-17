@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation"
 import { StepsContextProvider } from '@/context/use-steps-context'
 import {UserRegistrationProps, UserRegistrationSchema, UserSigninProps, UserSigninSchema} from '@/schemas/auth.schema'
 import { useToast } from '@/hooks/use-toast'
-import { onCompleteUserRegistration } from '@/actions/user'
+import { onCompleteUserRegistration } from '@/actions/user.action'
 import Loader from '@/components/loader'
 
 type Props = {
