@@ -28,7 +28,7 @@ function DomainMenu({
             return (
               <li
                 key={domain.id}
-                className="m-auto p-4 w-fit rounded-full lg:rounded-none lg:w-full cursor-pointer hover:bg-muted">
+                className="m-auto p-4 w-fit rounded-full lg:rounded-none lg:w-full cursor-pointer hover:bg-surface">
                 <Link
                   href={`/domains/${domain.id}`}
                   className="flex flex-row justify-center lg:justify-start gap-2"
@@ -40,7 +40,7 @@ function DomainMenu({
                     alt={`logo for the domain ${domain.name}`}
                     unoptimized
                   />
-                  <span className="hidden lg:inline-block">
+                  <span className="hidden lg:inline-block text-text">
                     {domain.name}
                   </span>
                 </Link>
@@ -58,18 +58,18 @@ function DomainCreateForm() {
   return (
     <Drawer open={open}>
       <div className="flex justify-center lg:justify-between items-center p-4">
-        <span className="hidden lg:inline-block">Domains</span>
-        <Button className="bg-background rounded-full hover:bg-muted p-2" onClick={() => setOpen(true)}>
-          <PlusIcon className="w-6 text-foreground" />
+        <span className="hidden lg:inline-block text-text">Domains</span>
+        <Button className="bg-background rounded-full text-text hover:bg-surface hover:text-text-foreground p-2" onClick={() => setOpen(true)}>
+          <PlusIcon className="w-6" />
         </Button>
       </div>
       <DrawerContent className="pb-12">
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
-            <DrawerTitle>
+            <DrawerTitle className="text-text-foreground">
               Create a Domain
             </DrawerTitle>
-            <DrawerDescription>
+            <DrawerDescription className="text-text">
               Each chatbot will be associated with a domain
             </DrawerDescription>
             <DomainAddFormProvider onSuccess={() => setOpen(false)}>

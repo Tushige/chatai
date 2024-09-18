@@ -35,10 +35,10 @@ model Domain {
   name String
   icon String
 
-  chatBot         ChatBot?
-  helpdesk        HelpDesk[]
-  filterQuestions FilterQuestions[]
-  products        Product[]
+  chatBot   ChatBot?
+  helpdesk  HelpDesk[]
+  questions Questions[]
+  products  Product[]
 
   customer   Customer[]
   user       User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -77,10 +77,9 @@ model HelpDesk {
   domainId String? @db.Uuid
 }
 
-model FilterQuestions {
-  id       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+model Questions {
+  id       String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   question String
-  answered String?
 
   domain   Domain? @relation(fields: [domainId], references: [id], onDelete: Cascade)
   domainId String? @db.Uuid
@@ -98,7 +97,7 @@ model Customer {
   id    String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email String?
 
-  questions CustomerResponses[]
+  answers CustomerResponses[]
 
   chatRoom ChatRoom[]
 

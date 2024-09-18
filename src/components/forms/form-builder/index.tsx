@@ -41,7 +41,7 @@ const FormBuilder = ({
     default:
       return (
         <Label
-          className={cn("flex flex-col gap-2", className)}
+          className={cn("flex flex-col gap-2 text-text", className)}
           htmlFor={`input-${label}`}
         >
           {label && label}
@@ -108,6 +108,7 @@ const FormBuilder = ({
             {...register(name)}
             rows={lines}
             defaultValue={defaultValue}
+            className="placeholder:text-zinc-300"
           />
           <ErrorMessage
             errors={errors}

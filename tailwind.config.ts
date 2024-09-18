@@ -13,35 +13,27 @@ const config: Config = {
   		colors: {
   			background: 'var(--background)',
   			foreground: 'var(--foreground)',
-  			card: {
-  				DEFAULT: 'var(--card)',
-  				foreground: 'var(--card-foreground)'
-  			},
-  			popover: {
-  				DEFAULT: 'var(--popover)',
-  				foreground: 'var(--popover-foreground)'
-  			},
-  			primary: {
-  				DEFAULT: 'hsl(var(--primary))',
-  				foreground: 'hsl(var(--primary-foreground))'
-  			},
-  			secondary: {
-  				DEFAULT: 'hsl(var(--secondary))',
-  				foreground: 'hsl(var(--secondary-foreground))'
-  			},
+  			surface: 'var(--surface)',
+				text: {
+					DEFAULT: 'var(--text)',
+					foreground: 'var(--text-foreground)',
+					secondary: 'var(--text-secondary)'
+				},
+				accent: {
+					DEFAULT: 'var(--accent)'
+				},
   			muted: {
   				DEFAULT: 'var(--muted)',
   				foreground: 'hsl(var(--muted-foreground))'
   			},
-  			accent: {
-  				DEFAULT: 'hsl(var(--accent))',
-  				foreground: 'hsl(var(--accent-foreground))'
-  			},
+				hover: {
+					DEFAULT: 'var(--hover)'
+				},
   			destructive: {
   				DEFAULT: 'hsl(var(--destructive))',
   				foreground: 'hsl(var(--destructive-foreground))'
   			},
-  			border: 'hsl(var(--border))',
+  			border: 'var(--border)',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
   			chart: {

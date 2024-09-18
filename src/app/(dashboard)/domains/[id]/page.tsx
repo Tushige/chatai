@@ -1,9 +1,10 @@
 import {getDomain} from '@/actions/domain.action'
 import { Separator } from '@/components/ui/separator'
 import ChatWindow from '@/ui/chat-window'
+import DomainChatBotTraining from '@/ui/domain/domain-chatbot-training'
 import DomainCodeIntegration from '@/ui/domain/domain-code-integration'
 import DomainSettings from '@/ui/domain/domain-settings'
-import { redirect } from 'next/navigation'
+import { redirect, useParams } from 'next/navigation'
 import React from 'react'
 
 const DomainSettingsPage = async ({params}) => {
@@ -24,6 +25,7 @@ const DomainSettingsPage = async ({params}) => {
       </div>
       <DomainCodeIntegration domain={domain}/>
       <DomainSettings domain={domain} />
+      <DomainChatBotTraining domainId={domainId}/>
       <ChatWindow domain={domain}/>
     </div>
   )

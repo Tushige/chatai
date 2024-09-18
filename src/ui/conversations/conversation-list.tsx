@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 
 type Props = {
   conversations: Conversation[],
-  selSelectedConversation: () => void
+  setSelectedConversation: (value: Conversation) => void
 }
 
 const ConversationList = ({

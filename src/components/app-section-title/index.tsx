@@ -6,7 +6,7 @@ type Props = {
   description?: string,
   className?: string
 }
-const SectionTitle = ({
+const AppSectionTitle = ({
   title,
   description,
   className
@@ -14,9 +14,9 @@ const SectionTitle = ({
   return (
     <div className={cn(className)}>
       <h2 className="font-medium text-2xl">{title}</h2>
-      <p>{description}</p>
+      <p className="max-w-[42rem]">{description}</p>
     </div>
   )
 }
 
-export default SectionTitle
+export default AppSectionTitle

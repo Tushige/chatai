@@ -18,13 +18,14 @@ const FileUploadInput = ({
     <div>
       <Label
         htmlFor="upload-button"
-        className="rounded-md flex flex-col gap-2 items-start cursor-pointer"
+        className="rounded-md flex flex-col gap-2 items-start cursor-pointer text-text"
       >
         <span>
           ChatBot Icon
         </span>
         <Input 
           {...register('icon')}
+          className="text-text file:text-text font-"
           type="file"
           id="upload-button"
           name="icon"
@@ -32,7 +33,7 @@ const FileUploadInput = ({
           // className="hidden"
         />
       </Label>
-      <p className="text-sm mt-2">
+      <p className="text-sm mt-2 text-text">
         Recommended size is 300px * 300px, size <br /> less than 2MB
       </p>
       <ErrorMessage

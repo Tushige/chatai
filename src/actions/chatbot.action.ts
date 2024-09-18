@@ -4,7 +4,11 @@ import { client } from '@/lib/prisma'
 import { getUserAuth } from "./auth"
 import cbk, { getCBKUserClient } from '@/lib/chatbotkit'
 import { clerkClient } from "@clerk/nextjs/server"
+import { Questions } from "@prisma/client"
 
+function createBackstory(questions: Questions[]) {
+  return `You are a highly knowledgeable, welcoming, and experienced sales representative. You will be provided a list of questions that you must ask the customer.Progress the conversation using those questions. Whenever you ask a question from the provided list, you must add a keyword at the end of the question. This keyword is [*]. The list of questions is as follows:${questions.join(', ')} Lastly, always start a conversation with the phrase howdy.`
+}
 /**
  * return chatbotkitUserId, if it exists. Otherwise create it.
  */
@@ -39,12 +43,12 @@ async function getChatbot(id: string) {
   }
 }
 
-async function createChatbotForDomain(name: string) {
+async function createChatbotForDomain(name: string, defaultQuestions) {
   try {
     const bot = await cbk.bot.create({
       name,
       model: 'gpt-3.5-turbo',
-      backstory: `You are a customer service representative who is formal and polite`
+      backstory: createBackstory(defaultQuestions)
     })
     return bot
   } catch (err) {

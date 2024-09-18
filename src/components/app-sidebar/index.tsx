@@ -68,7 +68,7 @@ const AppSideBar = ({
     >
       <h2 className="flex items-center justify-center lg:justify-start row gap-4 p-4 w-full">
         <AppLogo/>
-        <div className="text-2xl font-black hidden lg:block">
+        <div className="text-2xl font-black text-text-foreground hidden lg:block">
           ENVISION <span className="font-medium">AI</span>
         </div>
       </h2>
@@ -104,11 +104,11 @@ function MenuItem({link, pathname}: {
   return (
     <li
       key={link.href}
-      className={cn("hover:bg-muted px-4", {'bg-muted': pathname === link.href})}
+      className={cn("hover:bg-surface px-4", {'bg-surface': pathname === link.href})}
     >
       <Link 
         href={link.href}
-        className={cn("w-full justify-center lg:justify-start flex h-[48px] grow items-center gap-2 rounded-md p-3 text-sm font-medium")}
+        className={cn("w-full justify-center lg:justify-start flex h-[48px] grow items-center gap-2 rounded-md p-3 text-sm font-medium text-text hover:text-text-foreground")}
       >
         <Icon className="w-6"/>
         <span className="hidden lg:block">
@@ -121,9 +121,9 @@ function MenuItem({link, pathname}: {
 function MenuOptions() {
   return (
     <div className="bg-background p-4 absolute bottom-0 w-full">
-      <Button className="w-full bg-background rounded-md flex flex-row gap-2 flex-start hover:bg-muted">
-        <ArrowLeftEndOnRectangleIcon className="w-6 text-foreground" />
-        <Link href="/auth/sign-out" className="text-foreground text-medium hidden lg:inline-block">
+      <Button className="w-full bg-background hover:bg-surface rounded-md flex flex-row gap-2 flex-start">
+        <ArrowLeftEndOnRectangleIcon className="w-6 text-text" />
+        <Link href="/auth/sign-out" className="text-text text-medium hidden lg:inline-block">
           Sign Out
         </Link>
       </Button>

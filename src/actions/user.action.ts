@@ -4,7 +4,17 @@ import { DomainProps } from '@/schemas/domain.schema'
 import { auth, currentUser, redirectToSignIn} from '@clerk/nextjs'
 import ChatBotKit from '@chatbotkit/sdk'
 import { createChatbotForDomain } from './chatbot.action'
+import { createSkillset } from '@chatbotkit/sdk/skillset/v1'
 
+
+const DEFAULT_QUESTIONS = [
+  {
+    question: "What are your goals?"
+  },
+  {
+    question: "What is your email?"
+  }
+]
 /*
  create a user in the database
 */
@@ -91,7 +101,6 @@ const createDomain = async({
   name,
   botName,
   icon,
-  welcomeMessage
 }: DomainProps): Promise<createDomainReturn> => {
   const authUser = await currentUser()
   if (!authUser) return {
@@ -142,11 +151,15 @@ const createDomain = async({
           status: 400,
           message: "You've reached the maximum number of domains. Upgrade your plan to add more domains."
         }
-    }
-    const bot = await createChatbotForDomain(botName)
+      }
+    
+    // create default bot questions
+    const bot = await createChatbotForDomain(botName, DEFAULT_QUESTIONS)
+    // 
     if (!bot) {
       throw new Error('Failed to create Bot')
     }
+
     const createdDomain = await client.user.update({
       where: {
         clerkId: authUser.id
@@ -161,6 +174,9 @@ const createDomain = async({
                 welcomeMessage: "Hi, how are you? Do you have any questions for us?",
                 chatBotKitId: bot?.id
               }
+            },
+            questions: {
+              create: DEFAULT_QUESTIONS
             }
           }
         }

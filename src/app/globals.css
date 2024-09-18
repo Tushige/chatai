@@ -21,43 +21,20 @@ body {
 
 @layer base {
   :root {
-    /* 1->4 = dark -> light*/
-    --color-1: #674636;
-    --color-2: #AAB396;
-    --color-3: #F7EED3;
-    --color-4: #FFF8E8;
-
-    --background: var(--color-4);
-    --foreground: var(--color-1);
-
-    --card: var(--color-4);
-    --card-foreground: var(--color-1);
-
-    --popover: var(--color-4);
-    --popover-foreground: var(--color-1);
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: var(--color-3);
-    --muted-foreground: var(--color-1);
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
     --ring: "#867070";
     --radius: 0.5rem;
 
-    --text: var(--color-1);
-    --text-hover: white;
+    --background: #121212;
+    --surface: #1E1E1E;
+    --border: #292929;
+    --text: #E0E0E0;
+    --text-foreground: white;
+    --text-secondary: #A3A3A3;
+    --accent: #BB86FC;
+    --success: #03DAC5;
+    --warning: #FBC02D;
+    --error: #CF6679;
+    --hover: #333333;
   }
 
   .dark {

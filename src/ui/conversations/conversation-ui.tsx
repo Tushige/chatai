@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import ConversationMessenger from './conversation-messenger'
-import SectionTitle from '@/components/app-section-title'
+import AppSectionTitle from '@/components/app-section-title'
 import ConversationList from './conversation-list'
 import { getMessages } from '@/actions/chatbot.action'
 import { Conversation } from './types'
@@ -85,7 +85,7 @@ const ConversationUI = ({
               "[mask-image:radial-gradient(800px_circle_at_center,white,transparent)]",
             )}
           />
-          <SectionTitle title="Conversation" className="mb-8"/>
+          <AppSectionTitle title="Conversation" className="mb-8"/>
           <ConversationMessenger messages={selectedConversation?.messages || []}/>
         </div>
       </div>

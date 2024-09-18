@@ -1,5 +1,5 @@
 'use client'
-import SectionTitle from '@/components/app-section-title'
+import AppSectionTitle from '@/components/app-section-title'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import useCopyToClipboard from '@/hooks/use-copy-to-clipboard'
@@ -43,7 +43,7 @@ const DomainCodeIntegration = ({
   `
   return (
     <div className="container">
-      <SectionTitle
+      <AppSectionTitle
         title="Integrate Chatbot"
         description="Please copy/paste the following code snippet into the header tag of your application."
       />

@@ -37,11 +37,11 @@ const DomainAddForm = ({
         <Button
           type="button"
           onClick={closeDrawer}
-          className="bg-transparent text-foreground border-none shadow-none hover:bg-transparent "
+          className="bg-transparent text-text border-none shadow-none hover:bg-transparent "
         >
           Cancel
         </Button>
-        <Button type="submit" className="w-full mt-4 bg-background text-foreground text-medium rounded-md flex flex-row gap-2 flex-start hover:bg-muted hover:text-black">
+        <Button type="submit" className="w-full mt-4 bg-background text-text rounded-md flex flex-row gap-2 flex-start hover:bg-surface hover:text-text-foreground">
           Add Domain
         </Button>
       </div>
