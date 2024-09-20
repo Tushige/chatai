@@ -47,7 +47,7 @@ const DomainCodeIntegration = ({
         title="Integrate Chatbot"
         description="Please copy/paste the following code snippet into the header tag of your application."
       />
-      <Separator className="mb-2"/>
+      <Separator className="my-2"/>
       <div className="bg-background rounded-md inline-block p-2 relative mb-8 max-w-[100%]">
         <Button 
           className="bg-background text-text rounded-full absolute right-[15px] top-[15px] hover:bg-muted"
@@ -55,7 +55,7 @@ const DomainCodeIntegration = ({
         >
           <DocumentDuplicateIcon className="w-6" />
         </Button>
-        <pre className="overflow-x-scroll">
+        <pre className="overflow-x-scroll chat-window">
           <code>
             {snippet}
           </code>

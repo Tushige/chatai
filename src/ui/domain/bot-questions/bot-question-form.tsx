@@ -2,20 +2,22 @@
 import FormBuilder from '@/components/forms/form-builder'
 import { useToast } from '@/hooks/use-toast'
 import React, { useState } from 'react'
-import { FormProvider, useForm, useFormContext } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import { BotQuestionProps, BotQuestionSchema } from './bot-question.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ArrowLongLeftIcon } from '@heroicons/react/24/outline'
 import { createBotQuestion } from '@/actions/questions.action'
-import { revalidatePath } from 'next/cache'
+import { updateChatbotBackstory } from '@/actions/chatbot.action'
 
 type Props = {
-  domainId: string
+  domainId: string,
+  chatBotKitId: string
 }
 const BotQuestionForm = ({
-  domainId
+  domainId,
+  chatBotKitId
 }: Props) => {
   const {toast} = useToast()
   const [loading, setLoading] = useState<boolean>(false)
@@ -26,10 +28,9 @@ const BotQuestionForm = ({
   const {register, formState: {errors}} = methods
   const handleSubmit = async (data: BotQuestionProps) => {
     try {
-      console.log('submitting bot question')
-      console.log(data)
       setLoading(true)
-      const res = await createBotQuestion(data.question, domainId)
+      const updatedQuestions = await createBotQuestion(data.question, domainId)
+      await updateChatbotBackstory(chatBotKitId, updatedQuestions)
       toast({
         title: 'Success',
         description: 'Added new question'

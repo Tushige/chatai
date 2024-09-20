@@ -52,6 +52,7 @@ const FormBuilder = ({
             form={form}
             defaultValue={defaultValue}
             {...register(name)}
+            className="placeholder:text-text-secondary"
           />
           <ErrorMessage
             errors={errors}

@@ -1,10 +1,8 @@
 'use server'
 import { client } from '@/lib/prisma'
 import { DomainProps } from '@/schemas/domain.schema'
-import { auth, currentUser, redirectToSignIn} from '@clerk/nextjs'
-import ChatBotKit from '@chatbotkit/sdk'
+import { currentUser} from '@clerk/nextjs'
 import { createChatbotForDomain } from './chatbot.action'
-import { createSkillset } from '@chatbotkit/sdk/skillset/v1'
 
 
 const DEFAULT_QUESTIONS = [
@@ -44,6 +42,8 @@ const createUser = async (
         status: 200,
         user: registered
       }
+    } else {
+      throw new Error('registration failed')
     }
   } catch (err) {
     return {
@@ -66,17 +66,7 @@ const getAuthUser = async(clerkId: string) => {
           select: {
             name: true,
             icon: true,
-            id: true,
-            customer: {
-              select: {
-                chatRoom: {
-                  select: {
-                    id: true,
-                    live: true,
-                  },
-                },
-              },
-            },
+            id: true
           },
         },
       }
@@ -155,7 +145,7 @@ const createDomain = async({
     
     // create default bot questions
     const bot = await createChatbotForDomain(botName, DEFAULT_QUESTIONS)
-    // 
+    
     if (!bot) {
       throw new Error('Failed to create Bot')
     }

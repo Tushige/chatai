@@ -14,7 +14,7 @@ const DomainSettingsPage = async ({params}) => {
   }
   const domain = await getDomain(params.id)  
   return (
-    <div className="container">
+    <div className="container px-4 lg:px-8 pt-8">
       <div className="mb-8">
         <h2 className="text-4xl">
          {domain.name}

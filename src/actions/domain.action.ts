@@ -69,7 +69,14 @@ const getAllDomains = async () => {
             chatBot: {
               select: {
                 chatBotKitId: true,
-                conversations: true
+                conversationIds: true
+              }
+            },
+            contacts: {
+              select: {
+                id: true,
+                email: true,
+                conversationIds: true
               }
             }
           }

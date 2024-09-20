@@ -2,15 +2,15 @@ import cbk from '@/lib/chatbotkit'
 /**
  * Creates a conversation ID and conversation Session
  */
-export async function GET() {
-  const {id: conversationId} = await cbk.conversation.create({})
+export async function POST(req) {
+  const {botId} = await req.json()
+  /*
+   * passing botId allows bot with this id to respond to messages. 
+   * general flow is to specify backstory on the bot and create a conversation with specific bot id.
+   */
+  const {id: conversationId} = await cbk.conversation.create({botId})
   const {token} = await cbk.conversation.session.create(conversationId, {
     durationInSeconds: 3600
   })
-  // we need to save a reference to this conversation in our domain so that we can fetch the messages later
-  // return res.status(200).json({
-  //   conversationId,
-  //   token
-  // })
   return Response.json({conversationId, token})
 }

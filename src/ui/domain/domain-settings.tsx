@@ -21,7 +21,7 @@ const DomainSettings = ({
         title="Domain Settings"
         description="update your domain info"
       />
-      <Separator className="mb-8"/>
+      <Separator className="mt-4 mb-8"/>
       <DomainUpdateFormProvider initialData={initialData} domainId={domain.id}>
         <DomainUpdateForm  className="w-[400px]"/>
       </DomainUpdateFormProvider>

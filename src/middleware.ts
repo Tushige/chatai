@@ -1,8 +1,8 @@
 import { authMiddleware } from '@clerk/nextjs'
 
 export default authMiddleware({
-  publicRoutes: ['/', '/auth(.*)', '/portal(.*)'],
-  ignoredRoutes: ['/chatbot'],
+  publicRoutes: ['/', '/auth(.*)', '/portal(.*)', '/api/v1(.*)'],
+  ignoredRoutes: ['/chatbot']
 })
 
 export const config = {

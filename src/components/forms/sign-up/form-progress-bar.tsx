@@ -16,7 +16,7 @@ const FormProgressBar = () => {
 
 function Step({step, currentStep}) {
   return (
-    <div className={cn("rounded-full h-2 col-span-1 bg-slate-300", {'bg-fuchsia-300': step <= currentStep})} />
+    <div className={cn("rounded-full h-2 col-span-1 bg-surface", {'bg-accent': step <= currentStep})} />
   )
 }
 export default FormProgressBar

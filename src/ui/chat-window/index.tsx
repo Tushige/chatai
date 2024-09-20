@@ -7,9 +7,9 @@ import { getChatbot, getChatBotKitUserClient } from '@/actions/chatbot.action'
 const ChatWindow = async ({domain}) => {
   const bot = await getChatbot(domain.chatBot.chatBotKitId)
   return (
-    <div className="h-[600px] w-[400px] border bg-white border-zinc-200 rounded-xl shadow-md ">
+    <div className="h-[600px] w-[400px] border bg-background border-zinc-200 rounded-xl shadow-md ">
       <div className="flex flex-row gap-2 items-center mb-4">
-        <div className="w-[80px] h-[80px] rounded-full flex justify-center items-center bg-white">
+        <div className="w-[80px] h-[80px] rounded-full flex justify-center items-center bg-background">
           <Image
             src="/images/plus.png"
             width={36}
@@ -22,7 +22,7 @@ const ChatWindow = async ({domain}) => {
         </p>
       </div>
       <Separator />
-      <ChatForm bot={bot} botId={domain.chatBot.id}/>
+      <ChatForm bot={bot} botId={domain.chatBot.id} domainId={domain.id}/>
     </div>
   )
 }

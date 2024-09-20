@@ -60,7 +60,7 @@ type Props = {
   domains: Domain[] | null | undefined
 }
 const AppSideBar = ({
-  domains
+  domains,
 }: Props) => {
   const pathname = usePathname()
   return (
@@ -73,7 +73,7 @@ const AppSideBar = ({
         </div>
       </h2>
      <Menu pathname={pathname}/>
-     <DomainMenu domains={domains}/>
+     <DomainMenu domains={domains} pathname={pathname}/>
      <MenuOptions />
     </div>
   )

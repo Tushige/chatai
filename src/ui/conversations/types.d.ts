@@ -8,7 +8,8 @@ type Message = {
 }
 type Conversation = {
   id: string,
-  messages: Message[]
+  messages: Message[],
+  email: string | null
 }
 
 export {

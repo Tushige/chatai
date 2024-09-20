@@ -33,6 +33,12 @@ const config: Config = {
   				DEFAULT: 'hsl(var(--destructive))',
   				foreground: 'hsl(var(--destructive-foreground))'
   			},
+				error: {
+					DEFAULT: 'var(--error)'
+				},
+				success: {
+					DEFAULT: 'var(--success)'
+				},
   			border: 'var(--border)',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',

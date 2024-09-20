@@ -20,10 +20,10 @@ const UserTypeForm = () => {
   const [userType, setUserType] = useState<UserType>('individual')
   return (
     <div>
-      <h2 className="font-bold text-2xl md:text-4xl">
+      <h2 className="font-bold text-text text-2xl md:text-4xl">
         Create an Account
       </h2>
-      <p className="text-sm text-black/70 mt-4">
+      <p className="text-sm text-text-secondary mt-4">
         What type of account would you like?
       </p>
       <div className="flex flex-col gap-4 mt-8">
@@ -47,16 +47,16 @@ const UserTypeForm = () => {
       <div className="mt-4">
         <Button
           type="submit"
-          className="w-full"
+          className="w-full text-text border border-border hover:bg-surface"
           onClick={() => setCurrentStep(prev => prev + 1)}
         >
           Continue
         </Button>
         <div className="flex flex-row gap-2 mt-4">
-          <p className="text-medium">Already have an account?</p>
+          <p className="text-medium text-text">Already have an account?</p>
           <Link
             href="/auth/sign-in"
-            className="font-bold underline"
+            className="font-bold underline text-text"
           >
             Sign In
           </Link>
@@ -86,15 +86,15 @@ function UserTypeCard({
     <Label htmlFor={value}>
       <Card className={cn(
         "flex justify-between items-center p-2 px-3 cursor-pointer", 
-        {'border-fuchsia-500': selectedUserType === value}
+        {'border-accent': selectedUserType === value}
       )}>
         <div className="flex items-center gap-4 px-4 py-2">
-          <UserIcon className={cn("w-12", {'text-fuchsia-500': selectedUserType === value})} />
+          <UserIcon className={cn("w-12 text-text", {'text-accent': selectedUserType === value})} />
           <div>
-            <CardDescription className="text-black">
+            <CardDescription className="text-text">
               {title}
             </CardDescription>
-            <CardDescription className="text-black/70">
+            <CardDescription className="text-text-secondary">
               {description}
             </CardDescription>
           </div>
@@ -103,7 +103,7 @@ function UserTypeCard({
           <div className={cn("w-4 h-4 rounded-full")}>
             {
               selectedUserType === value ? (
-                <CheckIcon className="w-6 h-6 text-fuchsia-500"/>
+                <CheckIcon className="w-6 h-6 text-accent"/>
               ) : null
             }
             <Input

@@ -39,21 +39,24 @@ const DomainAddFormProvider = ({initialData, onSuccess, children}: {
       if (status === 200) {
         toast({
           title: 'Success',
-          description: `${data.name} successfully added`
+          description: `${data.name} successfully added`,
+          className: 'text-success'
         })
         onSuccess()
         router.refresh()
       } else {
         toast({
           title: 'Error',
-          description: message
+          description: message,
+          className: 'text-error'
         })
       }
     } catch (err) {
       console.error('failed creating domain with error: ', err)
       toast({
         title: 'Error',
-        description: 'Something went wrong! Please try again.'
+        description: 'Something went wrong! Please try again.',
+        className: 'text-error'
       })
     } finally {
       setLoading(false)

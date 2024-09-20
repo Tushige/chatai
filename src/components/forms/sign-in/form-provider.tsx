@@ -4,10 +4,8 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSignIn } from "@clerk/nextjs"
 import { useRouter } from "next/navigation"
-import { StepsContextProvider } from '@/context/use-steps-context'
-import {UserRegistrationProps, UserRegistrationSchema, UserSigninProps, UserSigninSchema} from '@/schemas/auth.schema'
+import {UserSigninProps, UserSigninSchema} from '@/schemas/auth.schema'
 import { useToast } from '@/hooks/use-toast'
-import { onCompleteUserRegistration } from '@/actions/user.action'
 import Loader from '@/components/loader'
 
 type Props = {
@@ -51,25 +49,28 @@ const SigninFormProvider = ({children}: Props) => {
           title: 'Error',
           description: 'email or password is incorrect. Please try again.'
         })
+      } else {
+        toast({
+          title: <span className="text-error">Error</span>,
+          description: 'Something went wrong. Please try again.'
+        })
       }
     } finally {
       setLoading(false)
     }
   }
   return (
-    <FormStepsProvider>
-      <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(handleSubmit)} className="h-full">
-          {
-            loading ? (
-              <Loader />
-            ) : (
-              children
-            )
-          }
-        </form>
-      </FormProvider>
-    </FormStepsProvider>
+    <FormProvider {...methods}>
+      <form onSubmit={methods.handleSubmit(handleSubmit)} className="h-full">
+        {
+          loading ? (
+            <Loader />
+          ) : (
+            children
+          )
+        }
+      </form>
+    </FormProvider>
   )
 }
 

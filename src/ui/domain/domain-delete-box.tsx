@@ -35,7 +35,7 @@ const DomainDeleteBox = ({
     }
   }
   return (
-    <div className={cn("p-2 bg-red-200 border border-red-600 rounded-md mt-8",className)}>
+    <div className={cn("p-2 border border-red-600 rounded-md mt-8",className)}>
       <h2 className="mb-8 text-red-600">Danger Zone</h2>
       <Button
         className="bg-red-300 text-red-700 hover:bg-red-900 hover:text-white"

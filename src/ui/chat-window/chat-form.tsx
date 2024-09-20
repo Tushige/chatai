@@ -2,11 +2,13 @@
 import { Button } from '@/components/ui/button';
 import { useConversationManager } from '@chatbotkit/react'
 import { BotOptions } from '@chatbotkit/sdk/bot/v1';
-import { ArrowLeftEndOnRectangleIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftEndOnRectangleIcon } from '@heroicons/react/24/outline';
 import { useEffect, useRef, useState } from "react";
 import ChatMessages from './chat-messages';
 import { useToast } from '@/hooks/use-toast';
-import { addConversation } from '@/actions/chatbot.action';
+import { extractEmailsFromString } from '@/lib/utils';
+import { createContact } from '@/actions/contact.action';
+import { addContactToConversation } from '@/actions/chatbot.action';
 
 type Bot = {
   datasetId: string,
@@ -17,13 +19,15 @@ type Bot = {
 
 function ChatForm({
   botId,
-  bot
+  bot,
+  domainId
 }: {
   bot: BotOptions,
-  botId: string
+  botId: string,
+  domainId: string
 }) {
   const {toast} = useToast()
-  const {backstory, datasetId, model, botName} = bot
+  const {botName} = bot
   const [conversationId, setConversationId] = useState(undefined)
   const [token, setToken] = useState(undefined)
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -38,14 +42,16 @@ function ChatForm({
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({behavior: 'smooth'})
+    
   }, [messages])
 
   async function createSession() {
     const res = await fetch('/api/session', {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json'
-      }
+      },
+      body: JSON.stringify({botId: bot.id})
     })
     if (!res) {
       throw new Error('Failed to create a conversation session')
@@ -74,6 +80,8 @@ function ChatForm({
   }
   return (
     <ChatContent 
+      domainId={domainId}
+      conversationId={conversationId}
       messages={messages}
       botName={botName}
       thinking={thinking}
@@ -86,6 +94,8 @@ function ChatForm({
 }
 
 function ChatContent({
+  domainId,
+  conversationId,
   messages,
   botName,
   thinking,
@@ -94,15 +104,31 @@ function ChatContent({
   setText,
   submit,
 }) {
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    // let's extract email address if available
+    const emailArr = extractEmailsFromString(text)
+    try {
+      if (emailArr && emailArr.length > 0) {
+        // found email
+        // create contact record with the found email
+        const contact = await createContact({
+          email: emailArr[0],
+          domainId,
+          conversationId
+        })
+      }
+      submit()
+    } catch (err) {
+      console.error(err)
+    }
+  }
   return (
     <form
-      onSubmit={(e) => {
-        e.preventDefault()
-        submit()
-      }}
-      className=""
+      onSubmit={onSubmit}
+      className="bg-background"
     >
-      <div className="h-[25rem] overflow-y-scroll">
+      <div className="h-[25rem] overflow-y-scroll scrollbar-hi bg-background chat-window">
         <ChatMessages messages={messages} botName={botName} thinking={thinking}/>
         <div ref={messagesEndRef} />
       </div>
@@ -110,7 +136,7 @@ function ChatContent({
       <div className="relative p-6">
         <input
           value={text}
-          className="flex h-12 w-full rounded-lg border bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 border-zinc-200 shadow transition duration-150"
+          className="flex h-12 w-full pr-12 rounded-lg border bg-background px-3 py-2 text-sm text-text ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-text-secondary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 border-border shadow transition duration-150"
           placeholder="Say something4..."
           onChange={(e) => {
             setText(e.target.value)
@@ -119,7 +145,7 @@ function ChatContent({
         <Button 
           type="submit"
           disabled={!text}
-          className="h-8 w-8 absolute right-8 top-1/2 transform -translate-y-1/2"
+          className="h-8 w-8 absolute right-8 top-1/2 transform -translate-y-1/2 hover:bg-surface"
           >
           <ArrowLeftEndOnRectangleIcon className="min-h-[0.75rem] min-w-[0.75rem]" /> 
           </Button>

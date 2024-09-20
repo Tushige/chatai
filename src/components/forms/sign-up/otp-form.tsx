@@ -16,10 +16,10 @@ const OTPForm = () => {
   }, [otp])
   return (
     <div>
-      <h2 className="font-bold text-2xl md:text-4xl">
+      <h2 className="font-bold text-2xl text-text md:text-4xl">
         Last Step
       </h2>
-      <p>
+      <p className="text-text-secondary">
         Enter the one-time password that was sent to your email.
       </p>
       <div className="w-full justify-center flex py-5">
@@ -40,7 +40,7 @@ const OTPForm = () => {
         />
       </div>
       <div className="w-full">
-        <Button className="w-full" type="submit">
+        <Button className="w-full text-text border border-border hover:bg-surface" type="submit">
           Create an account
         </Button>
       </div>

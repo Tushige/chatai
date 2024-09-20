@@ -13,7 +13,7 @@ const OTPInput = ({ otp, setOtp }: Props) => {
       value={otp}
       onChange={(otp) => setOtp(otp)}
     >
-      <div className="flex gap-3">
+      <div className="flex gap-3 text-text">
         <div>
           <InputOTPSlot index={0} />
         </div>

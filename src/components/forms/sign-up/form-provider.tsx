@@ -47,7 +47,6 @@ const SignupFormProvider = ({children}: Props) => {
           await setActive({
             session: res.createdSessionId
           })
-          setLoading(false)
           router.push('/dashboard')
         }
         if (registered?.status === 400) {

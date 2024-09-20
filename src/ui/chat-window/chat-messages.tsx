@@ -22,7 +22,7 @@ const ChatMessages = ({
               return (
                 <div 
                   key={id}
-                  className="whitespace-pre-wrap border-b border-zinc-200 py-5 hover:bg-zinc-50 px-6"
+                  className="whitespace-pre-wrap border-b border-border py-5 hover:bg-surface px-6"
                 >
                   <div className="flex items-center space-x-2 mb-2">
                     <div className="relative flex h-[20px] w-[20px] overflow-hidden rounded-full text-sm transition duration-150 hover:opacity-70 focus:outline-none">
@@ -42,11 +42,11 @@ const ChatMessages = ({
               return (
                 <div
                   key={id}
-                  className="whitespace-pre-wrap border-b border-zinc-200 py-5 hover:bg-zinc-50 px-6"
+                  className="whitespace-pre-wrap border-b border-border py-5 hover:bg-surface px-6"
                 >
                   <div className="flex items-center space-x-2 mb-2">
-                    <div className="relative h-[20px] w-[20px] overflow-hidden rounded-full text-sm transition duration-150 hover:opacity-70 border border-zinc-200 focus:outline-none flex items-center justify-center bg-black">
-                      <SparklesIcon className="h-3 w-3 text-white" />
+                    <div className="relative h-[20px] w-[20px] overflow-hidden rounded-full text-sm transition duration-150 hover:opacity-70 border border-border focus:outline-none flex items-center justify-center">
+                      <SparklesIcon className="h-3 w-3 text-text-foreground" />
                     </div>
                     <p className="text-sm font-medium">{botName}</p>
                   </div>

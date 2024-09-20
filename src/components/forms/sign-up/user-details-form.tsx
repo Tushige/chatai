@@ -38,7 +38,7 @@ const UserDetailsForm = () => {
 
   return (
     <div>
-      <h2 className="text-lg md:text-2xl font-bold mb-12">
+      <h2 className="text-lg md:text-2xl font-bold mb-12 text-text">
         Account Details
       </h2>
       <div className="flex flex-col gap-4">
@@ -82,7 +82,7 @@ const UserDetailsForm = () => {
       <div className="mt-4">
         <Button
           type="submit"
-          className="w-full"
+          className="w-full text-text hover:bg-surface border border-border"
           onClick={generateOTP}
         >
           Continue

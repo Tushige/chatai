@@ -2,18 +2,19 @@
 import { useFormContext } from "react-hook-form"
 import FormBuilder from "../form-builder"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 const SigninForm = () => {
   const {register, formState: {errors}} = useFormContext()
   return (
     <div>
-      <h2 className="text-lg md:text-2xl font-bold mb-4">
+      <h2 className="font-bold text-text text-2xl md:text-4xl">
         Sign in to FINCENT AI
       </h2>
-      <p className="text-sm">
-        You will receive a one time password
+      <p className="text-sm text-text-secondary mt-4">
+        Don't have an account? <Link href="/auth/sign-up" className="underline hover:text-text-foreground">Sign Up</Link>
       </p>
-      <div className="flex flex-col gap-4 mt-4">
+      <div className="flex flex-col gap-4 mt-8">
         <FormBuilder
           inputType="input"
           label="Email"
@@ -36,7 +37,7 @@ const SigninForm = () => {
       <div className="w-full mt-4">
         <Button
           type="submit"
-          className="w-full"
+          className="w-full border border-border text-text hover:bg-surface"
         >
           Continue
         </Button>

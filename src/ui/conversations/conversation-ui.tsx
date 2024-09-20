@@ -14,10 +14,22 @@ import { Separator } from '@/components/ui/separator'
 import ConversationMessenger from './conversation-messenger'
 import AppSectionTitle from '@/components/app-section-title'
 import ConversationList from './conversation-list'
-import { getMessages } from '@/actions/chatbot.action'
+import { getConversation, getMessages } from '@/actions/chatbot.action'
 import { Conversation } from './types'
 import Loader from '@/components/loader'
 import { cn } from '@/lib/utils'
+
+/*
+ * returns the contact record that contains conversationId
+* undefined otherwise
+ */
+function getEmailByConversationId(contacts, conversationId) {
+  if (!contacts) return null
+  if (!conversationId) return null
+  return contacts.find(contact => {
+    return contact.conversationIds.includes(conversationId)
+  })
+}
 
 const ConversationUI = ({
   domains
@@ -27,6 +39,7 @@ const ConversationUI = ({
   const [selectedConversation, setSelectedConversation] = useState<Conversation>(null)
   const [loading, setLoading] = useState(false)
   function onDomainChange(value: string) {
+    setSelectedConversation(null)
     setDomainsIdx(value)
   }
 
@@ -34,12 +47,16 @@ const ConversationUI = ({
     const fetchConversations = async () => {
       setLoading(true)
       try {
-        const conversationIds = domains[domainsIdx].chatBot.conversations
+        const conversationIds = domains[domainsIdx].chatBot.conversationIds
         const conversations = await Promise.all(conversationIds.map(async (id: string) => {
+          // TODO - fetch in parallel
+          const conversation = await getConversation(id)
           const messages = await getMessages(id)
+          const contact = getEmailByConversationId(domains[domainsIdx].contacts, id)
           return {
             id,
-            messages: messages.items
+            messages: messages.items,
+            email: contact ? contact.email : null
           }
         }))
         setConversations(conversations)
@@ -67,12 +84,13 @@ const ConversationUI = ({
               <SelectLabel>Domain</SelectLabel>
               {
                 domains.map( (domain, domainsIdx: string) => (
-                  <SelectItem key={domain.id} value={domainsIdx}>{domain.name}</SelectItem>
+                  <SelectItem key={domain.id} value={domainsIdx} className="text-text bg-background">{domain.name}</SelectItem>
                 ))
               }
             </SelectGroup>
           </SelectContent>
         </Select>
+        <ListTitle domainName={domains[domainsIdx].name} />
         <ConversationList conversations={conversations} setSelectedConversation={setSelectedConversation} />
       </div>
       <div className="col-span-1 flex justify-center">
@@ -90,6 +108,19 @@ const ConversationUI = ({
         </div>
       </div>
     </div>
+  )
+}
+
+function ListTitle({domainName}) {
+  if (!domainName) {
+    return (
+      <h2 className="text-text-secondary">Select a domain to see conversations</h2>
+    )
+  }
+  return (
+    <h2 className="text-text-secondary mb-8">
+      Showing conversations for {domainName} 
+    </h2>
   )
 }
 
