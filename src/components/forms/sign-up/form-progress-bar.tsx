@@ -4,7 +4,6 @@ import { cn } from "@/lib/utils"
 
 const FormProgressBar = () => {
   const {currentStep} = useStepsContext()
-
   return (
     <div className="grid grid-cols-3 gap-3 w-full">
      <Step step={1} currentStep={currentStep} />

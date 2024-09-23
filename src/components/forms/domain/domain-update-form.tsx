@@ -53,7 +53,7 @@ const DomainUpdateForm = ({
       <Button
         type="submit"
         disabled={!nameDirty && !iconDirty && !welcomeMessageDirty}
-        className="w-full mt-4 bg-background text-foreground text-medium rounded-md flex flex-row gap-2 flex-start hover:bg-muted"
+        className="w-full mt-4 bg-background text-foreground text-medium rounded-md flex flex-row gap-2 flex-start hover:bg-surface"
       >
         Save
       </Button>

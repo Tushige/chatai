@@ -38,11 +38,10 @@ model Domain {
   chatBot   ChatBot?
   questions Questions[]
 
-  contacts   Contact[]
-  user       User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String?   @db.Uuid
-  campaign   Campaign? @relation(fields: [campaignId], references: [id])
-  campaignId String?   @db.Uuid
+  campaigns Campaign[]
+  contacts  Contact[]
+  user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String?    @db.Uuid
 }
 
 model ChatBot {
@@ -91,8 +90,10 @@ model Contact {
 
   booking Bookings[]
 
-  domain   Domain? @relation(fields: [domainId], references: [id], onDelete: Cascade)
-  domainId String? @db.Uuid
+  domain     Domain?   @relation(fields: [domainId], references: [id], onDelete: Cascade)
+  domainId   String?   @db.Uuid
+  Campaign   Campaign? @relation(fields: [campaignId], references: [id])
+  campaignId String?   @db.Uuid
 }
 
 model ChatMessage {
@@ -117,14 +118,16 @@ model Bookings {
 }
 
 model Campaign {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name      String
-  customers String[]
-  domain    Domain[]
-  template  String?
-  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String?  @db.Uuid
-  createdAt DateTime @default(now())
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  description String?
+  content     String?
+  contacts    Contact[]
+  user        User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String?   @db.Uuid
+  createdAt   DateTime  @default(now())
+  domain      Domain?   @relation(fields: [domainId], references: [id], onDelete: Cascade)
+  domainId    String?   @unique @db.Uuid
 }
 
 enum Plans {

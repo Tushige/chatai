@@ -13,8 +13,8 @@ const AppSectionTitle = ({
 }: Props) => {
   return (
     <div className={cn(className)}>
-      <h2 className="font-medium text-2xl">{title}</h2>
-      <p className="max-w-[42rem]">{description}</p>
+      <h2 className="font-medium text-2xl text-text-foreground">{title}</h2>
+      <p className="mt-2 lg:mt-4 max-w-[42rem] text-sm text-secondary">{description}</p>
     </div>
   )
 }

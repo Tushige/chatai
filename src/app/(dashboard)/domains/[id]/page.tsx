@@ -1,4 +1,5 @@
 import {getDomain} from '@/actions/domain.action'
+import AppPageTitle from '@/components/app-page-title'
 import { Separator } from '@/components/ui/separator'
 import ChatWindow from '@/ui/chat-window'
 import DomainChatBotTraining from '@/ui/domain/domain-chatbot-training'
@@ -15,14 +16,7 @@ const DomainSettingsPage = async ({params}) => {
   const domain = await getDomain(params.id)  
   return (
     <div className="container px-4 lg:px-8 pt-8">
-      <div className="mb-8">
-        <h2 className="text-4xl">
-         {domain.name}
-        </h2>
-        <p className="text-sm text-muted">
-          Modify domain and chatbox settings
-        </p>
-      </div>
+      <AppPageTitle title={domain.name} description="Modify domain and chatbox settings"/>
       <DomainCodeIntegration domain={domain}/>
       <DomainSettings domain={domain} />
       <DomainChatBotTraining domainId={domainId}/>

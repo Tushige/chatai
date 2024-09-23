@@ -8,12 +8,12 @@ const page = () => {
   return (
     <div className="flex flex-col w-full h-full gap-3 py-36 md:px-16">
       <SignupFormProvider>
-        <div className="w-full mb-8">
-          <StepsProvider>
-            <RegistrationSteps />
-          </StepsProvider>
-        </div>
-        <FormProgressBar/>
+        <StepsProvider>
+          <div className="w-full mb-8">
+              <RegistrationSteps />
+          </div>
+          <FormProgressBar/>
+        </StepsProvider>
       </SignupFormProvider>
     </div>
   )

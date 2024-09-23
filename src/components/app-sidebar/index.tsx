@@ -50,8 +50,8 @@ const links: LinkProp[] = [
     icon: PencilSquareIcon,
   },
   {
-    label: 'Marketing',
-    href: '/marketing',
+    label: 'Campaigns',
+    href: '/campaigns',
     icon: ChartBarIcon,
   },
 ]
@@ -69,7 +69,7 @@ const AppSideBar = ({
       <h2 className="flex items-center justify-center lg:justify-start row gap-4 p-4 w-full">
         <AppLogo/>
         <div className="text-2xl font-black text-text-foreground hidden lg:block">
-          ENVISION <span className="font-medium">AI</span>
+          AI <span className="font-medium">Campaigner</span>
         </div>
       </h2>
      <Menu pathname={pathname}/>

@@ -48,7 +48,9 @@ const UserTypeForm = () => {
         <Button
           type="submit"
           className="w-full text-text border border-border hover:bg-surface"
-          onClick={() => setCurrentStep(prev => prev + 1)}
+          onClick={() => setCurrentStep(prev => {
+            return prev + 1
+          })} 
         >
           Continue
         </Button>

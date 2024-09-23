@@ -16,8 +16,8 @@ const COMPLETE = 'complete'
 const SigninFormProvider = ({children}: Props) => {
   const {toast} = useToast()
   const [loading, setLoading] = useState<boolean>(false)
-  const {signIn, isLoaded, setActive} = useSignIn()
   const router = useRouter()
+  const {signIn, isLoaded, setActive} = useSignIn()
 
   const methods = useForm<UserSigninProps>({
     resolver: zodResolver(UserSigninSchema),
@@ -38,24 +38,24 @@ const SigninFormProvider = ({children}: Props) => {
       if (authenticated.status === COMPLETE) {
         await setActive({session: authenticated.createdSessionId})
         toast({
-          title: 'Success',
-          description: 'Welcome back!'
+          title: <span className="text-success">Success</span>,
+          description: 'Welcome back!',
+          className: 'text-success'
         })
         router.push('/dashboard')
       }
     } catch (err) {
       if (err.errors[0].code === 'form_password_incorrect') {
         toast({
-          title: 'Error',
-          description: 'email or password is incorrect. Please try again.'
+          title: <span className="text-error">Error</span>,
+          description: 'email or password is incorrect. Please try again.',
         })
       } else {
         toast({
           title: <span className="text-error">Error</span>,
-          description: 'Something went wrong. Please try again.'
+          description: 'Something went wrong. Please try again.',
         })
       }
-    } finally {
       setLoading(false)
     }
   }

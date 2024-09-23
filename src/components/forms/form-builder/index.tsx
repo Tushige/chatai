@@ -98,7 +98,7 @@ const FormBuilder = ({
     case 'textarea':
       return (
         <Label
-          className={cn("flex flex-col gap-2", className)}
+          className={cn("flex flex-col gap-2 text-text", className)}
           htmlFor={`input-${label}`}
         >
           {label && label}
