@@ -46,6 +46,7 @@ export async function getCampaign(id: string) {
         name: true,
         description: true,
         createdAt: true,
+        domainId: true,
         contacts: {
           select: {
             id: true,
@@ -134,8 +135,6 @@ export async function sendEmail({
         if (err) {
           return reject('Failed to send email')
         }
-        console.log('email sent')
-        console.log(info)
         return resolve({
           status: 200,
           message: 'Email Sent!'

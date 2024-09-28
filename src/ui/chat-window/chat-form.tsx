@@ -14,22 +14,22 @@ type Bot = {
   datasetId: string,
   backstory: string,
   botName: string,
-  model: string
+  model: string,
 }
 
 function ChatForm({
-  botId,
   bot,
-  domainId
+  domainId,
+  conversationId,
+  token
 }: {
   bot: BotOptions,
-  botId: string,
-  domainId: string
+  domainId: string,
+  conversationId: string,
+  token: string
 }) {
-  const {toast} = useToast()
-  const {botName} = bot
-  const [conversationId, setConversationId] = useState(undefined)
-  const [token, setToken] = useState(undefined)
+  const {name} = bot
+  
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const {
     text,
@@ -45,45 +45,12 @@ function ChatForm({
     
   }, [messages])
 
-  async function createSession() {
-    const res = await fetch('/api/session', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({botId: bot.id})
-    })
-    if (!res) {
-      throw new Error('Failed to create a conversation session')
-    }
-    const {conversationId, token} = await res.json()
-    setConversationId(conversationId)
-    setToken(token)
-    const chatUpdates = await fetch('/api/chatbot/update-conversations', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({id: botId, conversationId})
-    })
-    if (chatUpdates.status !== 200) {
-      toast({
-        title: 'ERROR',
-        description: 'Chat Feature is Unavailable'
-      })
-    }
-  }
-  if (!conversationId || !token) {
-    return (
-      <Button onClick={() => createSession()}>Start Chat</Button>
-    )
-  }
   return (
     <ChatContent 
       domainId={domainId}
       conversationId={conversationId}
       messages={messages}
-      botName={botName}
+      botName={name}
       thinking={thinking}
       messagesEndRef={messagesEndRef}
       text={text}

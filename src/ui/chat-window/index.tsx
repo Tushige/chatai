@@ -3,27 +3,27 @@ import ChatForm from './chat-form'
 import Image from 'next/image'
 import React, { useState } from 'react'
 import { getChatbot, getChatBotKitUserClient } from '@/actions/chatbot.action'
+import ChatUI from './chat-ui'
+import { CHATBOT_TOKEN_DURATION } from '@/app/constants'
+import { redirect } from 'next/navigation'
 
 const ChatWindow = async ({domain}) => {
   const bot = await getChatbot(domain.chatBot.chatBotKitId)
+  if (!bot) {
+    console.error('bot not found')
+    redirect('/')
+  }
+  // const {conversationId, token} = await fetch(`/api/session?botId=${bot.id}`, {
+  //   method: 'GET',
+  //   headers: {
+  //     'Content-Type': 'application/json'
+  //   },
+  //   next: {
+  //     revalidate: CHATBOT_TOKEN_DURATION,
+  //   }
+  // })
   return (
-    <div className="h-[600px] w-[400px] border bg-background border-zinc-200 rounded-xl shadow-md ">
-      <div className="flex flex-row gap-2 items-center mb-4">
-        <div className="w-[80px] h-[80px] rounded-full flex justify-center items-center bg-background">
-          <Image
-            src="/images/plus.png"
-            width={36}
-            height={36}
-            alt="chatbot avatar"
-          />
-        </div>
-        <p>
-          {bot.name}
-        </p>
-      </div>
-      <Separator />
-      <ChatForm bot={bot} botId={domain.chatBot.id} domainId={domain.id}/>
-    </div>
+    <ChatUI bot={bot} domain={domain}/>
   )
 }
 

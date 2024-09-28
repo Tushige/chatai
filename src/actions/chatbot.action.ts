@@ -93,10 +93,7 @@ const addConversation = async (id: string, conversationId: string) => {
     }
   } catch (err) {
     console.error(err)
-    return {
-      status: 400,
-      message: err
-    }
+    throw new Error(err)
   }
 }
 

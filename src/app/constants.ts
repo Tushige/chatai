@@ -1,0 +1,1 @@
+export const CHATBOT_TOKEN_DURATION=3600

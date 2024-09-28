@@ -23,7 +23,7 @@ const DomainChatBotTraining = ({
           Add Questions to your bot to extend its functionality
         </p>
         <Link href={`/domains/${domainId}/questions/new`} className="flex flex-row items-center gap-2 border border-text rounded-lg w-fit px-4 py-2 bg-background hover:bg-muted-foreground my-4">
-          <span>Create Question</span>
+          <span>Create Questions</span>
           <ArrowRightIcon className="size-4" />
         </Link>
       </div>
