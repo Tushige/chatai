@@ -20,7 +20,8 @@ const config: Config = {
 					secondary: 'var(--text-secondary)'
 				},
 				accent: {
-					DEFAULT: 'var(--accent)'
+					DEFAULT: 'var(--accent)',
+					hover: 'var(--accent-hover)'
 				},
   			muted: {
   				DEFAULT: 'var(--muted)',

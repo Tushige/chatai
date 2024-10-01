@@ -31,6 +31,7 @@ body {
     --text-foreground: white;
     --text-secondary: #A3A3A3;
     --accent: #F05A7E;
+    --accent-hover: #ed2858;
     --success: #03DAC5;
     --warning: #FBC02D;
     --error: #CF6679;

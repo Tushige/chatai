@@ -7,10 +7,11 @@ import { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
 
 const OTPForm = () => {
-  const {register, formState: {errors}} = useFormContext()
+  const {register, formState: {errors}, getFieldState} = useFormContext()
   const {setValue} = useFormContext()
   const [otp, setOtp] = useState('')
-
+  const {isDirty} = getFieldState('otp')
+  console.log(isDirty)
   useEffect(() => {
     setValue('otp', otp)
   }, [otp])
@@ -26,18 +27,23 @@ const OTPForm = () => {
         <OTPInput
           otp={otp}
           setOtp={setOtp}
+          register={register}
         />
       </div>
       <div className="w-full">
-        <ErrorMessage
-          errors={errors}
-          name="otp"
-          render={({message}) => (
-            <p className="text-red-400 mt-2">
-              {message}
-            </p>
-          )}
-        />
+        {
+          isDirty && (
+            <ErrorMessage
+              errors={errors}
+              name="otp"
+              render={({message}) => (
+                <p className="text-red-400 mt-2">
+                  {message}
+                </p>
+              )}
+            />
+          )
+        }
       </div>
       <div className="w-full">
         <Button className="w-full text-text border border-border hover:bg-surface" type="submit">

@@ -8,6 +8,8 @@ import {UserRegistrationProps, UserRegistrationSchema} from '@/schemas/auth.sche
 import { useToast } from '@/hooks/use-toast'
 import { createUser } from '@/actions/user.action'
 import Loader from '@/components/loader'
+import { createCustomer, createFreeSubscription } from '@/actions/stripe'
+import Stripe from 'stripe'
 
 type Props = {
   children: React.ReactNode
@@ -37,34 +39,53 @@ const SignupFormProvider = ({children}: Props) => {
         code: data.otp
       })
       if (res.status === COMPLETE) {
-        if (!signUp.createdUserId) return
+        if (!signUp.createdUserId) {
+          throw new Error('Failed to register')
+        }
+        // create customer on stripe
+        const customer = await createCustomer({
+          name: data.fullname,
+          email: data.email
+        }) 
+        // TODO - later on when we have our homepage, we will give users to option to choose a plan with the signup
+        // But for now automatically subscribe the user to the free tier.
+        await createFreeSubscription(customer.id)
+        
+        if (!customer) {
+          throw new Error('Failed to create customer')
+        }
         const registered = await createUser(
           data.fullname,
           signUp.createdUserId,
-          data.type
+          data.type,
+          customer.id
         )
         if (registered?.status === 200 && registered?.user) {
           await setActive({
             session: res.createdSessionId
           })
           router.push('/dashboard')
-        }
-        if (registered?.status === 400) {
+        } else {
           toast({
-            title: 'ERROR',
+            title: <span className="error">Error</span>,
             description: 'Something went wrong.'
           })
+          setLoading(false)
         }
       } else {
-        return {
-          message: 'Something went wrong. Please try again'
-        }
+        toast({
+          title: <span className="error">Error</span>,
+          description: 'Something went wrong. Please try again'
+        })
+        setLoading(false)
       }
     } catch (err) {
+      console.error(err)
       toast({
-        title: 'Error',
-        description: err.errors[0].longMessage
+        title: <span className="text-error">Error</span>,
+        description: 'An error occured. Please try again'
       })
+      setLoading(false)
     }
   }
   return (

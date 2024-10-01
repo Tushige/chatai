@@ -1,8 +1,13 @@
+import { createCustomer } from '@/actions/stripe'
 import React from 'react'
 
-const page = () => {
+const page = async () => {
   return (
-    <div>Dashboard</div>
+    <div>
+      <h1>
+        Usage
+      </h1>
+    </div>
   )
 }
 

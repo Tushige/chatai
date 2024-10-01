@@ -56,7 +56,7 @@ const CampaignAddForm = ({
   const {register, formState: {errors}} = methods
 
   return (
-    <FormProvider>
+    <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(handleSubmit)}>
         <div className="mt-4 flex flex-col gap-4">
           <FormBuilder

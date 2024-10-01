@@ -8,7 +8,7 @@ import { Separator } from '@/components/ui/separator'
 const CampaignsPage = async () => {
   const domains = await getAllDomains()
   return (
-    <div className="container px-4 lg:px-8 pt-8">
+    <>
       <AppPageTitle title="Campaigns" description="Organize your email campaigns and track them effectively here"/>
       {
         !domains || domains.length < 1 ? (
@@ -40,7 +40,7 @@ const CampaignsPage = async () => {
           </>
         )
       }
-    </div>
+    </>
   )
 }
 export default CampaignsPage

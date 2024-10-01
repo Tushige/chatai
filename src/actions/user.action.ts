@@ -19,7 +19,8 @@ const DEFAULT_QUESTIONS = [
 const createUser = async (
   fullname: string,
   clerkId: string,
-  type: string
+  type: string,
+  stripeCustomerId: string
 ) => {
   try {
     const registered = await client.user.create({
@@ -28,7 +29,9 @@ const createUser = async (
         clerkId,
         type,
         billing: {
-          create: {}
+          create: {
+            stripeCustomerId
+          }
         }
       },
       select: {
@@ -49,6 +52,33 @@ const createUser = async (
     return {
       status: 400
     }
+  }
+}
+
+const getUserBilling = async (clerkId: string) => {
+  try {
+    const user = await client.user.findUnique({
+      where: {
+        clerkId
+      },
+      select: {
+        id: true,
+        fullname: true,
+        type: true,
+        billing: {
+          select: {
+            id: true,
+            stripeCustomerId: true,
+          }
+        }
+      }
+    })
+    if (!user) {
+      throw new Error('Failed to get the current user')
+    }
+    return user;
+  } catch (err) {
+    throw new Error(err)
   }
 }
 
@@ -107,11 +137,6 @@ const createDomain = async({
           select: {
             domains: true
           }
-        },
-        billing: {
-          select: {
-            plan: true
-          }
         }
       }
     })
@@ -131,18 +156,7 @@ const createDomain = async({
         message: 'Domain already exists'
       }
     }
-    const planType = user?.billing?.plan
-    // return early if user has reached their max capacity
-    if (
-      (planType === 'PRO' && user._count.domains > 7) ||
-      (planType === 'ULTIMATE' && user._count.domains > 10) ||
-      (planType === 'STANDARD' && user._count.domains > 3)) {
-        return {
-          status: 400,
-          message: "You've reached the maximum number of domains. Upgrade your plan to add more domains."
-        }
-      }
-    
+    // TODO - check if user has reached maximum capacity on their plan.
     // create default bot questions
     const bot = await createChatbotForDomain(botName, DEFAULT_QUESTIONS)
     
@@ -192,6 +206,7 @@ const createDomain = async({
 
 export {
   createUser,
+  getUserBilling,
   getAuthUser,
   createDomain
 }

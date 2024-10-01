@@ -21,13 +21,11 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  stripeId String?
-
   domains Domain[]
 
   campaign Campaign[]
 
-  billing Billings?
+  billing Billing?
 }
 
 model Domain {
@@ -57,12 +55,16 @@ model ChatBot {
   domainId        String?  @unique @db.Uuid
 }
 
-model Billings {
-  id      String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  plan    Plans   @default(STANDARD)
-  credits Int     @default(10)
-  user    User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId  String? @unique @db.Uuid
+model Billing {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  stripeCustomerId String?
+
+  credits  Int      @default(10)
+  features String[] @default([])
+
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String? @unique @db.Uuid
 }
 
 model Questions {
@@ -128,12 +130,6 @@ model Campaign {
   createdAt   DateTime  @default(now())
   domain      Domain?   @relation(fields: [domainId], references: [id], onDelete: Cascade)
   domainId    String?   @unique @db.Uuid
-}
-
-enum Plans {
-  STANDARD
-  PRO
-  ULTIMATE
 }
 
 enum Role {

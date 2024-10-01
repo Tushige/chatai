@@ -21,7 +21,9 @@ const Layout = async ({children}: {
       </div>
       <Separator orientation='vertical'/>
       <div className="w-full h-screen flex flex-col overflow-y-scroll bg-background text-text">
-        {children}
+        <div className="container px-4 lg:px-8 pt-8">
+          {children}
+        </div>
       </div>
     </div>
   )
