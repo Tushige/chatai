@@ -1,14 +1,13 @@
 'use client'
-import DomainAddForm from '@/components/forms/domain/domain-add-form'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/drawer'
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer'
 import { PlusIcon } from 'lucide-react'
 import Link from 'next/link'
 import React, { useMemo, useState } from 'react'
 import CampaignAddForm from './campaign-add-form'
 import Loader from '@/components/loader'
-import AppDate from '@/components/app-date'
+import { AppRelativeDate } from '@/components/app-date'
 
 const CampaignsList = ({
   campaigns,
@@ -99,7 +98,7 @@ function CampaignCard({
           <CardDescription>{campaign.description}</CardDescription>
         </CardHeader>
         <div className="px-8">
-          <AppDate timestamp={timestamp} />
+          <AppRelativeDate timestamp={timestamp} />
         </div>
       </Card>
     </Link>

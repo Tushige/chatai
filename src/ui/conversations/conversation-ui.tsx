@@ -38,6 +38,7 @@ const ConversationUI = ({
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [selectedConversation, setSelectedConversation] = useState<Conversation>(null)
   const [loading, setLoading] = useState(false)
+
   function onDomainChange(value: string) {
     setSelectedConversation(null)
     setDomainsIdx(value)
@@ -71,6 +72,13 @@ const ConversationUI = ({
   }, [domainsIdx])
   if (loading) {
     return <Loader />
+  }
+  if (!domains || domains.length < 1) {
+    return (
+      <div className="h-[90vh] flex justify-center items-center text-secondary text-medium">
+        Create a Domain first and then come back
+      </div>
+    )
   }
   return (
     <div className="w-full h-full grid grid-cols-12 pt-10">

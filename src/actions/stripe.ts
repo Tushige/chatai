@@ -1,6 +1,6 @@
 import Stripe from 'stripe'
 
-export const stripeClient = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET)
+export const stripeClient = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET!)
 
 export const getPrices = async (productId: string) => {
   try {
@@ -10,6 +10,7 @@ export const getPrices = async (productId: string) => {
     })
     return prices;
   } catch(err) {
+    console.error(err)
     throw new Error(err)
   }
 }
@@ -38,8 +39,13 @@ export const getAvailablePrices = async (customerId: string) => {
     if (!prices || !prices.data) {
       throw new Error('Expected prices but got nothing')
     }
-    console.log(prices.data)
-    return {prices: prices.data, current: price}
+    return {
+      subscriptionId: subscription.data[0].id,
+      prices: prices.data,
+      subscriptionItemId: subscription.data[0].items.data[0].id,
+      currentPrice: price,
+      currentPeriodEnd: subscription.data[0].current_period_end
+    }
   } catch (err) {
     console.error(err)
     throw new Error(err)
@@ -51,6 +57,7 @@ export const getAvailablePrices = async (customerId: string) => {
  * flow: customer browses available plan and select a plan. We call this method with the select price's id and the customer id.
  * customer will be redirected to stripe hosted checkout page where they'll complete the purchase
  * 
+ * This is no longer used, we're going with custom form instead
  */
 export const createCheckoutSession = async (priceId: string, customerId: string) => {
   try {
@@ -73,25 +80,6 @@ export const createCheckoutSession = async (priceId: string, customerId: string)
   }
 }
 
-export const updateCheckoutSession = async (priceId: string, customerId: string, subscriptionId: string) => {
-  try {
-    const session = await stripeClient.checkout.sessions.create({
-      billing_address_collection: 'auto',
-      customer: customerId,
-      line_items: [{
-        price: priceId, // The new price ID
-        quantity: 1, // Typically, this is set to 1
-      }],
-      mode: 'subscription',
-      success_url: `http://localhost:3000/settings/membership/change-plan?success=true&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `http://localhost:3000/settings/membership`
-    })
-    return session
-  } catch (err) {
-    throw new Error(err)
-  }
-}
-
 // we subscribe new users to the free plan by default.
 export const createFreeSubscription = async (customerId: string) => {
   try {
@@ -99,8 +87,13 @@ export const createFreeSubscription = async (customerId: string) => {
       customer: customerId,
       items: [{
         price: process.env.NEXT_PUBLIC_STRIPE_FREE_PLAN_ID
-      }]
+      }],
+      payment_behavior: 'default_incomplete',
+      payment_settings: {
+        save_default_payment_method: 'on_subscription'
+      }
     })
+  
     if (!subscription) {
       throw new Error('Failed to create a free subscription')
     }
@@ -110,11 +103,39 @@ export const createFreeSubscription = async (customerId: string) => {
     throw new Error(err)
   }
 }
+
+/**
+ * we update the subscription with the new plan and return payment intent back to the client
+ * On the client, we collect the payment info and complete the transaction.
+ */
+export const updateSubscription = async (customerId: string, subscriptionId: string, subscriptionItemId: string, priceId: string) => {
+  try {
+    const subscription = await stripeClient.subscriptions.update(subscriptionId, {
+      items: [{
+        id: subscriptionItemId,
+        price: priceId,
+        quantity: 1
+      }],
+      payment_behavior: 'default_incomplete',
+      payment_settings: {
+        save_default_payment_method: 'on_subscription',
+      },
+      expand: ['latest_invoice.payment_intent']
+    })
+    return {
+      subscriptionId: subscription.id,
+      clientSecret: subscription.latest_invoice.payment_intent.client_secret,
+      payment_intent_status: subscription.latest_invoice.payment_intent.status
+    }
+  } catch (err) {
+    console.error(err)
+    throw new Error(err)
+  }
+}
 /**
  * 
  */
 export const createPortalSession = async (customerId: string) => {
-  console.log(`creating portal for ${customerId}`)
   try {
     const portalSession = await stripeClient.billingPortal.sessions.create({
       customer: customerId,
@@ -140,30 +161,3 @@ export const createCustomer = async ({name, email}) => {
     throw new Error(err)
   }
 }
-
-
-
-// export const updateCheckoutSession = async (priceId: string, customerId: string, subscriptionId: string) => {
-//   try {
-//     const session = await stripeClient.checkout.sessions.create({
-//       customer: customerId,
-//       line_items: [{
-//         price: priceId, // The new price ID
-//         quantity: 1, // Typically, this is set to 1
-//       }],
-//       subscription_data: {
-//         items: [
-//           {
-//             price: priceId
-//           }
-//         ]
-//       },
-//       mode: 'subscription',
-//       success_url: `http://localhost:3000/settings/membership/change-plan?success=true&session_id={CHECKOUT_SESSION_ID}`,
-//       cancel_url: `http://localhost:3000/settings/membership`
-//     })
-//     return session
-//   } catch (err) {
-//     throw new Error(err)
-//   }
-// }

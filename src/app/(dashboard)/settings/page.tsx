@@ -20,7 +20,7 @@ const links = [
 ]
 const SettingsPage = () => {
   return (
-    <div>
+    <div className="w-full">
       <h1 className="font-bold text-4xl">
         Settings
       </h1>        

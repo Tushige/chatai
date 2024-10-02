@@ -17,7 +17,7 @@ type Props = {
   timestamp: number
 }
 
-const AppDate = ({
+export const AppRelativeDate = ({
   timestamp
 }: Props) => {
   return (
@@ -27,4 +27,15 @@ const AppDate = ({
   )
 }
 
-export default AppDate
+const simpleDate = (t) => {
+  return dayjs(t).format('MM/DD/YYYY')
+}
+export const AppDate = ({
+  timestamp
+}: Props) => {
+  return (
+    <span>
+      {simpleDate(timestamp)}
+    </span>
+  )
+}

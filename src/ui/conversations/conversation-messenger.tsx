@@ -1,4 +1,4 @@
-import AppDate from '@/components/app-date'
+import { AppRelativeDate } from '@/components/app-date'
 import { cn } from '@/lib/utils'
 import { AvatarIcon } from '@radix-ui/react-icons'
 import { Bot } from 'lucide-react';
@@ -51,7 +51,7 @@ function ChatMessage({
       {'flex-row-reverse': type === 'bot'}
     )}>
       <div className="flex flex-col gap-2 p-4 justify-start bg-background">
-        <AppDate timestamp={createdAt} />
+        <AppRelativeDate timestamp={createdAt} />
         <p>
           {message}
         </p>

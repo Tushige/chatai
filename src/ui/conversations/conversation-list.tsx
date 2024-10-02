@@ -1,9 +1,6 @@
 'use client'
-import { getMessages } from "@/actions/chatbot.action"
-import AppDate from "@/components/app-date"
-import Loader from "@/components/loader"
+import { AppRelativeDate } from "@/components/app-date"
 import { AvatarIcon } from "@radix-ui/react-icons"
-import { useEffect, useState } from "react"
 import { Conversation, Message } from "./types"
 import { Button } from "@/components/ui/button"
 
@@ -65,7 +62,7 @@ function MessageCard({message, createdAt, email}: MessageCardProps) {
         </div>
       </div>
       <div className="col-span-1 text-sm text-right">
-        <AppDate timestamp={createdAt} />
+        <AppRelativeDate timestamp={createdAt} />
       </div>
     </div>
   )
