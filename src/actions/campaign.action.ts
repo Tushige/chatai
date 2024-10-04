@@ -52,6 +52,13 @@ export async function getCampaign(id: string) {
             id: true,
             email: true
           }
+        },
+        emailBatches: {
+          select: {
+            id: true,
+            count: true,
+            createdAt: true
+          }
         }
       }
     })
@@ -104,16 +111,52 @@ export async function updateCampaignContacts(id: string, contactIds: string[]) {
     throw new Error(err)
   }
 }
-
+export async function totalEmailCountForUser(userId: string) {
+  try {
+    const count = await client.emailBatch.aggregate({
+      _sum: {
+        count: true,
+      },
+      where: {
+        campaign: {
+          domain: {
+            userId
+          }
+        }
+      }
+    })
+    return count._sum.count || 0;
+  } catch (err) {
+    console.error(err)
+    throw new Error(err)
+  }
+}
+export async function totalEmailCountForCampaign(campaignId: string) {
+  try {
+    const count = await client.emailBatch.aggregate({
+      _sum: {
+        count: true,
+      },
+      where: {
+        campaignId
+      }
+    })
+    return count._sum.count || 0;
+  } catch (err) {
+    console.error(err)
+  }
+}
 type SendEmailProps = {
   subject: string,
   text: string,
-  to: string[]
+  to: string[],
+  campaignId: string
 }
 export async function sendEmail({
   subject,
   text,
-  to
+  to,
+  campaignId
 }: SendEmailProps) {
   try {
     const transporter = nodemailer.createTransport({
@@ -131,9 +174,25 @@ export async function sendEmail({
       text,
     }
     return new Promise((resolve, reject) => {
-      transporter.sendMail(mailConfig, (err, info) => {
+      transporter.sendMail(mailConfig, async (err, info) => {
         if (err) {
           return reject('Failed to send email')
+        }
+        // save emails to our db
+        const numEmails = to.length
+        const emailBatchRecord = await client.emailBatch.create({
+          data: {
+            count: numEmails,
+            campaign: {
+              connect: {
+                id: campaignId
+              }
+            }
+          }
+        })
+        if (!emailBatchRecord) {
+          // TODO - once we have an error loggin solution, we just record that email was sent successfully but we failed to save emails to the DB
+          console.error('Failed to save emails to DB')
         }
         return resolve({
           status: 200,

@@ -68,7 +68,7 @@ const CampaignPage = async ({
               className="mt-8 xl:mt-0"
             />
             <Separator className="text-text my-4"/>
-            <CampaignEmailTemplate recipients={recipients}/>
+            <CampaignEmailTemplate recipients={recipients} campaignId={campaign.id}/>
           </div>
         </div>
       </div>

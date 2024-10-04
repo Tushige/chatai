@@ -16,15 +16,21 @@ import Stripe from 'stripe';
 import { StripeElementsOptions } from '@stripe/stripe-js';
 import { AppDate } from '@/components/app-date';
 import { CheckCircle } from 'lucide-react';
-import DotPattern from '@/components/magicui/dot-pattern';
 import GridPattern from "@/components/ui/grid-pattern";
+import { ConfettiFireworks } from '@/components/app-fireworks';
 
+
+const SUCCEEDED = 'succeeded';
+type PaymentOptionsType = StripeElementsOptions & {
+  payment_intent_status: string
+}
 const initialPaymentOptions = {
   appearance: {
     theme: 'night',
     labels: 'floating'
   },
-  clientSecret: null
+  clientSecret: undefined,
+  payment_intent_status: ""
 };
 
 type Price = Stripe.Price
@@ -41,14 +47,31 @@ type Billing = {
  * we fetch subscription to show customers their active subscription
  */
 const MembershipPage = () => {
-  const [paymentOptions, setPaymentOptions] = useState<StripeElementsOptions>(initialPaymentOptions)
+  const [paymentOptions, setPaymentOptions] = useState<PaymentOptionsType>(initialPaymentOptions)
   const [selectedPrice, setSelectedPrice] = useState<Price | null>(null)
   const [billing, setBilling] = useState<Billing | null >(null)
   const [loading, setLoading] = useState(false)
+  const [confettiActive, setConfettiActive] = useState(false)
   const {toast} = useToast()
+
+  const fetchBilling = async () => {
+    try {
+      const authId = await getAuthId()
+      let billing = await getUserBilling(authId)
+      billing = billing.billing
+      const subscription = await getAvailablePrices(billing.stripeCustomerId)
+      setBilling({
+        ...subscription,
+        customerId: billing.stripeCustomerId
+      })
+    } catch (err) {
+      console.error(err)
+    }
+  }
 
   const checkout = async (price) => {
     setSelectedPrice(price)
+    setLoading(true)
     try {
       const {subscriptionId, clientSecret, payment_intent_status} = await updateSubscription(
         billing.customerId,
@@ -56,47 +79,42 @@ const MembershipPage = () => {
         billing?.subscriptionItemId,
         price.id
       )
-      revalidatePath('/settings/membership')
+
+      // payment options is used by Stripe Elements 
       setPaymentOptions(prev => ({
         ...prev,
         clientSecret,
         payment_intent_status
       }))
+      if (payment_intent_status === SUCCEEDED) {
+        // payment succeded so no need to collect payment info
+        if (price.nickname === 'Premium') {
+          setConfettiActive(true)
+        }
+        fetchBilling()
+      }
     } catch(err) {
+      console.error(err)
       toast({
         title: <span className="text-error">Error</span>,
         description: 'Something went wrong. Please try again'
       })
+    } finally {
+      setLoading(false)
     }
   }
+
   useEffect(() => {
-    const fetchBilling = async () => {
-      try {
-        const authId = await getAuthId()
-        let billing = await getUserBilling(authId)
-        billing = billing.billing
-        const subscription = await getAvailablePrices(billing.stripeCustomerId)
-        console.log('ui subscription')
-        console.log(subscription)
-        setBilling({
-          ...subscription,
-          customerId: billing.stripeCustomerId
-        })
-      } catch (err) {
-        console.error(err)
-      }
-    }
     fetchBilling()
   }, [])
 
-  if (!billing || loading ) {
+  if (!billing ) {
     return (
       <div className="w-full h-[100vh] flex items-center justify-center">
         <Loader />
       </div>
     )
   }
-
   return (
     <div>
       <div className="relative">
@@ -109,6 +127,7 @@ const MembershipPage = () => {
             "[mask-image:linear-gradient(to_bottom_left,white,transparent,transparent)] ",
           )}
         />
+        <ConfettiFireworks active={confettiActive} />
         <h1 className="relative font-bold text-4xl">
           Membership
         </h1> 
@@ -129,13 +148,13 @@ const MembershipPage = () => {
                       <MembershipPlanCard
                         premium
                         priceId={d.id}
-                        key={d.nickname}
                         name={d.nickname}
                         unitAmount={d.unit_amount}
                         features={features}
                         className="relative z-10"
                         onClick={() => checkout(d)}
                         currentPrice={billing.currentPrice}
+                        loading={loading}
                       />
                     </WithGlow>
                   )
@@ -157,14 +176,19 @@ const MembershipPage = () => {
           </ul>
         </div>
         <SheetContent className="text-text">
-            {
-              paymentOptions.payment_intent_status === 'succeeded' ? (
+          {
+            loading ? (
+              <div className="w-full h-[100vh] flex items-center justify-center">
+                <Loader />
+              </div>
+            ) : (
+              paymentOptions.payment_intent_status === SUCCEEDED ? (
                 <div className="size-full flex flex-col justify-center items-center">
                   <CheckCircle className="size-24 text-success"/>
                   <span className="text-text text-xl">You're all set!</span>
                 </div>
               ) : (
-                paymentOptions.clientSecret && paymentOptions.payment_intent_status !== 'succeeded' ? (
+                paymentOptions.clientSecret ? (
                   <>
                     <SheetHeader>
                       <SheetTitle className="text-text mb-4">Subscribe to {selectedPrice?.nickname}</SheetTitle>
@@ -174,26 +198,29 @@ const MembershipPage = () => {
                     </Elements>
                   </>
                 ) : (
-                  (
-                    <div className="w-full h-[100vh] flex items-center justify-center">
-                      <Loader />
-                    </div>
-                  )
+                  <div className="text-4xl">
+                    Unexpected State
+                  </div>
                 )
-
               )
-            }
+            )
+          }`
         </SheetContent>
       </Sheet>
     </div>
   )
 }
 
+type PlanTextProps = {
+  className: string,
+  currentPrice: Price,
+  currentPeriodEnd: number
+}
 const PlanText = ({
   className,
   currentPrice,
   currentPeriodEnd
-}) => {
+}: PlanTextProps) => {
   return (
     <div className={cn(className)}>
       <p className="text-text">

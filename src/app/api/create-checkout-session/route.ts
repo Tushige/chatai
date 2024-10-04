@@ -3,7 +3,6 @@ import { redirect } from "next/navigation"
 
 export async function POST(req, res) {
   try {
-    console.log('[CREATE-STRIPE SESSION] API ROUTE]')
     const {priceId, customerId} = await req.json()
     const session = await createCheckoutSession(priceId, customerId)
     return new Response(JSON.stringify({

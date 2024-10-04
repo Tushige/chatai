@@ -23,8 +23,6 @@ model User {
 
   domains Domain[]
 
-  campaign Campaign[]
-
   billing Billing?
 }
 
@@ -113,23 +111,33 @@ model Bookings {
   date      DateTime
   slot      String
   email     String
+  createdAt DateTime @default(now())
+
   contact   Contact? @relation(fields: [contactId], references: [id], onDelete: Cascade)
   contactId String?  @db.Uuid
   domainId  String?  @db.Uuid
-  createdAt DateTime @default(now())
 }
 
 model Campaign {
-  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name        String
-  description String?
-  content     String?
-  contacts    Contact[]
-  user        User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String?   @db.Uuid
-  createdAt   DateTime  @default(now())
-  domain      Domain?   @relation(fields: [domainId], references: [id], onDelete: Cascade)
-  domainId    String?   @unique @db.Uuid
+  id           String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String
+  description  String?
+  content      String?
+  contacts     Contact[]
+  emailBatches EmailBatch[]
+  createdAt    DateTime     @default(now())
+
+  domain   Domain? @relation(fields: [domainId], references: [id], onDelete: Cascade)
+  domainId String? @unique @db.Uuid
+}
+
+model EmailBatch {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  count     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  campaign   Campaign? @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  campaignId String?   @db.Uuid
 }
 
 enum Role {

@@ -122,11 +122,12 @@ export const updateSubscription = async (customerId: string, subscriptionId: str
       },
       expand: ['latest_invoice.payment_intent']
     })
-    return {
+    const returnVal = {
       subscriptionId: subscription.id,
-      clientSecret: subscription.latest_invoice.payment_intent.client_secret,
-      payment_intent_status: subscription.latest_invoice.payment_intent.status
+      clientSecret: subscription.latest_invoice.payment_intent?.client_secret,
+      payment_intent_status: subscription.latest_invoice.payment_intent?.status || subscription.latest_invoice.status === 'paid' ? 'succeeded' :null
     }
+    return returnVal;
   } catch (err) {
     console.error(err)
     throw new Error(err)

@@ -10,11 +10,13 @@ import React, { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 type Props = {
-  recipients: string[]
+  recipients: string[],
+  campaignId: string
 }
 
 const CampaignEmailTemplate = ({
-  recipients
+  recipients,
+  campaignId
 }: Props) => {
   const {toast} = useToast()
   const [loading, setLoading] = useState<boolean>(false)
@@ -29,7 +31,8 @@ const CampaignEmailTemplate = ({
       const {status} = await sendEmail({
         subject: data.subject,
         text: data.text,
-        to: recipients
+        to: recipients,
+        campaignId
       })
       if (status === 200) {
         toast({

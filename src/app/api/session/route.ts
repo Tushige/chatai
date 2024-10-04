@@ -50,7 +50,6 @@ export async function GET(req) {
   const cbkbotId = searchParams.get('cbkbotId')
   const domainBotId = searchParams.get('domainBotId')
   if (!domainBotId || !cbkbotId) {
-    console.log('invalid arguments')
     return Response.json(JSON.stringify({status: 400, error: 'Invalid arguments'}))
   }
 

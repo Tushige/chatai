@@ -11,7 +11,6 @@ const OTPForm = () => {
   const {setValue} = useFormContext()
   const [otp, setOtp] = useState('')
   const {isDirty} = getFieldState('otp')
-  console.log(isDirty)
   useEffect(() => {
     setValue('otp', otp)
   }, [otp])
