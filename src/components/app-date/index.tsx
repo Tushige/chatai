@@ -27,8 +27,17 @@ export const AppRelativeDate = ({
   )
 }
 
-const simpleDate = (t) => {
+export const simpleDate = (t) => {
   return dayjs(t).format('MM/DD/YYYY')
+}
+export const dateWithTime = (date: string) => {
+  return dayjs(date).format("dddd, MMMM D, YYYY h:mm A")
+}
+export const timeFormat = (date: string, isTwentyFour?: boolean) => {
+  if (isTwentyFour) {
+    return dayjs(date).format('HH:mm')
+  }
+  return dayjs(date).format('h:mm A')
 }
 export const AppDate = ({
   timestamp

@@ -3,42 +3,51 @@ import { client } from '@/lib/prisma'
 import { DomainProps } from '@/schemas/domain.schema'
 import { getAuthId } from './auth'
 
+const getDomainWithOptions = async (domainId: string, select = {}) => {
+  try {
+    const domain = await client.domain.findUnique({
+      where: {
+        id: domainId,
+      },
+      select
+    })
+    if (!domain) {
+      throw Error('failed to fetch Domain')
+    }
+    return domain
+  } catch (err) {
+    console.error(err)
+    throw new Error(err)
+  }
+}
 /**
  * fetches domain record for the /domains/:id page 
  */
 const getDomain = async(domainId: string) => {
   try {
-    const domain = await client.domain.findUnique({
-      where: {
-        id: domainId
+    const domain = await getDomainWithOptions(domainId, {
+      id: true,
+      name: true,
+      icon: true,
+      chatBot: {
+        select: {
+          id: true,
+          welcomeMessage: true,
+          icon: true,
+          chatBotKitId: true
+        }
       },
-      select: {
-        id: true,
-        name: true,
-        icon: true,
-        chatBot: {
-          select: {
-            id: true,
-            welcomeMessage: true,
-            icon: true,
-            chatBotKitId: true
-          }
-        },
-        user: {
-          select: {
-            fullname: true,
-            billing: {
-              select: {
-                plan: true
-              }
+      user: {
+        select: {
+          fullname: true,
+          billing: {
+            select: {
+              stripeCustomerId: true,
             }
           }
         }
-      },
+      }
     })
-    if (!domain) {
-      throw Error('failed to fetch Domain')
-    }
     return domain
   } catch (err) {
     return {
@@ -47,7 +56,23 @@ const getDomain = async(domainId: string) => {
     }
   }
 }
-
+const getDomainWithContacts = async (domainId: string ) => {
+  try {
+    const domain = await getDomainWithOptions(domainId, {
+      id: true,
+      name: true,
+      contacts: {
+        select: {
+          id: true,
+          email: true,
+        }
+      }
+    })
+    return domain
+  } catch (err) {
+    console.error(err)
+  }
+}
 /**
  * we use this in conversations page to display all conversations for each domain
  */
@@ -165,5 +190,6 @@ export {
   getAllDomains,
   updateDomain,
   deleteDomain,
+  getDomainWithContacts
 }
 

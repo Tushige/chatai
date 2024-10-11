@@ -16,7 +16,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { getDomain } from '@/actions/domain.action'
+import { getDomain, getDomainWithContacts } from '@/actions/domain.action'
 
 const CampaignPage = async ({
   params,
@@ -26,7 +26,7 @@ const CampaignPage = async ({
   if (!campaign) {
     console.error('Campaign not found')
   }
-  const domain = await getDomain(campaign.domainId)
+  const domain = await getDomainWithContacts(campaign.domainId)
   let recipients = campaign.contacts.map(c => c.email)
   return (
     <div className="w-full h-full">
@@ -56,7 +56,7 @@ const CampaignPage = async ({
             <Separator className="text-text my-4"/>
             <EmailTable
               columns={EmailTableColumns}
-              contacts={campaign.contacts}
+              contacts={domain.contacts}
               campaign={campaign}
             />
           </div>

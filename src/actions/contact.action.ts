@@ -1,6 +1,40 @@
 'use server'
 import { client } from '@/lib/prisma'
 
+export const upsertContact = async ({email, domainId}: {
+  email: string,
+  domainId: string
+}) => {
+  try {
+    let contact = await client.contact.findFirst({
+      where: {
+        email
+      },
+      select: {
+        id: true
+      }
+    })
+    if (contact) {
+      return contact
+    }
+    contact = await client.contact.create({
+      data: {
+        email,
+        domain: {
+          connect: {
+            id: domainId
+          }
+        }
+      }
+    })
+    return contact;
+  } catch (err) {
+    console.error(err)
+    throw new Error(err)
+  }
+}
+
+// creates a new contact from a conversation
 export const createContact = async ({
   email,
   domainId,

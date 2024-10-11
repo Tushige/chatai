@@ -38,6 +38,7 @@ model Domain {
   contacts  Contact[]
   user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String?    @db.Uuid
+  Booking   Booking[]
 }
 
 model ChatBot {
@@ -88,7 +89,7 @@ model Contact {
   conversationIds    String[]             @default([])
   discoveryResponses DiscoveryResponses[]
 
-  booking Bookings[]
+  booking Booking[]
 
   domain     Domain?   @relation(fields: [domainId], references: [id], onDelete: Cascade)
   domainId   String?   @db.Uuid
@@ -106,16 +107,16 @@ model ChatMessage {
   seen       Boolean  @default(false)
 }
 
-model Bookings {
+model Booking {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   date      DateTime
-  slot      String
-  email     String
   createdAt DateTime @default(now())
 
   contact   Contact? @relation(fields: [contactId], references: [id], onDelete: Cascade)
   contactId String?  @db.Uuid
-  domainId  String?  @db.Uuid
+
+  domain   Domain? @relation(fields: [domainId], references: [id], onDelete: Cascade)
+  domainId String? @db.Uuid
 }
 
 model Campaign {
@@ -128,7 +129,7 @@ model Campaign {
   createdAt    DateTime     @default(now())
 
   domain   Domain? @relation(fields: [domainId], references: [id], onDelete: Cascade)
-  domainId String? @unique @db.Uuid
+  domainId String? @db.Uuid
 }
 
 model EmailBatch {

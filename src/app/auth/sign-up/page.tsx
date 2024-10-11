@@ -10,7 +10,7 @@ const page = () => {
       <SignupFormProvider>
         <StepsProvider>
           <div className="w-full mb-8">
-              <RegistrationSteps />
+            <RegistrationSteps />
           </div>
           <FormProgressBar/>
         </StepsProvider>

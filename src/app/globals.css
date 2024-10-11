@@ -36,6 +36,10 @@ body {
     --warning: #FBC02D;
     --error: #CF6679;
     --hover: #333333;
+
+    --primary-foreground: 'white';
+    --muted-foreground: 'white';
+    --accent-foreground: 'white';
   }
 
   .dark {

@@ -2,10 +2,14 @@
 import { useStepsContext } from "@/context/use-steps-context"
 import { cn } from "@/lib/utils"
 
-const FormProgressBar = () => {
+const FormProgressBar = ({
+  className
+}: {
+  className?: string
+}) => {
   const {currentStep} = useStepsContext()
   return (
-    <div className="grid grid-cols-3 gap-3 w-full">
+    <div className={cn("grid grid-cols-3 gap-3 w-full", className)}>
      <Step step={1} currentStep={currentStep} />
      <Step step={2} currentStep={currentStep} />
      <Step step={3} currentStep={currentStep} />
