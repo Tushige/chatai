@@ -3,6 +3,7 @@ import { client } from '@/lib/prisma'
 import { DomainProps } from '@/schemas/domain.schema'
 import { currentUser} from '@clerk/nextjs'
 import { createChatbotForDomain } from './chatbot.action'
+import { getPlan } from './plan.action'
 
 
 const DEFAULT_QUESTIONS = [
@@ -22,6 +23,8 @@ const createUser = async (
   type: string,
   stripeCustomerId: string
 ) => {
+  // every new user will be created on the Free tier
+  const freePlan = await getPlan('FREE')
   try {
     const registered = await client.user.create({
       data: {
@@ -30,7 +33,12 @@ const createUser = async (
         type,
         billing: {
           create: {
-            stripeCustomerId
+            stripeCustomerId,
+            plan: {
+              connect: {
+                id: freePlan.id
+              }
+            }
           }
         }
       },
@@ -49,9 +57,8 @@ const createUser = async (
       throw new Error('registration failed')
     }
   } catch (err) {
-    return {
-      status: 400
-    }
+    console.error(err)
+    throw new Error(err)
   }
 }
 
@@ -99,15 +106,22 @@ const getAuthUser = async(clerkId: string) => {
             id: true
           },
         },
+        billing: {
+          select: {
+            plan: {
+              select: {
+                domainLimit: true,
+                emailLimit: true
+              }
+            }
+          }
+        }
       }
     })
     return user;
   } catch (err) {
     console.error(err)
-    return {
-      status: 400,
-      message: err
-    }
+    throw new Error(err)
   }
 }
 type createDomainReturn = {
@@ -197,10 +211,7 @@ const createDomain = async({
 
   } catch (err) {
     console.error(err) 
-    return {
-      status: 400,
-      message: 'Failed creating Domain'
-    }
+    throw new Error(err)
   }
 }
 

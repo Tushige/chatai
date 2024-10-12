@@ -17,11 +17,11 @@ const Layout = async ({children}: {
   return (
     <div className="flex h-screen w-full overflow-hidden">
       <div className="sticky top-0 left-0">
-        <AppSideBar domains={authUser.domains}/>
+        <AppSideBar user={authUser} />
       </div>
       <Separator orientation='vertical'/>
       <div className="w-full h-screen flex flex-col overflow-y-scroll bg-background text-text">
-        <div className="container flex justify-center px-4 lg:px-8 pt-8">
+        <div className="container flex px-4 lg:px-8 pt-8">
           {children}
         </div>
       </div>

@@ -9,26 +9,28 @@ import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } f
 import { cn } from "@/lib/utils"
 import { PlusIcon } from "@heroicons/react/24/outline"
 import { Domain } from "@prisma/client"
+import { ArrowRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 
 function DomainMenu({
-  domains,
+  user,
   pathname
 }: {
-  domains: Domain[] | null | undefined,
+  user: any,
   pathname: string
 }) {
   const pathSegments = pathname.split('/')
   const domainId = pathSegments[pathSegments.length-1]
   return (
     <>
-      <DomainCreateForm/>
+      <DomainCreateForm reachedLimit={user.domains.length >= user.billing.plan.domainLimit} />
       <ul>
         {
-          domains?.map(domain => {
+          user.domains?.map(domain => {
             return (
               <li
                 key={domain.id}
@@ -57,8 +59,15 @@ function DomainMenu({
   )
 }
 
-function DomainCreateForm() {
+function DomainCreateForm({
+  reachedLimit
+}: {
+  reachedLimit: boolean
+}) {
   const [open, setOpen] = useState(false)
+  const router = useRouter()
+  const closeDrawer = () => setOpen(false)
+  const openDrawer = () => setOpen(true)
   return (
     <Drawer open={open}>
       <div className="flex justify-center lg:justify-between items-center p-4">
@@ -69,17 +78,51 @@ function DomainCreateForm() {
       </div>
       <DrawerContent className="pb-12">
         <div className="mx-auto w-full max-w-sm">
-          <DrawerHeader>
-            <DrawerTitle className="text-text-foreground">
-              Create a Domain
-            </DrawerTitle>
-            <DrawerDescription className="text-text">
-              Each chatbot will be associated with a domain
-            </DrawerDescription>
-            <DomainAddForm
-              closeDrawer={() => setOpen(false)}
-              onSuccess={() => setOpen(false)}
-            />
+        <DrawerHeader>
+          {
+            reachedLimit ? (
+              <>
+                <DrawerTitle className="text-text-foreground">
+                  You've reached your plan limits
+                </DrawerTitle>
+                <p className="text-sm text-text">
+                  Upgrade your plan to get access to more resources
+                </p>
+                <div className="flex justify-between items-end gap-2">
+                  <Button
+                    type="button"
+                    onClick={closeDrawer}
+                    className="bg-transparent text-text border-none shadow-none hover:bg-transparent "
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    className="mt-4 w-full bg-background text-text rounded-md flex flex-row gap-2 items-end hover:bg-surface"
+                    onClick={() => {
+                      router.push('/settings/membership')
+                      closeDrawer()
+                    }}
+                  >
+                    <span>Upgrade</span>
+                    <ArrowRight className="size-4 pb-1"/>
+                </Button>
+                </div>
+              </>
+            ) : (
+              <>
+                <DrawerTitle className="text-text-foreground">
+                  Create a Domain
+                </DrawerTitle>
+                <DrawerDescription className="text-text">
+                  Each chatbot will be associated with a domain
+                </DrawerDescription>
+                <DomainAddForm
+                  closeDrawer={closeDrawer}
+                  onSuccess={closeDrawer}
+                />
+              </>
+            )
+          }
           </DrawerHeader>
         </div>
       </DrawerContent>

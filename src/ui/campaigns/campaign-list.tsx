@@ -8,6 +8,7 @@ import React, { useMemo, useState } from 'react'
 import CampaignAddForm from './campaign-add-form'
 import Loader from '@/components/loader'
 import { AppRelativeDate } from '@/components/app-date'
+import CampaignCreateForm from './campaign-create-form'
 
 const CampaignsList = ({
   campaigns,
@@ -22,58 +23,23 @@ const CampaignsList = ({
             <CampaignCreateForm domainId={domainId}/>
           </div>
         ) : (
-          <ul className="flex flex-col gap-4 max-w-[42rem]">
-            {
-              campaigns.map(d => (
-                <li key={d.id}>
-                  <CampaignCard campaign={d} />
-                </li>
-              ))
-            }
-          </ul>
+          <div className="flex flex-col gap-4 max-w-[42rem]">
+            <div className="text-text text-medium text-center text-secondary flex justify-end">
+              <CampaignCreateForm domainId={domainId}/>
+            </div>
+            <ul className="flex flex-col gap-4 max-w-[42rem]">
+              {
+                campaigns.map(d => (
+                  <li key={d.id}>
+                    <CampaignCard campaign={d} />
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
         )
       }
     </>
-  )
-}
-
-function CampaignCreateForm({
-  domainId
-}) {
-  const [open, setOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
-
-  if (loading) {
-    return (
-      <div className="py-12">
-        <Loader className="w-[30px] h-[30px]"/>
-      </div>
-    )
-  }
-  return (
-    <Drawer open={open}>
-      <div className="flex justify-center items-center p-4">
-        <Button className="bg-background rounded-full text-text hover:bg-surface hover:text-text-foreground p-2" onClick={() => setOpen(true)}>
-          <PlusIcon className="w-6" />
-        </Button>
-      </div>
-      <DrawerContent className="pb-12">
-        <div className="mx-auto w-full max-w-sm">
-          <DrawerHeader>
-            <DrawerTitle className="text-text-foreground">
-              Create a Campaign
-            </DrawerTitle>
-            <CampaignAddForm
-              closeDrawer={() => setOpen(false)}
-              onSuccess={() => setOpen(false)}
-              loading={loading}
-              setLoading={setLoading}
-              domainId={domainId}
-            />
-          </DrawerHeader>
-        </div>
-      </DrawerContent>
-    </Drawer>
   )
 }
 
@@ -97,7 +63,7 @@ function CampaignCard({
           <CardTitle>{campaign.name}</CardTitle>
           <CardDescription>{campaign.description}</CardDescription>
         </CardHeader>
-        <div className="px-8">
+        <div className="px-8 text-sm">
           <AppRelativeDate timestamp={timestamp} />
         </div>
       </Card>

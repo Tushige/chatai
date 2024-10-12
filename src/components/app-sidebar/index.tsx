@@ -57,10 +57,10 @@ const links: LinkProp[] = [
 ]
 
 type Props = {
-  domains: Domain[] | null | undefined
+  user: any
 }
 const AppSideBar = ({
-  domains,
+  user,
 }: Props) => {
   const pathname = usePathname()
   return (
@@ -73,7 +73,7 @@ const AppSideBar = ({
         </div>
       </h2>
      <Menu pathname={pathname}/>
-     <DomainMenu domains={domains} pathname={pathname}/>
+     <DomainMenu user={user} pathname={pathname}/>
      <MenuOptions />
     </div>
   )
@@ -123,7 +123,7 @@ function MenuOptions() {
     <div className="bg-background p-4 absolute bottom-0 w-full">
       <Button className="w-full bg-background hover:bg-surface rounded-md flex flex-row gap-2 flex-start">
         <ArrowLeftEndOnRectangleIcon className="w-6 text-text" />
-        <Link href="/auth/sign-out" className="text-text text-medium hidden lg:inline-block">
+        <Link href="/sign-out" className="text-text text-medium hidden lg:inline-block">
           Sign Out
         </Link>
       </Button>

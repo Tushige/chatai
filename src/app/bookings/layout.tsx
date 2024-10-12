@@ -17,7 +17,7 @@ const Layout = async ({children}: {
         <AppPublicNavbar />
       </div>
       <div className="w-full flex flex-col bg-background text-text">
-        <div className="container mx-auto flex justify-center px-4 lg:px-8 pt-8">
+        <div className="container mx-auto flex px-4 lg:px-8 pt-8">
           {children}
         </div>
       </div>

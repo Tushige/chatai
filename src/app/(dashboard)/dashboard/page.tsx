@@ -10,18 +10,18 @@ import { totalEmailCountForCampaign, totalEmailCountForUser } from '@/actions/ca
 
 const page = async () => {
   const authId = await getAuthId()
-  const user = await getAuthUser(authId)
+  const user = await getAuthUser(authId!)
   const numEmails = await totalEmailCountForUser(user.id)
   const metrics = [
     {
       label: 'Domains',
-      value: 4,
-      max: 10
+      value: user.domains.length,
+      max: user.billing.plan.domainLimit
     },
     {
       label: 'Emails',
       value: numEmails,
-      max: 300
+      max: user.billing.plan.emailLimit
     }
   ]
   return (

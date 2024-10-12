@@ -57,7 +57,7 @@ const UserTypeForm = () => {
         <div className="flex flex-row gap-2 mt-4">
           <p className="text-medium text-text">Already have an account?</p>
           <Link
-            href="/auth/sign-in"
+            href="/sign-in"
             className="font-bold underline text-text"
           >
             Sign In

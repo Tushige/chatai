@@ -12,7 +12,7 @@ const SigninForm = () => {
         Sign in to FINCENT AI
       </h2>
       <p className="text-sm text-text-secondary mt-4">
-        Don't have an account? <Link href="/auth/sign-up" className="underline hover:text-text-foreground">Sign Up</Link>
+        Don't have an account? <Link href="/sign-up" className="underline hover:text-text-foreground">Sign Up</Link>
       </p>
       <div className="flex flex-col gap-4 mt-8">
         <FormBuilder

@@ -50,17 +50,24 @@ model ChatBot {
   background      String?
   textColor       String?
   helpdesk        Boolean  @default(false)
-  domain          Domain?  @relation(fields: [domainId], references: [id], onDelete: Cascade)
   domainId        String?  @unique @db.Uuid
+  domain          Domain?  @relation(fields: [domainId], references: [id], onDelete: Cascade)
+}
+
+model Plan {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String    @unique
+  emailLimit  Int
+  domainLimit Int
+  Billing     Billing[]
 }
 
 model Billing {
   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
   stripeCustomerId String?
-
-  credits  Int      @default(10)
-  features String[] @default([])
+  plan             Plan    @relation(fields: [planId], references: [id])
+  planId           String  @db.Uuid
 
   user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String? @unique @db.Uuid
@@ -123,7 +130,7 @@ model Campaign {
   id           String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name         String
   description  String?
-  content      String?
+  content      String? // is this userd anywhere?
   contacts     Contact[]
   emailBatches EmailBatch[]
   createdAt    DateTime     @default(now())

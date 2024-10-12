@@ -176,7 +176,8 @@ export async function sendEmail({
     return new Promise((resolve, reject) => {
       transporter.sendMail(mailConfig, async (err, info) => {
         if (err) {
-          return reject('Failed to send email')
+          console.error(err)
+          return reject({message: 'Failed to send email'})
         }
         // save emails to our db
         const numEmails = to.length

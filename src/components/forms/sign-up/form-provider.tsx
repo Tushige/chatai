@@ -50,7 +50,6 @@ const SignupFormProvider = ({children}: Props) => {
         // TODO - later on when we have our homepage, we will give users to option to choose a plan with the signup
         // But for now automatically subscribe the user to the free tier.
         await createFreeSubscription(customer.id)
-        
         if (!customer) {
           throw new Error('Failed to create customer')
         }
