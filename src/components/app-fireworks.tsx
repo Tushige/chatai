@@ -1,26 +1,24 @@
-import confetti from "canvas-confetti";
- 
-import { Button } from "@/components/ui/button";
-import { useEffect } from "react";
- 
-export function ConfettiFireworks({
-  active
-}) {
+import confetti from 'canvas-confetti';
+
+import { Button } from '@/components/ui/button';
+import { useEffect } from 'react';
+
+export function ConfettiFireworks({ active }) {
   const activateConfetti = () => {
     const duration = 5 * 1000;
     const animationEnd = Date.now() + duration;
     const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
- 
+
     const randomInRange = (min: number, max: number) =>
       Math.random() * (max - min) + min;
- 
+
     const interval = window.setInterval(() => {
       const timeLeft = animationEnd - Date.now();
- 
+
       if (timeLeft <= 0) {
         return clearInterval(interval);
       }
- 
+
       const particleCount = 50 * (timeLeft / duration);
       confetti({
         ...defaults,
@@ -36,12 +34,8 @@ export function ConfettiFireworks({
   };
   useEffect(() => {
     if (active) {
-      activateConfetti()
+      activateConfetti();
     }
-  }, [active])
-  return (
-    <div className="relative">
-     
-    </div>
-  );
+  }, [active]);
+  return <div className='relative'></div>;
 }

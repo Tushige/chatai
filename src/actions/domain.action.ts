@@ -1,7 +1,7 @@
-'use server'
-import { client } from '@/lib/prisma'
-import { DomainProps } from '@/schemas/domain.schema'
-import { getAuthId } from './auth'
+'use server';
+import { client } from '@/lib/prisma';
+import { DomainProps } from '@/schemas/domain.schema';
+import { getAuthId } from './auth';
 
 const getDomainWithOptions = async (domainId: string, select = {}) => {
   try {
@@ -9,21 +9,21 @@ const getDomainWithOptions = async (domainId: string, select = {}) => {
       where: {
         id: domainId,
       },
-      select
-    })
+      select,
+    });
     if (!domain) {
-      throw Error('failed to fetch Domain')
+      throw Error('failed to fetch Domain');
     }
-    return domain
+    return domain;
   } catch (err) {
-    console.error(err)
-    throw new Error(err)
+    console.error(err);
+    throw new Error(err);
   }
-}
+};
 /**
- * fetches domain record for the /domains/:id page 
+ * fetches domain record for the /domains/:id page
  */
-const getDomain = async(domainId: string) => {
+const getDomain = async (domainId: string) => {
   try {
     const domain = await getDomainWithOptions(domainId, {
       id: true,
@@ -34,8 +34,8 @@ const getDomain = async(domainId: string) => {
           id: true,
           welcomeMessage: true,
           icon: true,
-          chatBotKitId: true
-        }
+          chatBotKitId: true,
+        },
       },
       user: {
         select: {
@@ -43,20 +43,20 @@ const getDomain = async(domainId: string) => {
           billing: {
             select: {
               stripeCustomerId: true,
-            }
-          }
-        }
-      }
-    })
-    return domain
+            },
+          },
+        },
+      },
+    });
+    return domain;
   } catch (err) {
     return {
       status: 400,
-      message: err
-    }
+      message: err,
+    };
   }
-}
-const getDomainWithContacts = async (domainId: string ) => {
+};
+const getDomainWithContacts = async (domainId: string) => {
   try {
     const domain = await getDomainWithOptions(domainId, {
       id: true,
@@ -65,24 +65,24 @@ const getDomainWithContacts = async (domainId: string ) => {
         select: {
           id: true,
           email: true,
-        }
-      }
-    })
-    return domain
+        },
+      },
+    });
+    return domain;
   } catch (err) {
-    console.error(err)
+    console.error(err);
   }
-}
+};
 /**
  * we use this in conversations page to display all conversations for each domain
  */
 const getAllDomains = async () => {
-  const authId = await getAuthId()
-  if (!authId) return
+  const authId = await getAuthId();
+  if (!authId) return;
   try {
     const user = await client.user.findUnique({
       where: {
-        clerkId: authId
+        clerkId: authId,
       },
       select: {
         id: true,
@@ -94,42 +94,41 @@ const getAllDomains = async () => {
             chatBot: {
               select: {
                 chatBotKitId: true,
-                conversationIds: true
-              }
+                conversationIds: true,
+              },
             },
             contacts: {
               select: {
                 id: true,
                 email: true,
-                conversationIds: true
-              }
-            }
-          }
-        }
-      }
-    })
-    return user.domains
+                conversationIds: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    return user.domains;
   } catch (err) {
-    console.error(err)
+    console.error(err);
     return {
       status: 400,
-      message: 'Failed to fetch all domains'
-    }
+      message: 'Failed to fetch all domains',
+    };
   }
-}
+};
 
 /**
  * update domain settings in the Domain Settings UI
  */
-const updateDomain = async (id, {
-  name,
-  icon,
-  welcomeMessage
-}: DomainProps) => {
+const updateDomain = async (
+  id,
+  { name, icon, welcomeMessage }: DomainProps
+) => {
   try {
     const domain = await client.domain.update({
       where: {
-        id
+        id,
       },
       data: {
         name,
@@ -137,59 +136,58 @@ const updateDomain = async (id, {
         chatBot: {
           update: {
             data: {
-              welcomeMessage
-            }
-          }
-        }
-      }
-    })
+              welcomeMessage,
+            },
+          },
+        },
+      },
+    });
     if (!domain) {
       return {
         status: 400,
-        message: 'Domain update failed'
-      }
+        message: 'Domain update failed',
+      };
     }
     return {
       status: 200,
-      message: 'Domain successfully updated'
-    }
+      message: 'Domain successfully updated',
+    };
   } catch (err) {
-    console.error(err)
+    console.error(err);
     return {
       status: 400,
-      message: err
-    }
+      message: err,
+    };
   }
-}
+};
 const deleteDomain = async (id) => {
   try {
     const deleted = await client.domain.delete({
       where: {
-        id
-      }
-    })
+        id,
+      },
+    });
     if (deleted) {
       return {
         status: 200,
-        message: 'successfully deleted domain'
-      }
+        message: 'successfully deleted domain',
+      };
     } else {
-      throw Error('failed to delete domain')
+      throw Error('failed to delete domain');
     }
   } catch (err) {
-    console.error(err) 
+    console.error(err);
     return {
       status: 400,
-      message: err
-    }
+      message: err,
+    };
   }
-}
+};
 
 export {
   getDomain,
   getAllDomains,
   updateDomain,
   deleteDomain,
-  getDomainWithContacts
-}
-
+  getDomainWithContacts,
+};

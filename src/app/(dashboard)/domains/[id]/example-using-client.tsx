@@ -1,69 +1,62 @@
-'use client'
-import {getDomain} from '@/actions/domain.action'
-import Loader from '@/components/loader'
-import { Separator } from '@/components/ui/separator'
-import { AuthContext } from '@/context/use-auth-context'
-import { useToast } from '@/hooks/use-toast'
-import { useRouter } from 'next/navigation'
-import React, { useContext, useEffect, useState } from 'react'
+'use client';
+import { getDomain } from '@/actions/domain.action';
+import Loader from '@/components/loader';
+import { Separator } from '@/components/ui/separator';
+import { AuthContext } from '@/context/use-auth-context';
+import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
+import React, { useContext, useEffect, useState } from 'react';
 
-const DomainSettingsPage = ({params}) => {
-  const {toast} = useToast()
-  const router = useRouter()
-  const domainId = params.id
+const DomainSettingsPage = ({ params }) => {
+  const { toast } = useToast();
+  const router = useRouter();
+  const domainId = params.id;
   if (!domainId) {
-    router.push('/')
+    router.push('/');
   }
-  const {authId, loading: authLoading} = useContext(AuthContext)
-  const [domain, setDomain] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const { authId, loading: authLoading } = useContext(AuthContext);
+  const [domain, setDomain] = useState(null);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const domainRecord = await getDomain(params.id)  
-        setDomain(domainRecord)
-        setLoading(false)
+        const domainRecord = await getDomain(params.id);
+        setDomain(domainRecord);
+        setLoading(false);
       } catch (err) {
         toast({
           title: 'Error',
-          description: 'oops'
-        })
+          description: 'oops',
+        });
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
     if (!authLoading) {
-      fetchUser()
+      fetchUser();
     }
-  }, [authLoading])
+  }, [authLoading]);
   if (authLoading) {
-    return <Loader />
+    return <Loader />;
   }
   if (!authId) {
-    return router.push('/')
+    return router.push('/');
   }
   if (loading) {
-    <Loader />
+    <Loader />;
   }
   return (
     <div>
       <div>
-        <h2>
-         {/* {domain.name} */}
-        </h2>
-        <p>
-          Modify domain and chatbox settings
-        </p>
+        <h2>{/* {domain.name} */}</h2>
+        <p>Modify domain and chatbox settings</p>
       </div>
       <div>
-        <h2>
-          Domain Settings
-        </h2>
+        <h2>Domain Settings</h2>
         <Separator />
-        
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DomainSettingsPage
+export default DomainSettingsPage;

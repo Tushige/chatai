@@ -1,79 +1,83 @@
-'use client'
-import { updateDomain } from '@/actions/domain.action'
-import Loader from '@/components/loader'
-import { useToast } from '@/hooks/use-toast'
-import { uploadCareUpload } from '@/lib/upload-care'
-import { DomainSchema, DomainUpdateProps } from '@/schemas/domain.schema'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+'use client';
+import { updateDomain } from '@/actions/domain.action';
+import Loader from '@/components/loader';
+import { useToast } from '@/hooks/use-toast';
+import { uploadCareUpload } from '@/lib/upload-care';
+import { DomainSchema, DomainUpdateProps } from '@/schemas/domain.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 
-const DomainUpdateFormProvider = ({domainId, initialData, children}: {
-  domainId: string,
-  initialData?: DomainUpdateProps
-  children: React.ReactNode
+const DomainUpdateFormProvider = ({
+  domainId,
+  initialData,
+  children,
+}: {
+  domainId: string;
+  initialData?: DomainUpdateProps;
+  children: React.ReactNode;
 }) => {
-  const {toast} = useToast()
-  const router = useRouter()
-  const [loading, setLoading] = useState<boolean>(false)
+  const { toast } = useToast();
+  const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
   const methods = useForm<DomainUpdateProps>({
     resolver: zodResolver(DomainSchema),
     defaultValues: {
       ...initialData,
-      icon: undefined
-    }
-  })
+      icon: undefined,
+    },
+  });
   const handleSubmit = async (data: DomainUpdateProps) => {
     try {
-      setLoading(true)
+      setLoading(true);
       if (data.icon) {
-        const uploadCareImage = await uploadCareUpload(data.icon[0])
-        data.icon = uploadCareImage.uuid
+        const uploadCareImage = await uploadCareUpload(data.icon[0]);
+        data.icon = uploadCareImage.uuid;
       }
       const cleanedData = Object.fromEntries(
-        Object.entries(data).filter(([key, value]) => value !== null && value !== undefined)
+        Object.entries(data).filter(
+          ([key, value]) => value !== null && value !== undefined
+        )
       );
-      const {status, message} = await updateDomain(domainId, cleanedData)
+      const { status, message } = await updateDomain(domainId, cleanedData);
       if (status === 200) {
         toast({
           title: 'Success',
-          description: `${data.name} successfully updated`
-        })
+          description: `${data.name} successfully updated`,
+        });
       } else {
         toast({
           title: 'Error',
-          description: message
-        })
+          description: message,
+        });
       }
-      router.refresh()
+      router.refresh();
     } catch (err) {
-      console.error('failed updating domain with error: ', err)
+      console.error('failed updating domain with error: ', err);
       toast({
         title: 'Error',
-        description: 'Something went wrong! Please try again.'
-      })
+        description: 'Something went wrong! Please try again.',
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
   return (
     <div>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(handleSubmit)}>
-          {
-            loading ? (
-              <div className="py-12">
-                <Loader className="w-[30px] h-[30px]"/>
-              </div>
-            ) : (
-              children
-            )
-          }
+          {loading ? (
+            <div className='py-12'>
+              <Loader className='h-[30px] w-[30px]' />
+            </div>
+          ) : (
+            children
+          )}
         </form>
       </FormProvider>
     </div>
-  )
-}
+  );
+};
 
-export default DomainUpdateFormProvider
+export default DomainUpdateFormProvider;

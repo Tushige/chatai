@@ -21,20 +21,21 @@ body {
 
 @layer base {
   :root {
-    --ring: "#867070";
+    --ring: '#867070';
     --radius: 0.5rem;
 
     --background: #121212;
-    --surface: #1E1E1E;
+    --background-secondary: #0e0e0e;
+    --surface: #1e1e1e;
     --border: #292929;
-    --text: #E0E0E0;
+    --text: #e0e0e0;
     --text-foreground: white;
-    --text-secondary: #A3A3A3;
-    --accent: #F05A7E;
+    --text-secondary: #a3a3a3;
+    --accent: #f05a7e;
     --accent-hover: #ed2858;
-    --success: #72BF78;
-    --warning: #FBC02D;
-    --error: #CF6679;
+    --success: #72bf78;
+    --warning: #fbc02d;
+    --error: #cf6679;
     --hover: #333333;
 
     --primary-foreground: 'white';
@@ -43,13 +44,13 @@ body {
   }
 
   .dark {
-    --background: "#867070";
+    --background: '#867070';
     --foreground: 210 40% 98%;
 
-    --card: "#867070";
+    --card: '#867070';
     --card-foreground: 210 40% 98%;
 
-    --popover: "#867070";
+    --popover: '#867070';
     --popover-foreground: 210 40% 98%;
 
     --primary: 210 40% 98%;
@@ -153,5 +154,34 @@ body {
   transition: transform 0.2s ease-out;
   &:hover {
     transform: scale(1.2);
+  }
+}
+
+.glass-container {
+  position: relative;
+  z-index: 1;
+}
+
+.glass-container::before {
+  @apply absolute -inset-[10px] -z-10 rounded-xl border border-fuchsia-100/20 bg-fuchsia-200/10 backdrop-blur;
+  content: "";
+}
+
+.signal-line {
+  --rotation: 90deg;
+  @apply h-[20px] w-[1.5px] bg-gradient-to-t md:h-[1.5px] md:w-[30px] lg:w-[40px] xl:w-[50px];
+  background-color: hsla(0, 0%, 100%, 0.1);
+  background-image: linear-gradient(
+    var(--rotation),
+    rgba(255, 255, 255, 0) 50%,
+    #bfdbfe 50%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  background-size: 400% 400%;
+}
+
+@media (max-width: 767px) {
+  .signal-line {
+    --rotation: 0deg;
   }
 }

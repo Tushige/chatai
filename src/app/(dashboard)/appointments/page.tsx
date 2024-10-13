@@ -1,17 +1,26 @@
-import { getBookingsSummary } from '@/actions/bookings.action'
-import { getAllDomains } from '@/actions/domain.action'
-import AppPageTitle from '@/components/app-page-title'
-import BookingsSummaryUI from '@/ui/bookings/bookings-summary'
-import React from 'react'
+import { getBookingsSummary } from '@/actions/bookings.action';
+import { getAllDomains } from '@/actions/domain.action';
+import AppPageTitle from '@/components/app-page-title';
+import AppSectionContainer from '@/components/app-section-container';
+import AppSectionHeroContainer from '@/components/app-section-hero-container';
+import BookingsSummaryUI from '@/ui/bookings/bookings-summary';
+import React from 'react';
 
 const AppointmentsPage = async () => {
-  const bookings = await getBookingsSummary()
+  const bookings = await getBookingsSummary();
   return (
-    <div className="w-full">
-      <AppPageTitle title="Bookings" description="Organize your customer bookings and track them effectively here"/>
-      <BookingsSummaryUI bookings={bookings}/>
+    <div className='w-full'>
+      <AppSectionHeroContainer>
+        <AppPageTitle
+          title='Bookings'
+          description='Organize your customer bookings and track them effectively here'
+        />
+      </AppSectionHeroContainer>
+      <AppSectionContainer>
+        <BookingsSummaryUI bookings={bookings} />
+      </AppSectionContainer>
     </div>
-  )
-}
+  );
+};
 
-export default AppointmentsPage
+export default AppointmentsPage;

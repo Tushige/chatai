@@ -1,14 +1,17 @@
-'use client'
-import { createBooking } from '@/actions/bookings.action'
-import { StepsProvider } from '@/context/use-steps-context'
-import { combineDateAndTime } from '@/lib/utils'
-import { BookAppointmentProps, BookAppointmentSchema } from '@/schemas/appointment.schema'
-import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useState } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
-import BookAppointmentSteps from './bbok-appointment-steps'
-import FormProgressBar from '@/components/forms/sign-up/form-progress-bar'
-import { useRouter } from 'next/navigation'
+'use client';
+import { createBooking } from '@/actions/bookings.action';
+import { StepsProvider } from '@/context/use-steps-context';
+import { combineDateAndTime } from '@/lib/utils';
+import {
+  BookAppointmentProps,
+  BookAppointmentSchema,
+} from '@/schemas/appointment.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import React, { useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import BookAppointmentSteps from './bbok-appointment-steps';
+import FormProgressBar from '@/components/forms/sign-up/form-progress-bar';
+import { useRouter } from 'next/navigation';
 
 const times = [
   '09:00',
@@ -28,35 +31,34 @@ const times = [
   '16:00',
   '16:30',
   '17:00',
-]
-const BookAppointmentForm = ({
-  domainId
-}: {
-  domainId: string
-}) => {
-  const [time, setTime] = useState<string>('')
-  const [loading, setLoading] = useState<boolean>(false)
-  const router = useRouter()
+];
+const BookAppointmentForm = ({ domainId }: { domainId: string }) => {
+  const [time, setTime] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
   const form = useForm<BookAppointmentProps>({
-    resolver: zodResolver(BookAppointmentSchema)
-  })
-  const {register, formState: {errors}} = form;
+    resolver: zodResolver(BookAppointmentSchema),
+  });
+  const {
+    register,
+    formState: { errors },
+  } = form;
 
   const handleSubmit = async (data: BookAppointmentProps) => {
     try {
-      setLoading(true)
-      const combinedDate = combineDateAndTime(data.date, time)
-      const isoDate = combinedDate.toISOString()
+      setLoading(true);
+      const combinedDate = combineDateAndTime(data.date, time);
+      const isoDate = combinedDate.toISOString();
       // book appointment
-      const newBooking = await createBooking(isoDate, data.email, domainId)
-      router.push(`/bookings/${newBooking.id}`)
+      const newBooking = await createBooking(isoDate, data.email, domainId);
+      router.push(`/bookings/${newBooking.id}`);
     } catch (err) {
-      console.error(err)
-      setLoading(false)
-    } 
-  }
+      console.error(err);
+      setLoading(false);
+    }
+  };
   return (
-    <div className="w-full">
+    <div className='w-full'>
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <StepsProvider>
@@ -72,11 +74,11 @@ const BookAppointmentForm = ({
                 loading={loading}
               />
             </div>
-            <FormProgressBar className="mt-8"/>
+            <FormProgressBar className='mt-8' />
           </StepsProvider>
         </form>
       </FormProvider>
     </div>
-  )
-}
-export default BookAppointmentForm
+  );
+};
+export default BookAppointmentForm;

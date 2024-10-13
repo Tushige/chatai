@@ -1,25 +1,25 @@
-'use client'
-import { useStepsContext } from "@/context/use-steps-context"
-import { cn } from "@/lib/utils"
+'use client';
+import { useStepsContext } from '@/context/use-steps-context';
+import { cn } from '@/lib/utils';
 
-const FormProgressBar = ({
-  className
-}: {
-  className?: string
-}) => {
-  const {currentStep} = useStepsContext()
+const FormProgressBar = ({ className }: { className?: string }) => {
+  const { currentStep } = useStepsContext();
   return (
-    <div className={cn("grid grid-cols-3 gap-3 w-full", className)}>
-     <Step step={1} currentStep={currentStep} />
-     <Step step={2} currentStep={currentStep} />
-     <Step step={3} currentStep={currentStep} />
+    <div className={cn('grid w-full grid-cols-3 gap-3', className)}>
+      <Step step={1} currentStep={currentStep} />
+      <Step step={2} currentStep={currentStep} />
+      <Step step={3} currentStep={currentStep} />
     </div>
-  )
-}
+  );
+};
 
-function Step({step, currentStep}) {
+function Step({ step, currentStep }) {
   return (
-    <div className={cn("rounded-full h-2 col-span-1 bg-surface", {'bg-accent': step <= currentStep})} />
-  )
+    <div
+      className={cn('col-span-1 h-2 rounded-full bg-surface', {
+        'bg-accent': step <= currentStep,
+      })}
+    />
+  );
 }
-export default FormProgressBar
+export default FormProgressBar;

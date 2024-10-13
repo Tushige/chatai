@@ -1,32 +1,28 @@
-import { getAuthId } from '@/actions/auth'
-import { getAuthUser } from '@/actions/user.action'
-import AppSideBar from '@/components/app-sidebar'
-import { Separator } from '@/components/ui/separator'
-import { redirect } from 'next/navigation'
-import React from 'react'
+import { getAuthId } from '@/actions/auth';
+import { getAuthUser } from '@/actions/user.action';
+import AppSideBar from '@/components/app-sidebar';
+import { Separator } from '@/components/ui/separator';
+import { redirect } from 'next/navigation';
+import React from 'react';
 
-const Layout = async ({children}: {
-  children: React.ReactNode
-}) => {
-  const clerkId = await getAuthId()
-  if (!clerkId) return
-  const authUser = await getAuthUser(clerkId)
+const Layout = async ({ children }: { children: React.ReactNode }) => {
+  const clerkId = await getAuthId();
+  if (!clerkId) return;
+  const authUser = await getAuthUser(clerkId);
   if (!authUser) {
-    redirect('/')
+    redirect('/');
   }
   return (
-    <div className="flex h-screen w-full overflow-hidden">
-      <div className="sticky top-0 left-0">
+    <div className='flex h-screen w-full overflow-hidden'>
+      <div className='sticky left-0 top-0'>
         <AppSideBar user={authUser} />
       </div>
-      <Separator orientation='vertical'/>
-      <div className="w-full h-screen flex flex-col overflow-y-scroll bg-background text-text">
-        <div className="container flex px-4 lg:px-8 pt-8">
-          {children}
-        </div>
+      <Separator orientation='vertical' />
+      <div className='flex h-screen w-full flex-col overflow-y-scroll bg-background text-text'>
+        <div>{children}</div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;

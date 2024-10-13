@@ -1,16 +1,16 @@
-import { client } from "@/lib/prisma"
+import { client } from '@/lib/prisma';
 
-export const updateBilling = async (id, {...data}) => {
+export const updateBilling = async (id, { ...data }) => {
   try {
     const billing = await client.billing.update({
       where: {
-        id
+        id,
       },
       data: {
-        ...data
-      }
-    })
+        ...data,
+      },
+    });
   } catch (err) {
-    console.error(err)
+    console.error(err);
   }
-}
+};

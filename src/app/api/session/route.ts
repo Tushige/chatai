@@ -1,7 +1,7 @@
-import {v4 as uuidv4} from 'uuid'
-import { addConversation } from '@/actions/chatbot.action'
-import { CHATBOT_TOKEN_DURATION } from '@/app/constants'
-import cbk from '@/lib/chatbotkit'
+import { v4 as uuidv4 } from 'uuid';
+import { addConversation } from '@/actions/chatbot.action';
+import { CHATBOT_TOKEN_DURATION } from '@/app/constants';
+import cbk from '@/lib/chatbotkit';
 /**
  * Creates a conversation ID and conversation Session
  */
@@ -17,7 +17,7 @@ import cbk from '@/lib/chatbotkit'
 //     return Response.json(JSON.stringify({status: 400, error: 'Invalid arguments'}))
 //   }
 //   /*
-//    * passing botId allows bot with this id to respond to messages. 
+//    * passing botId allows bot with this id to respond to messages.
 //    * general flow is to specify backstory on the bot and create a conversation with specific bot id.
 //    */
 //   console.log('REQUESTING SESSION FROM CBK')
@@ -46,20 +46,22 @@ import cbk from '@/lib/chatbotkit'
  */
 export async function GET(req) {
   // const {botId} = await req.json()
-  const {searchParams} = new URL(req.url)
-  const cbkbotId = searchParams.get('cbkbotId')
-  const domainBotId = searchParams.get('domainBotId')
+  const { searchParams } = new URL(req.url);
+  const cbkbotId = searchParams.get('cbkbotId');
+  const domainBotId = searchParams.get('domainBotId');
   if (!domainBotId || !cbkbotId) {
-    return Response.json(JSON.stringify({status: 400, error: 'Invalid arguments'}))
+    return Response.json(
+      JSON.stringify({ status: 400, error: 'Invalid arguments' })
+    );
   }
 
   try {
     await new Promise((resolve, reject) => {
-      setTimeout(() => resolve(true), 5000)
-    })
-    return Response.json({conversationId: 'convo', token: uuidv4()})
+      setTimeout(() => resolve(true), 5000);
+    });
+    return Response.json({ conversationId: 'convo', token: uuidv4() });
   } catch (error) {
-    console.error(error)
-    return Response.json(JSON.stringify({status: 400, error}))
+    console.error(error);
+    return Response.json(JSON.stringify({ status: 400, error }));
   }
 }

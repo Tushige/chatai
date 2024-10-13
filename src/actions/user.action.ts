@@ -1,19 +1,18 @@
-'use server'
-import { client } from '@/lib/prisma'
-import { DomainProps } from '@/schemas/domain.schema'
-import { currentUser} from '@clerk/nextjs'
-import { createChatbotForDomain } from './chatbot.action'
-import { getPlan } from './plan.action'
-
+'use server';
+import { client } from '@/lib/prisma';
+import { DomainProps } from '@/schemas/domain.schema';
+import { currentUser } from '@clerk/nextjs';
+import { createChatbotForDomain } from './chatbot.action';
+import { getPlan } from './plan.action';
 
 const DEFAULT_QUESTIONS = [
   {
-    question: "What are your goals?"
+    question: 'What are your goals?',
   },
   {
-    question: "What is your email?"
-  }
-]
+    question: 'What is your email?',
+  },
+];
 /*
  create a user in the database
 */
@@ -24,7 +23,7 @@ const createUser = async (
   stripeCustomerId: string
 ) => {
   // every new user will be created on the Free tier
-  const freePlan = await getPlan('FREE')
+  const freePlan = await getPlan('FREE');
   try {
     const registered = await client.user.create({
       data: {
@@ -36,37 +35,37 @@ const createUser = async (
             stripeCustomerId,
             plan: {
               connect: {
-                id: freePlan.id
-              }
-            }
-          }
-        }
+                id: freePlan.id,
+              },
+            },
+          },
+        },
       },
       select: {
         fullname: true,
         id: true,
-        type: true
-      }
-    })
+        type: true,
+      },
+    });
     if (registered) {
       return {
         status: 200,
-        user: registered
-      }
+        user: registered,
+      };
     } else {
-      throw new Error('registration failed')
+      throw new Error('registration failed');
     }
   } catch (err) {
-    console.error(err)
-    throw new Error(err)
+    console.error(err);
+    throw new Error(err);
   }
-}
+};
 
 const getUserBilling = async (clerkId: string) => {
   try {
     const user = await client.user.findUnique({
       where: {
-        clerkId
+        clerkId,
       },
       select: {
         id: true,
@@ -76,24 +75,24 @@ const getUserBilling = async (clerkId: string) => {
           select: {
             id: true,
             stripeCustomerId: true,
-          }
-        }
-      }
-    })
+          },
+        },
+      },
+    });
     if (!user) {
-      throw new Error('Failed to get the current user')
+      throw new Error('Failed to get the current user');
     }
     return user;
   } catch (err) {
-    throw new Error(err)
+    throw new Error(err);
   }
-}
+};
 
-const getAuthUser = async(clerkId: string) => {
+const getAuthUser = async (clerkId: string) => {
   try {
     const user = await client.user.findUnique({
       where: {
-        clerkId
+        clerkId,
       },
       select: {
         fullname: true,
@@ -103,7 +102,7 @@ const getAuthUser = async(clerkId: string) => {
           select: {
             name: true,
             icon: true,
-            id: true
+            id: true,
           },
         },
         billing: {
@@ -111,76 +110,77 @@ const getAuthUser = async(clerkId: string) => {
             plan: {
               select: {
                 domainLimit: true,
-                emailLimit: true
-              }
-            }
-          }
-        }
-      }
-    })
+                emailLimit: true,
+              },
+            },
+          },
+        },
+      },
+    });
     return user;
   } catch (err) {
-    console.error(err)
-    throw new Error(err)
+    console.error(err);
+    throw new Error(err);
   }
-}
+};
 type createDomainReturn = {
-  status: number,
-  message: string
-}
+  status: number;
+  message: string;
+};
 /**
  * add a Domain document to the User
  */
-const createDomain = async({
+const createDomain = async ({
   name,
   botName,
   icon,
 }: DomainProps): Promise<createDomainReturn> => {
-  const authUser = await currentUser()
-  if (!authUser) return {
-    status: 400,
-    message: 'No Logged in User found'
-  }
+  const authUser = await currentUser();
+  if (!authUser)
+    return {
+      status: 400,
+      message: 'No Logged in User found',
+    };
   try {
     const user = await client.user.findUnique({
       where: {
-        clerkId: authUser.id
+        clerkId: authUser.id,
       },
       select: {
         _count: {
           select: {
-            domains: true
-          }
-        }
-      }
-    })
+            domains: true,
+          },
+        },
+      },
+    });
     const domain = await client.user.findFirst({
       where: {
         clerkId: user.id,
         domains: {
           some: {
-            name: name
-          }
-        }
-      }
-    })
+            name: name,
+          },
+        },
+      },
+    });
     if (domain) {
       return {
         status: 400,
-        message: 'Domain already exists'
-      }
+        message: 'Domain already exists',
+      };
     }
     // TODO - check if user has reached maximum capacity on their plan.
     // create default bot questions
-    const bot = await createChatbotForDomain(botName, DEFAULT_QUESTIONS)
-    
+    const bot = await createChatbotForDomain(botName, DEFAULT_QUESTIONS);
+
     if (!bot) {
-      throw new Error('Failed to create Bot')
+      throw new Error('Failed to create Bot');
     }
 
     const createdDomain = await client.user.update({
       where: {
-        clerkId: authUser.id
+        clerkId: authUser.id,
       },
       data: {
         domains: {
@@ -189,35 +189,30 @@ const createDomain = async({
             icon,
             chatBot: {
               create: {
-                welcomeMessage: "Hi, how are you? Do you have any questions for us?",
-                chatBotKitId: bot?.id
-              }
+                welcomeMessage:
+                  'Hi, how are you? Do you have any questions for us?',
+                chatBotKitId: bot?.id,
+              },
             },
             questions: {
-              create: DEFAULT_QUESTIONS
-            }
-          }
-        }
-      }
-    })
+              create: DEFAULT_QUESTIONS,
+            },
+          },
+        },
+      },
+    });
     if (createdDomain) {
       return {
         status: 200,
-        message: 'Domain Successfully created'
-      }
+        message: 'Domain Successfully created',
+      };
     } else {
-      throw Error('Failed creating Domain')
+      throw Error('Failed creating Domain');
     }
-
   } catch (err) {
-    console.error(err) 
-    throw new Error(err)
+    console.error(err);
+    throw new Error(err);
   }
-}
+};
 
-export {
-  createUser,
-  getUserBilling,
-  getAuthUser,
-  createDomain
-}
+export { createUser, getUserBilling, getAuthUser, createDomain };
