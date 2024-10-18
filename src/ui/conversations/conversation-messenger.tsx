@@ -1,18 +1,28 @@
+'use client'
 import { AppRelativeDate } from '@/components/app-date';
 import { cn } from '@/lib/utils';
 import { AvatarIcon } from '@radix-ui/react-icons';
 import { Bot } from 'lucide-react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Message } from './types';
+import Pusher from 'pusher-js';
 
 type Props = {
   messages: Message[];
+  conversationId: string;
 };
-const ConversationMessenger = ({ messages }: Props) => {
-  if (!messages || messages.length < 1) {
+const ConversationMessenger = ({ messages, conversationId }: Props) => {
+  if (!conversationId) {
     return (
       <div className='w-full text-center'>  
         Select a conversation to see messages
+      </div>
+    );
+  }
+  if (!messages || messages.length < 1) {
+    return (
+      <div className='w-full text-center'>  
+        This conversation has no chat history
       </div>
     );
   }

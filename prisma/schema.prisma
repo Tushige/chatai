@@ -34,11 +34,12 @@ model Domain {
   chatBot   ChatBot?
   questions Questions[]
 
-  campaigns Campaign[]
-  contacts  Contact[]
-  user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String?    @db.Uuid
-  Booking   Booking[]
+  campaigns     Campaign[]
+  contacts      Contact[]
+  user          User?          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String?        @db.Uuid
+  Booking       Booking[]
+  conversations Conversation[]
 }
 
 model ChatBot {
@@ -98,20 +99,37 @@ model Contact {
 
   booking Booking[]
 
-  domain     Domain?   @relation(fields: [domainId], references: [id], onDelete: Cascade)
-  domainId   String?   @db.Uuid
-  Campaign   Campaign? @relation(fields: [campaignId], references: [id])
-  campaignId String?   @db.Uuid
+  domain        Domain?        @relation(fields: [domainId], references: [id], onDelete: Cascade)
+  domainId      String?        @db.Uuid
+  Campaign      Campaign?      @relation(fields: [campaignId], references: [id])
+  campaignId    String?        @db.Uuid
+  conversations Conversation[]
+}
+
+model Conversation {
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  live         Boolean       @default(false)
+  customerLive Boolean       @default(false)
+  messages     ChatMessage[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  contact   Contact? @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  contactId String?  @db.Uuid
+
+  domain   Domain? @relation(fields: [domainId], references: [id], onDelete: Cascade)
+  domainId String? @db.Uuid
 }
 
 model ChatMessage {
-  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  message    String
-  role       Role?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  chatRoomId String?  @db.Uuid
-  seen       Boolean  @default(false)
+  id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  message        String
+  role           Role?
+  seen           Boolean       @default(false)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  conversationId String?       @db.Uuid
+  conversation   Conversation? @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 }
 
 model Booking {
@@ -150,5 +168,6 @@ model EmailBatch {
 
 enum Role {
   user
+  bot
   assistant
 }

@@ -2,9 +2,6 @@ import AppPageTitle from '@/components/app-page-title';
 import AppSectionTitle from '@/components/app-section-title';
 import EmailTable from '@/ui/campaigns/email-table';
 import EmailTableColumns from '@/ui/campaigns/email-table/email-table-columns';
-import { campaignData } from '@/ui/campaigns/email-table/data';
-import React, { useState } from 'react';
-import { randomUUID } from 'crypto';
 import { getCampaign, totalEmailCountForUser } from '@/actions/campaign.action';
 import { Separator } from '@/components/ui/separator';
 import CampaignEmailTemplate from '@/ui/campaigns/campaign-email-template';
@@ -16,7 +13,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import { getDomain, getDomainWithContacts } from '@/actions/domain.action';
+import {  getDomainWithContacts } from '@/actions/domain.action';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { getAuthId } from '@/actions/auth';

@@ -121,7 +121,7 @@ const MembershipPage = () => {
 
   if (!billing) {
     return (
-      <div className='flex h-[100vh] w-full items-center justify-center'>
+      <div className='flex h-[90vh] w-full items-center justify-center'>
         <Loader />
       </div>
     );
@@ -198,7 +198,7 @@ const MembershipPage = () => {
           </div>
           <SheetContent className='text-text'>
             {loading ? (
-              <div className='flex h-[100vh] w-full items-center justify-center'>
+              <div className='flex h-[90vh] w-full items-center justify-center'>
                 <Loader />
               </div>
             ) : paymentOptions.payment_intent_status === SUCCEEDED ? (

@@ -8,7 +8,7 @@ import { ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/outline';
 import { XIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { CHATBOT_TOKEN_DURATION } from '@/app/constants';
-import useSWR, { SWRConfig } from 'swr';
+import useSWR from 'swr';
 import Loader from '@/components/loader';
 
 function fetcher(...args) {
@@ -29,7 +29,7 @@ const ChatUI = ({ domain, bot }) => {
       dedupingInterval: CHATBOT_TOKEN_DURATION * 100,
       revalidateOnFocus: false,
     }
-  );
+  )
   useEffect(() => {
     if (data) {
       setConversationId(data.conversationId);
@@ -38,13 +38,15 @@ const ChatUI = ({ domain, bot }) => {
     if (error) {
       toast({
         title: <span className='text-error'>Error</span>,
-        description: 'Failed to connect to Chat',
+        description: 'Chat connection failed',
       });
     }
   }, [data, error]);
+
   const onChatButtonClick = async () => {
     setOpen(true);
   };
+
   return (
     <>
       <div className='fixed bottom-[20px] right-[50px] z-50'>

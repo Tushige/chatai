@@ -9,7 +9,10 @@ type Message = {
 type Conversation = {
   id: string;
   messages: Message[];
+  live: boolean,
+  createdAt: string
   email: string | null;
+  customerLive: boolean;
 };
 
 export { Message, Conversation };

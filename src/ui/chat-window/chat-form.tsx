@@ -5,10 +5,8 @@ import { BotOptions } from '@chatbotkit/sdk/bot/v1';
 import { ArrowLeftEndOnRectangleIcon } from '@heroicons/react/24/outline';
 import { useEffect, useRef, useState } from 'react';
 import ChatMessages from './chat-messages';
-import { useToast } from '@/hooks/use-toast';
 import { extractEmailsFromString } from '@/lib/utils';
 import { createContact } from '@/actions/contact.action';
-import { addContactToConversation } from '@/actions/chatbot.action';
 
 type Bot = {
   datasetId: string;

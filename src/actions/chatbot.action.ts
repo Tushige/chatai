@@ -2,6 +2,8 @@
 import { client } from '@/lib/prisma';
 import cbk from '@/lib/chatbotkit';
 import { Questions } from '@prisma/client';
+import pusher from '@/lib/pusher';
+import { createChatMessage } from './conversations.action';
 
 function createBackstory(questions: Questions[]) {
   // return `You are a highly knowledgeable, welcoming, and experienced sales representative. You will be provided a list of questions that you must ask the customer.Progress the conversation using those questions. Whenever you ask a question from the provided list, you must add a keyword at the end of the question. This keyword is [*]. The list of questions is as follows: ${questions.map(q => q.question).join(', ')} Lastly, always start a conversation with the phrase howdy.`
@@ -170,3 +172,103 @@ export {
   addConversation,
   addContactToConversation,
 };
+
+export const createConversation = async (domainId: string) => {
+  try {
+    const conversation = await client.conversation.create({
+      data: {
+        customerLive: true,
+        domain: {
+          connect: {
+            id: domainId
+          }
+        }
+      }
+    });
+    if (!conversation) {
+      throw new Error('failed to create a conversation');
+    }
+    return conversation;
+  } catch (err) {
+    console.error(err)
+    throw new Error(err)
+  }
+}
+export const getConversationRecord = async (id: string) => {
+  try {
+    const conversation = await client.conversation.findUnique({
+      where: {
+        id
+      },
+      select: {
+        id: true,
+        live: true
+      }
+    });
+    if (!conversation) {
+      throw new Error('Requested conversation not found')
+    }
+    return conversation;
+  } catch (err) {
+    console.error(err)
+  }
+}
+/**
+ * Logic related to realtime communication between customer and live representative
+ */
+export const sendLiveMessage = async ({
+  message,
+  conversationId,
+  role
+}: {
+  message: string,
+  conversationId: string,
+  role: string
+}) => {
+  try { 
+    await createChatMessage(conversationId, message, role);
+    const res = await pusher.trigger(`channel-${conversationId}`, 'message', {
+      message,
+      conversationId,
+      role,
+      createdAt: new Date()
+    })
+  } catch (err) {
+    console.error(err)
+    throw new Error(err)
+  }
+}
+
+export const sendStatus = async ({
+  online,
+  conversationId,
+  role
+}) => {
+  try {
+     const res = await pusher.trigger(`channel-${conversationId}`, 'status', {
+      online,
+      conversationId,
+      role
+     })
+  } catch (err) {
+    console.error(err)
+    throw new Error(err)
+  }
+}
+
+export const sendCustomerStatus = async ({
+  online, 
+  conversationId,
+  role
+}) => {
+  try {
+    const res = await pusher.trigger(`customer-status`, 'message', {
+     online,
+     conversationId,
+     role
+    })
+ } catch (err) {
+   console.error(err)
+   throw new Error(err)
+ }
+}

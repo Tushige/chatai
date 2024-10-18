@@ -3,6 +3,7 @@ import AppPageTitle from '@/components/app-page-title';
 import AppSectionContainer from '@/components/app-section-container';
 import AppSectionHeroContainer from '@/components/app-section-hero-container';
 import { Separator } from '@/components/ui/separator';
+import ChatLiveWindow from '@/ui/chat-live-window';
 import ChatWindow from '@/ui/chat-window';
 import DomainChatBotTraining from '@/ui/domain/domain-chatbot-training';
 import DomainCodeIntegration from '@/ui/domain/domain-code-integration';
@@ -28,7 +29,8 @@ const DomainSettingsPage = async ({ params }) => {
         <DomainCodeIntegration domain={domain} />
         <DomainSettings domain={domain} />
         <DomainChatBotTraining domainId={domainId} />
-        <ChatWindow domain={domain} />
+        {/* <ChatWindow domain={domain} /> */}
+        <ChatLiveWindow domain={domain}/>
       </AppSectionContainer>
     </div>
   );

@@ -124,6 +124,7 @@ const ConversationUI = ({ domains }) => {
           <AppSectionTitle title='Conversation' className='mb-8' />
           <ConversationMessenger
             messages={selectedConversation?.messages || []}
+            conversationId={selectedConversation?.id}
           />
         </div>
       </div>

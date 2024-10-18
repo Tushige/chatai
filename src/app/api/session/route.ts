@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { addConversation } from '@/actions/chatbot.action';
+import { addConversation, createConversation } from '@/actions/chatbot.action';
 import { CHATBOT_TOKEN_DURATION } from '@/app/constants';
 import cbk from '@/lib/chatbotkit';
 /**
@@ -59,7 +59,8 @@ export async function GET(req) {
     await new Promise((resolve, reject) => {
       setTimeout(() => resolve(true), 5000);
     });
-    return Response.json({ conversationId: 'convo', token: uuidv4() });
+    const conversation = await createConversation()
+    return Response.json({ conversationId: conversation.id, token: uuidv4() });
   } catch (error) {
     console.error(error);
     return Response.json(JSON.stringify({ status: 400, error }));
