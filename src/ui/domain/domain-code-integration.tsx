@@ -27,7 +27,7 @@ const DomainCodeIntegration = ({ domain }) => {
         }
     ')
     
-    iframe.src = "http://localhost:3000/chatbot"
+    iframe.src = "http://localhost:3000/chatbot/${domain.id}"
     iframe.classList.add('chat-frame')
     document.body.appendChild(iframe)
     
@@ -53,7 +53,7 @@ const DomainCodeIntegration = ({ domain }) => {
         >
           <DocumentDuplicateIcon className='w-6' />
         </Button>
-        <pre className='chat-window overflow-x-scroll'>
+        <pre className='overflow-x-scroll'>
           <code>{snippet}</code>
         </pre>
       </div>

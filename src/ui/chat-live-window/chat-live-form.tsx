@@ -13,6 +13,8 @@ import { XIcon } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { updateConversation } from '@/actions/conversations.action';
 import { v4 as uuidv4 } from 'uuid';
+import pusherJs from 'pusher-js';
+import { pusher } from '@/lib/pusher-client';
 
 type Bot = {
   datasetId: string;
@@ -36,13 +38,48 @@ function ChatLiveForm({
 
   useEffect(() => {
     /**
-     * sub to assistant messages and status
+     * Subscribing to the presence channel lets the assistant know that the customer is online/offline
      */
-    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY!, {
-      cluster: 'us2'
+    const pusherClient = new pusherJs(process.env.NEXT_PUBLIC_PUSHER_APP_KEY!, {
+      cluster: 'us2',
+      authEndpoint: '/api/pusher/auth',
+      auth: {
+        params: {
+          conversation_id: conversationId
+        }
+      },
     })
 
+    const presenceChannel = pusherClient.subscribe(`presence-channel`)
+    presenceChannel.bind('pusher:subscription_succeeded', (data) => {
+      console.log('[Customer] Current members: ', data.members);
+    });
+    presenceChannel.bind('pusher:subscription_error', (error) => {
+      console.log('[Customer] error during sub')
+      console.error(error)
+    });
+    presenceChannel.bind("pusher:member_added", async (member) => {
+      console.log('A member was added')
+    });
+    presenceChannel.bind("pusher:member_removed", async (member) => {
+      if (member.role === 'assistant') {
+        setAssistantOnline(false);
+      }
+    });
+
+    return () => {
+      presenceChannel.unbind();
+      pusherClient.unsubscribe('presence-channel');
+    }
+  }, [conversationId]);
+
+  useEffect(() => {
+    /**
+     * sub to assistant messages
+     */
+  
     const channel = pusher.subscribe(`channel-${conversationId}`);
+
     channel.bind('message', (data: {role: string, message: string}) => {
       setMessages(prev => [...prev, {
         id: uuidv4(),
@@ -51,25 +88,24 @@ function ChatLiveForm({
       }]);
     })
     channel.bind('status', (data: {role: string, online: boolean}) => {
-      // customer received status update from assistant
-      setAssistantOnline(data.online)
-      // add the status message to the list of messages so we see them. role: 'status' will differentiate the message from regular messages
-      setMessages(prev => [...prev, {
-        id: uuidv4(),
-        role: 'status',
-        message: data.online ? 'has joined the chat' : 'has left the chat'
-      }])
+      if (data.role === 'assistant') {
+        setAssistantOnline(data.online)
+        setMessages(prev => [
+          ...prev,
+          {
+            role: 'status',
+            name: 'Customer Rep',
+            message: data.online ? 'has joined the chat' : 'has left the chat'
+          }
+        ])
+      }
     })
     return () => {
       channel.unbind();
       pusher.unsubscribe(`channel-${conversationId}`);
-      customerOff(); 
     }
   }, [conversationId])
 
-  async function customerOff() {
-    await updateConversation(conversationId, {customerLive: false});
-  }
   const sendMessage = async () => {
     if (!message) return;
     try {

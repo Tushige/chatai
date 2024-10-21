@@ -19,6 +19,7 @@ export const updateConversationLive = async (conversationId: string, live: boole
 
 export const updateConversation = async (conversationId: string, data: Object) => {
   try {
+    console.log('[Conversation] updating...')
     const conversation = await client.conversation.update({
       where: {
         id: conversationId
@@ -28,6 +29,7 @@ export const updateConversation = async (conversationId: string, data: Object) =
     if (!conversation) {
       throw new Error('Failed to updated conversation')
     }
+    console.log('[Conversation] successfully updated')
     return conversation;
   } catch (err) {
     console.error(err)

@@ -10,10 +10,14 @@ body {
   background: transparent;
 }
 
+.hide-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 .chat-window::-webkit-scrollbar {
   display: none;
 }
-
 .chat-window {
   -ms-overflow-style: none;
   scrollbar-width: none;

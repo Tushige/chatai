@@ -21,7 +21,7 @@ import ConversationLiveMessenger from './conversation-live-messenger';
 import { Toggle } from '@/components/ui/toggle';
 import { updateConversationLive } from '@/actions/conversations.action';
 import Pusher from 'pusher-js';
-import { pusher } from './pusher-client';
+import { pusher } from '../../lib/pusher-client';
 import { RefreshCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -38,26 +38,13 @@ const ConversationLiveUI = ({ domains }) => {
   }
 
   useEffect(() => {
-    const channel = pusher.subscribe('customer-status');
-    channel.bind('message', (data: {role: string, online: boolean, conversationId: string}) => {
-      setConversations(prev => prev.map(c => {
-        if (c.id === data.conversationId) {
-          return {
-            ...c,
-            customerLive: data.online
-          }
-        }
-        return c;
-      }))
-    })  
-  },[])
-
-  useEffect(() => {
     fetchConversations();
   }, [domainsIdx])
 
   const fetchConversations = async () => {
+    console.log('fetching conversations')
     setLoading(true);
+    setSelectedConversation(null)
     try {
       let conversations = await getConversations(domains[domainsIdx].id);
       setConversations(conversations);
@@ -76,10 +63,10 @@ const ConversationLiveUI = ({ domains }) => {
     );
   }
   return (
-    <div className='grid min-h-[100vh] max-h-screen w-full grid-cols-12 pt-10'>
-      <div className='col-span-4'>
+    <div className='grid min-h-[100vh] max-h-screen w-full grid-cols-12'>
+      <div className='col-span-4 max-h-screen min-h-screen grid grid-rows-[50px_50px_1fr] pb-[50px] pt-10 gap-2'>
         <Select onValueChange={onDomainChange}>
-          <SelectTrigger className='mb-8 w-full'>
+          <SelectTrigger className='w-full'>
             <SelectValue placeholder='Pick a Domain' />
           </SelectTrigger>
           <SelectContent>
@@ -97,7 +84,7 @@ const ConversationLiveUI = ({ domains }) => {
             </SelectGroup>
           </SelectContent>
         </Select>
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex justify-between items-center">
           <ListTitle domainName={domains[domainsIdx].name} />
           <motion.button
             className="p-2 rounded-md border border-border"

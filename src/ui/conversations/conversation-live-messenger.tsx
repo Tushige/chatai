@@ -14,7 +14,7 @@ import { Toggle } from '@/components/ui/toggle';
 import { Button } from '@/components/ui/button';
 import { ArrowLeftEndOnRectangleIcon } from '@heroicons/react/24/outline';
 import { motion, AnimatePresence  } from 'framer-motion';
-import { pusher } from './pusher-client';
+import { pusher } from '../../lib/pusher-client';
 
 type Props = {
   conversation: Conversation
@@ -25,7 +25,7 @@ const ConversationLiveMessenger = ( {conversation }: Props) => {
   const [messages, setMessages] = useState(null)
   const [message, setMessage] = useState('');
   const [live, setLive] = useState(false)
-  const [userOnline, setUserOnline] = useState(false);
+  const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -35,10 +35,13 @@ const ConversationLiveMessenger = ( {conversation }: Props) => {
   useEffect(() => {
     async function fetchMessages() {
       try {
+        setLoading(true);
         const messages = await getChatMessages(conversation.id);
         setMessages(messages)
       } catch (err) {
         console.error(err)
+      } finally {
+        setLoading(false);
       }
     }
     /******************************************
@@ -46,12 +49,15 @@ const ConversationLiveMessenger = ( {conversation }: Props) => {
      ******************************************/
     if (conversation.id) {
       fetchMessages();
+    } else {
+      // clear messages if there is no selected conversation
+      setMessages([])
     }
   }, [conversation.id]);
 
   useEffect(() => {
     /******************************************
-     * handle realtime sub/unsub
+     * handle realtime message sub/unsub
      ******************************************/
     if (!conversation) {
       return;
@@ -66,9 +72,7 @@ const ConversationLiveMessenger = ( {conversation }: Props) => {
       channelRef.current.bind('message', (data: {role: string, message: string}) => {
         setMessages(prev => [...prev, data]);
       })
-      channelRef.current.bind('status', (data: {role: string, status: boolean}) => {
-        setUserOnline(data.status)
-      })
+
       pusher.connection.bind('state_change', (states) => {
         console.log(`*connection state is ${states.current}`)
       })
@@ -88,17 +92,19 @@ const ConversationLiveMessenger = ( {conversation }: Props) => {
     await updateConversationLive(conversation.id, false)
   } 
 
-  if (!messages) {
+  if (!messages || loading) {
     return (
-      <div className='py-12'>
+      <div className='size-full py-12'>
         <Loader className='h-[30px] w-[30px]' />
       </div>
     );
   }
   if (!messages || messages.length < 1) {
     return (
-      <div className='w-full text-center'>  
-        This conversation has no chat history
+      <div className='w-full h-full flex justify-center items-center text-center text-md relative z-1'>  
+        <div className="border border-border rounded-md p-4 bg-background text-sm">
+          This Conversation has no messages.
+        </div>
       </div>
     );
   }
@@ -106,13 +112,12 @@ const ConversationLiveMessenger = ( {conversation }: Props) => {
   async function toggleLive() {
     try {
       await sendStatus({
-        status: !live, 
+        online: !live, 
         conversationId: conversation.id,
         role: 'assistant'
       });
-      // await updateConversationLive(conversation.id, !live)
+      
       setLive(prev => !prev)
-      // broadcast to listeners that we're live
     } catch (err) {
       console.error(err)
     }
@@ -129,7 +134,7 @@ const ConversationLiveMessenger = ( {conversation }: Props) => {
   }
 
   return (
-    <div className="max-h-screen min-h-screen grid grid-rows-[100px_1fr_100px] pb-[50px]">
+    <div className="max-h-screen min-h-screen grid grid-rows-[100px_1fr_100px] pb-[50px] pt-10">
       <div className="row-start-1 flex justify-between">
         <AppSectionTitle title='Conversation' className='mb-8' />
         {

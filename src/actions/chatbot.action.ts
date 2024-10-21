@@ -177,7 +177,6 @@ export const createConversation = async (domainId: string) => {
   try {
     const conversation = await client.conversation.create({
       data: {
-        customerLive: true,
         domain: {
           connect: {
             id: domainId

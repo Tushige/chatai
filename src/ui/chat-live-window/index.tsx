@@ -20,27 +20,15 @@ const ChatLiveWindow = ({ domain }) => {
       newConversation = await createConversation(domain.id);
       setConversation(newConversation)
     } 
-    await sendCustomerStatus({
-      online: true,
-      conversationId: newConversation!.id,
-      role: 'user'
-    });
-    await updateConversation(newConversation!.id, {customerLive: true});
     setLoading(false)
   };
 
   const closeChatWindow = async () => {
     setOpen(false);
-    await sendCustomerStatus({
-      online: false,
-      conversationId: conversation?.id,
-      role: 'user'
-    });
-    await updateConversation(conversation?.id, {customerLive: false});
   }
   return (
     <>
-      <div className='fixed bottom-[20px] right-[50px] z-50'>
+      <div className='fixed z-50 right-0 bottom-0'>
         <motion.button
           onClick={() => openChatWindow()}
           className='flex size-[60px] items-center justify-center rounded-full bg-accent p-4 text-text'
@@ -59,7 +47,7 @@ const ChatLiveWindow = ({ domain }) => {
           )}
         </motion.button>
       </div>
-      <div className='z-51 fixed bottom-[20px] right-[50px]'>
+      <div className='z-51 fixed bottom-0 right-0 text-text'>
         <motion.div
           initial={{y: 1000}}
           animate={open && !loading ? { y: 0 } : { y: 1000 }}
