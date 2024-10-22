@@ -13,15 +13,6 @@ const ChatWindow = async ({ domain }) => {
     console.error('bot not found');
     redirect('/');
   }
-  // const {conversationId, token} = await fetch(`/api/session?botId=${bot.id}`, {
-  //   method: 'GET',
-  //   headers: {
-  //     'Content-Type': 'application/json'
-  //   },
-  //   next: {
-  //     revalidate: CHATBOT_TOKEN_DURATION,
-  //   }
-  // })
   return <ChatUI bot={bot} domain={domain} />;
 };
 

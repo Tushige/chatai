@@ -9,7 +9,8 @@ export default authMiddleware({
     '/portal(.*)',
     '/api/v1(.*)',
     '/api/pusher/auth',
-    '/chatbot(.*)'
+    '/chatbot(.*)',
+    '/api/session'
   ],
   ignoredRoutes: ['/chatbot', '/api/webhooks/(.*)'],
 });

@@ -53,37 +53,39 @@ export const createContact = async ({
         email,
       },
       select: {
+        id: true,
         conversationIds: true,
       },
     });
     if (contact) {
-      // customer already exists. Check if provided conversationId already exists
-      const isExistingConversation =
-        contact.conversationIds?.includes(conversationId);
-      // if it's a new conversation add it to the conversationIds list
-      if (!isExistingConversation) {
-        contact = await client.contact.update({
-          where: {
-            id: contact.id,
-          },
-          data: {
-            conversationIds: {
-              push: conversationId,
-            },
-          },
-        });
-      }
+      // contact already exists. associate the contact with the conversation. 
+      await client.conversation.update({
+        where: {
+          id: conversationId
+        },
+        data: {
+          contact: {
+            connect: {
+              id: contact.id
+            }
+          }
+        }
+      })
       return contact;
     } else {
       const newContact = await client.contact.create({
         data: {
           email,
-          conversationIds: [conversationId],
           domain: {
             connect: {
               id: domainId,
             },
           },
+          conversations: {
+            connect: {
+              id: conversationId
+            }
+          }
         },
       });
       return newContact;

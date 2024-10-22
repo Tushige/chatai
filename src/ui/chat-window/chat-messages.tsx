@@ -1,5 +1,6 @@
 import { ComplexMessage } from '@chatbotkit/react/hooks/useConversationManager';
 import { SparklesIcon, UserIcon } from '@heroicons/react/24/outline';
+import { BotIcon, CircleUser } from 'lucide-react';
 import React from 'react';
 
 type Props = {
@@ -28,6 +29,22 @@ const ChatMessages = ({ messages, botName, thinking }: Props) => {
                 <p className='text-sm font-light'>{text}</p>
               </div>
             );
+          case 'assistant':
+            return (
+              <div
+                key={id}
+                className='whitespace-pre-wrap border-b border-border px-6 py-5 hover:bg-surface'
+              >
+                <div className='mb-2 flex items-center space-x-2'>
+                  <div className='relative flex h-[20px] w-[20px] items-center justify-center overflow-hidden rounded-full border border-border text-sm transition duration-150 hover:opacity-70 focus:outline-none'>
+                    <CircleUser className='h-3 w-3 text-text-foreground' />
+                  </div>
+                  <p className='text-sm font-medium'>Real rep</p>
+                </div>
+
+                <p className={`text-sm font-light dark:opacity-80`}>{text}</p>
+              </div>
+            );
           case 'bot':
             return (
               <div
@@ -36,7 +53,7 @@ const ChatMessages = ({ messages, botName, thinking }: Props) => {
               >
                 <div className='mb-2 flex items-center space-x-2'>
                   <div className='relative flex h-[20px] w-[20px] items-center justify-center overflow-hidden rounded-full border border-border text-sm transition duration-150 hover:opacity-70 focus:outline-none'>
-                    <SparklesIcon className='h-3 w-3 text-text-foreground' />
+                    <BotIcon className='h-3 w-3 text-text-foreground' />
                   </div>
                   <p className='text-sm font-medium'>{botName}</p>
                 </div>
@@ -44,20 +61,32 @@ const ChatMessages = ({ messages, botName, thinking }: Props) => {
                 <p className={`text-sm font-light dark:opacity-80`}>{text}</p>
               </div>
             );
+          case 'status':
+            return (
+              <div 
+                key={id}
+                className="text-center py-2 text-sm"
+              >
+                <span className="text-text-foreground font-bold">Real representative</span>
+                <span>{' ' + text}</span>
+              </div>
+            )
+          default:
+            return (
+              <div key={id} />
+            )
         }
       })}
       {thinking ? (
         <div
-          key='thinking'
-          className='whitespace-pre-wrap border-b border-zinc-200 px-6 py-5 hover:bg-zinc-50'
+          className='whitespace-pre-wrap border-b border-border px-6 py-5 hover:bg-surface'
         >
           <div className='mb-2 flex items-center space-x-2'>
-            <div className='relative flex h-[20px] w-[20px] items-center justify-center overflow-hidden rounded-full border border-zinc-200 bg-black text-sm transition duration-150 hover:opacity-70 focus:outline-none'>
-              <SparklesIcon className='h-3 w-3 text-white' />
+            <div className='relative flex h-[20px] w-[20px] items-center justify-center overflow-hidden rounded-full border border-border bg-background text-sm transition duration-150 hover:opacity-70 focus:outline-none'>
+              <SparklesIcon className='h-3 w-3 text-text-foreground' />
             </div>
             <p className='text-sm font-medium'>{botName}</p>
           </div>
-
           <p className={`text-sm font-light dark:opacity-80`}>Thinking...</p>
         </div>
       ) : null}

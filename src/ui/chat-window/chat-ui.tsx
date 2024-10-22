@@ -18,11 +18,12 @@ function fetcher(...args) {
 const ChatUI = ({ domain, bot }) => {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
-  const [conversationId, setConversationId] = useState(null);
+  const [cbkConversationId, setCbkConversationId] = useState(null);
+  const [conversation, setConversation] = useState(null);
   const [token, setToken] = useState(null);
   const { data, isLoading, error, isValidating } = useSWR(
     open
-      ? `/api/session?cbkbotId=${bot.id}&domainBotId=${domain.chatBot.id}`
+      ? `/api/session?cbkbotId=${bot.id}&domainBotId=${domain.chatBot.id}&domainId=${domain.id}`
       : null,
     fetcher,
     {
@@ -30,9 +31,11 @@ const ChatUI = ({ domain, bot }) => {
       revalidateOnFocus: false,
     }
   )
+
   useEffect(() => {
     if (data) {
-      setConversationId(data.conversationId);
+      setCbkConversationId(data.cbk_conversation_id);
+      setConversation(data.conversation);
       setToken(data.token);
     }
     if (error) {
@@ -43,7 +46,7 @@ const ChatUI = ({ domain, bot }) => {
     }
   }, [data, error]);
 
-  const onChatButtonClick = async () => {
+  const openChatWindow = async () => {
     setOpen(true);
   };
 
@@ -51,7 +54,7 @@ const ChatUI = ({ domain, bot }) => {
     <>
       <div className='fixed bottom-[20px] right-[50px] z-50'>
         <motion.button
-          onClick={() => onChatButtonClick()}
+          onClick={() => openChatWindow()}
           className='flex size-[60px] items-center justify-center rounded-full bg-accent p-4 text-text'
           whileHover={{
             scale: 1.1,
@@ -68,33 +71,19 @@ const ChatUI = ({ domain, bot }) => {
           )}
         </motion.button>
       </div>
-      <div className='z-51 fixed bottom-[20px] right-[50px]'>
+      <div className='z-51 fixed bottom-0 right-0 text-text'>
         <motion.div
-          animate={open && data ? { y: 0 } : { y: 1000 }}
+          initial={{y: 1000}}
+          animate={open && !isLoading ? { y: 0 } : { y: 1000 }}
           className='relative h-[600px] w-[400px] rounded-xl border border-zinc-200 bg-background shadow-md'
         >
-          <div className='relative mb-4 flex flex-row items-center gap-2'>
-            <div className='flex h-[80px] w-[80px] items-center justify-center rounded-full bg-background'>
-              <Image
-                src='/images/plus.png'
-                width={36}
-                height={36}
-                alt='chatbot avatar'
-              />
-            </div>
-            <p>{bot.name}</p>
-            <XIcon
-              className='absolute right-[10px] top-[10px] size-6 cursor-pointer'
-              onClick={() => setOpen(false)}
-            />
-          </div>
-          <Separator />
-          {token && conversationId ? (
+          {token && cbkConversationId ? (
             <ChatForm
+              setOpen={setOpen} 
               bot={bot}
-              botId={domain.chatBot.id}
               domainId={domain.id}
-              conversationId={conversationId}
+              conversation={conversation}
+              cbkConversationId={cbkConversationId}
               token={token}
             />
           ) : (

@@ -216,20 +216,20 @@ export const getConversationRecord = async (id: string) => {
  * Logic related to realtime communication between customer and live representative
  */
 export const sendLiveMessage = async ({
-  message,
+  text,
   conversationId,
-  role
+  type
 }: {
-  message: string,
+  text: string,
   conversationId: string,
-  role: string
+  type: string
 }) => {
   try { 
-    await createChatMessage(conversationId, message, role);
+    await createChatMessage(conversationId, text, type);
     const res = await pusher.trigger(`channel-${conversationId}`, 'message', {
-      message,
+      text,
       conversationId,
-      role,
+      type,
       createdAt: new Date()
     })
   } catch (err) {
@@ -241,13 +241,13 @@ export const sendLiveMessage = async ({
 export const sendStatus = async ({
   online,
   conversationId,
-  role
+  type
 }) => {
   try {
      const res = await pusher.trigger(`channel-${conversationId}`, 'status', {
       online,
       conversationId,
-      role
+      type
      })
   } catch (err) {
     console.error(err)
@@ -258,13 +258,13 @@ export const sendStatus = async ({
 export const sendCustomerStatus = async ({
   online, 
   conversationId,
-  role
+  type
 }) => {
   try {
     const res = await pusher.trigger(`customer-status`, 'message', {
      online,
      conversationId,
-     role
+     type
     })
  } catch (err) {
    console.error(err)

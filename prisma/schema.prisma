@@ -94,7 +94,6 @@ model Contact {
   id    String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email String? @unique
 
-  conversationIds    String[]             @default([])
   discoveryResponses DiscoveryResponses[]
 
   booking Booking[]
@@ -107,12 +106,11 @@ model Contact {
 }
 
 model Conversation {
-  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  live         Boolean       @default(false)
-  customerLive Boolean       @default(false)
-  messages     ChatMessage[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  id        String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  live      Boolean       @default(false)
+  messages  ChatMessage[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
 
   contact   Contact? @relation(fields: [contactId], references: [id], onDelete: Cascade)
   contactId String?  @db.Uuid
@@ -123,8 +121,8 @@ model Conversation {
 
 model ChatMessage {
   id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  message        String
-  role           Role?
+  text           String
+  type           MessageType?
   seen           Boolean       @default(false)
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
@@ -166,8 +164,9 @@ model EmailBatch {
   campaignId String?   @db.Uuid
 }
 
-enum Role {
+enum MessageType {
   user
   bot
   assistant
+  status
 }

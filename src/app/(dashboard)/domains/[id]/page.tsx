@@ -30,7 +30,7 @@ const DomainSettingsPage = async ({ params }) => {
         <DomainSettings domain={domain} />
         <DomainChatBotTraining domainId={domainId} />
         {/* <ChatWindow domain={domain} /> */}
-        <ChatLiveWindow domain={domain}/>
+        <ChatWindow domain={domain}/>
       </AppSectionContainer>
     </div>
   );

@@ -19,7 +19,6 @@ export const updateConversationLive = async (conversationId: string, live: boole
 
 export const updateConversation = async (conversationId: string, data: Object) => {
   try {
-    console.log('[Conversation] updating...')
     const conversation = await client.conversation.update({
       where: {
         id: conversationId
@@ -29,8 +28,6 @@ export const updateConversation = async (conversationId: string, data: Object) =
     if (!conversation) {
       throw new Error('Failed to updated conversation')
     }
-    console.log('[Conversation] successfully updated')
-    return conversation;
   } catch (err) {
     console.error(err)
     throw new Error(err)
@@ -60,8 +57,8 @@ export const getConversations = async (domainId: string) => {
           },
           select: {
             id: true,
-            message: true,
-            role: true,
+            text: true,
+            type: true,
             seen: true,
             createdAt: true,
           }
@@ -88,8 +85,8 @@ export const getChatMessages = async (conversationId: string) => {
       },
       select: {
         id: true,
-        message: true,
-        role: true,
+        text: true,
+        type: true,
         seen: true,
         createdAt: true
       }
@@ -101,12 +98,12 @@ export const getChatMessages = async (conversationId: string) => {
   }
 }
 
-export const createChatMessage = async (conversationId: string, message: string, role: string) => {
+export const createChatMessage = async (conversationId: string, text: string, type: string) => {
   try {
     const chatMessage = await client.ChatMessage.create({
       data: {
-        message,
-        role,
+        text,
+        type,
         seen: true,
         conversation: {
           connect: {
