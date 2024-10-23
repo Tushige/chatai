@@ -6,11 +6,11 @@ import pusher from '@/lib/pusher';
 import { createChatMessage } from './conversations.action';
 
 function createBackstory(questions: Questions[]) {
-  // return `You are a highly knowledgeable, welcoming, and experienced sales representative. You will be provided a list of questions that you must ask the customer.Progress the conversation using those questions. Whenever you ask a question from the provided list, you must add a keyword at the end of the question. This keyword is [*]. The list of questions is as follows: ${questions.map(q => q.question).join(', ')} Lastly, always start a conversation with the phrase howdy.`
-  // return `You will be provided a list of questions that you must ask the customer.Progress the conversation using those questions. Whenever you ask a question from the provided list, you must add a keyword at the end of the question. This keyword is [*]. The list of questions is as follows: ${questions.map(q => q.question).join(', ')}`
+  return `You are a highly knowledgeable, welcoming, and experienced sales representative. You will be provided a list of questions that you must ask the customer. Progress the conversation using those questions. Whenever you ask a question from the provided list, you must add a keyword at the end of the question. This keyword is [*]. The list of questions are as follows: ${questions.map(q => q.question).join(', ')}. Additionally, keep your responses under 3 sentences.`
+  // use this backstory for when you want to be frugal with your tokens
   return `Limit your responses to one sentence. Immediately ask the following questions from customers as soon as they send you a message. Add [Q] at the end of each question. The questions are ${questions.map((q) => q.question).join(', ')}`;
 }
-async function getChatbot(id: string) {
+async function getCBKChatbot(id: string) {
   try {
     const bot = cbk.bot.fetch(id);
     if (!bot) {
@@ -165,7 +165,7 @@ const getMessages = async (conversationId: string) => {
 export {
   getChatbotByDomainId,
   createChatbotForDomain,
-  getChatbot,
+  getCBKChatbot,
   getConversation,
   getMessages,
   updateChatbotBackstory,
@@ -191,25 +191,6 @@ export const createConversation = async (domainId: string) => {
   } catch (err) {
     console.error(err)
     throw new Error(err)
-  }
-}
-export const getConversationRecord = async (id: string) => {
-  try {
-    const conversation = await client.conversation.findUnique({
-      where: {
-        id
-      },
-      select: {
-        id: true,
-        live: true
-      }
-    });
-    if (!conversation) {
-      throw new Error('Requested conversation not found')
-    }
-    return conversation;
-  } catch (err) {
-    console.error(err)
   }
 }
 /**
@@ -253,21 +234,4 @@ export const sendStatus = async ({
     console.error(err)
     throw new Error(err)
   }
-}
-
-export const sendCustomerStatus = async ({
-  online, 
-  conversationId,
-  type
-}) => {
-  try {
-    const res = await pusher.trigger(`customer-status`, 'message', {
-     online,
-     conversationId,
-     type
-    })
- } catch (err) {
-   console.error(err)
-   throw new Error(err)
- }
 }

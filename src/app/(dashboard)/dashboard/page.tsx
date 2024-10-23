@@ -7,9 +7,8 @@ import {
   totalEmailCountForUser,
 } from '@/actions/campaign.action';
 import AppSectionContainer from '@/components/app-section-container';
-import GridPattern from '@/components/ui/grid-pattern';
-import { cn } from '@/lib/utils';
 import AppSectionHeroContainer from '@/components/app-section-hero-container';
+import { capitalizeWord } from '@/lib/utils';
 
 const page = async () => {
   const authId = await getAuthId();
@@ -36,6 +35,14 @@ const page = async () => {
         </p>
       </AppSectionHeroContainer>
       <AppSectionContainer>
+        <div>
+        <p className='text-text'>
+          Current plan:{' '}
+          <span className='font-bold text-text-foreground'>
+            {capitalizeWord(user.billing.plan.name)}
+          </span>
+        </p>
+        </div>
         <div className='mt-8'>
           <UsageMetricsUI metrics={metrics} />
         </div>

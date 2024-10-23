@@ -1,5 +1,5 @@
 'use client'
-import { AppDate, AppRelativeDate } from '@/components/app-date';
+import { AppDate, AppRelativeDate, AppTime } from '@/components/app-date';
 import { cn } from '@/lib/utils';
 import { AvatarIcon } from '@radix-ui/react-icons';
 import { Bot, SmileIcon } from 'lucide-react';
@@ -207,7 +207,7 @@ function ChatMessage({ role, message, createdAt }: ChatMessageProps) {
       })}
     >
       <div className='flex flex-col justify-start gap-2 p-4 border border-accent rounded-md bg-surface z-[1]'>
-        <AppDate timestamp={createdAt} className="text-sm text-text-secondary"/>
+        <AppTime timestamp={createdAt} className="text-sm text-text-secondary"/>
         <p>{message}</p>
       </div>
       {

@@ -15,15 +15,12 @@ const DomainDeleteBox = ({ id, className }: Props) => {
   const router = useRouter();
   const onDelete = async () => {
     try {
-      const res = await deleteDomain(id);
+      await deleteDomain(id);
       toast({
-        title: res.status === 200 ? 'Success' : 'Error',
-        description: res.message,
+        title: '⭐ Success',
+        description: 'Successfully deleted'
       });
-      if (res.status === 200) {
-        router.push('/dashboard');
-        router.refresh();
-      }
+      router.push('/dashboard');
     } catch (err) {
       toast({
         title: 'Error',

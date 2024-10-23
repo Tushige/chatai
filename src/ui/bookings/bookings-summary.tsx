@@ -3,14 +3,12 @@ import React from 'react';
 import { Booking } from './booking.types';
 import BookingTable from './booking-table/booking-table';
 import { BookingTableColumns } from './booking-table/booking-table-columns';
-import AppSectionTitle from '@/components/app-section-title';
 import { Separator } from '@/components/ui/separator';
-import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
 const BookingsSummaryUI = ({ bookings }: { bookings: Booking[] }) => {
   if (!bookings || bookings.length < 1) {
-    return <div>You have no bookings</div>;
+    return <div>You have no appointments</div>;
   }
   return (
     <>

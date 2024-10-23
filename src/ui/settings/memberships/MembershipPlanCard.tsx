@@ -55,14 +55,12 @@ const MembershipPlanCard = ({
         ))}
       </ul>
       <div className='flex w-full flex-row justify-center'>
-        <SheetTrigger>
-          <Button
-            className='mt-8 bg-accent text-text hover:bg-accent-hover hover:drop-shadow-2xl'
-            onClick={() => onClick(priceId)}
-            disabled={isCurrentPlan}
+        <SheetTrigger
+          className={cn('px-4 py-2 mt-8 rounded-md bg-accent text-text font-medium hover:bg-accent-hover hover:drop-shadow-2xl', {'bg-border pointer-events-none': isCurrentPlan})}
+          onClick={() => onClick(priceId)}
+          disabled={isCurrentPlan}
           >
             {isCurrentPlan ? 'Current plan' : 'Subscibe'}
-          </Button>
         </SheetTrigger>
       </div>
     </div>

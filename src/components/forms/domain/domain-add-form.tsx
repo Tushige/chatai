@@ -43,7 +43,7 @@ const DomainAddForm = ({ initialData, onSuccess, closeDrawer }: Props) => {
       });
       if (status === 200) {
         toast({
-          title: 'Success',
+          title: '⭐Success',
           description: `${data.name} successfully added`,
           className: 'text-success',
         });

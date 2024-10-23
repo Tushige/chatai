@@ -18,6 +18,11 @@ async function main() {
         emailLimit: 100,
         domainLimit: 5,
       },
+      {
+        name: 'ENTERPRISE',
+        emailLimit: 1000,
+        domainLimit: 10,
+      },
     ],
   });
 }

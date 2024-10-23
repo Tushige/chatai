@@ -38,7 +38,7 @@ const SigninFormProvider = ({ children }: Props) => {
       if (authenticated.status === COMPLETE) {
         await setActive({ session: authenticated.createdSessionId });
         toast({
-          title: <span className='text-success'>Success</span>,
+          title: <span className='text-success'>⭐Success</span>,
           description: 'Welcome back!',
           className: 'text-success',
         });

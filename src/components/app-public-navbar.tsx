@@ -2,7 +2,7 @@ import React from 'react';
 import AppLogo from './app-logo';
 import { GradientText } from './app-gradient-text';
 
-const productName = 'AI CAMPAIGNER';
+const productName = 'ChatAI';
 const AppPublicNavbar = () => {
   return (
     <div className='gradient-background-2 w-full py-4 text-text'>

@@ -52,7 +52,7 @@ export const timeFormat = (date: string, isTwentyFour?: boolean) => {
   return dayjs(date).format('h:mm A');
 };
 
-export const AppDate = ({ timestamp, className }: Props) => {
+export const AppTime = ({ timestamp, className }: Props) => {
   const [dateValue, setDateValue] = useState(formattedTime(timestamp))
   useEffect(() => {
     setInterval(() => {
@@ -60,4 +60,8 @@ export const AppDate = ({ timestamp, className }: Props) => {
     }, REFRESH_PERIOD);
   }, []);
   return <span className={cn(className)}>{dateValue}</span>;
+};
+
+export const AppDate = ({ timestamp, className }: Props) => {
+  return <span className={cn(className)}>{simpleDate(timestamp)}</span>;
 };

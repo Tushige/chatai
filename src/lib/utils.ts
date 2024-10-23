@@ -25,3 +25,13 @@ export const combineDateAndTime = (date, time) => {
   combinedDate.setHours(hours, minutes);
   return combinedDate;
 };
+
+
+export const capitalizeWord = (s: string) => {
+  return s.toLowerCase().split('').map((c, i) => {
+    if (i === 0) {
+      return c.toUpperCase();
+    }
+    return c;
+  }).join('');
+}

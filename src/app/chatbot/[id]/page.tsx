@@ -1,5 +1,4 @@
 import { getDomain } from '@/actions/domain.action';
-import ChatLiveWindow from '@/ui/chat-live-window'
 import ChatWindow from '@/ui/chat-window';
 import React from 'react'
 

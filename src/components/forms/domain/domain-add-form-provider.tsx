@@ -42,7 +42,7 @@ const DomainAddFormProvider = ({
       });
       if (status === 200) {
         toast({
-          title: 'Success',
+          title: '⭐Success',
           description: `${data.name} successfully added`,
           className: 'text-success',
         });

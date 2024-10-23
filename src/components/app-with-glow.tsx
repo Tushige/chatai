@@ -10,7 +10,7 @@ import {
 } from 'framer-motion';
 import { useRef } from 'react';
 
-export const WithGlow = ({ children, className }) => {
+export const WithGlow = ({ children, className, glowColor = "border-accent" }) => {
   const duration = 5000;
   const pathRef = useRef(null);
   const progress = useMotionValue<number>(0);
@@ -56,7 +56,7 @@ export const WithGlow = ({ children, className }) => {
       </div>
       <motion.div
         ref={border}
-        className={cn('absolute inset-0 rounded-xl border-4', 'border-accent')}
+        className={cn('absolute inset-0 rounded-xl border-4', `${glowColor}`)}
         style={{
           WebkitMaskImage: maskImage,
           maskImage: maskImage,

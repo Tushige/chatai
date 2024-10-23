@@ -75,6 +75,14 @@ const getUserBilling = async (clerkId: string) => {
           select: {
             id: true,
             stripeCustomerId: true,
+            plan: {
+              select: {
+                id: true,
+                name: true,
+                emailLimit: true,
+                domainLimit: true
+              }
+            }
           },
         },
       },
@@ -109,6 +117,7 @@ const getAuthUser = async (clerkId: string) => {
           select: {
             plan: {
               select: {
+                name: true,
                 domainLimit: true,
                 emailLimit: true,
               },

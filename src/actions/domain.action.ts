@@ -2,6 +2,7 @@
 import { client } from '@/lib/prisma';
 import { DomainProps } from '@/schemas/domain.schema';
 import { getAuthId } from './auth';
+import { revalidatePath } from 'next/cache';
 
 const getDomainWithOptions = async (domainId: string, select = {}) => {
   try {
@@ -9,7 +10,7 @@ const getDomainWithOptions = async (domainId: string, select = {}) => {
       where: {
         id: domainId,
       },
-      select,
+      select
     });
     if (!domain) {
       throw Error('failed to fetch Domain');
@@ -48,12 +49,13 @@ const getDomain = async (domainId: string) => {
         },
       },
     });
+    if (!domain) {
+      throw new Error('Domain not found');
+    }
     return domain;
   } catch (err) {
-    return {
-      status: 400,
-      message: err,
-    };
+    console.error(err)
+    throw new Error(err);
   }
 };
 const getDomainWithContacts = async (domainId: string) => {
@@ -162,25 +164,15 @@ const updateDomain = async (
 };
 const deleteDomain = async (id) => {
   try {
-    const deleted = await client.domain.delete({
+    await client.domain.delete({
       where: {
         id,
       },
     });
-    if (deleted) {
-      return {
-        status: 200,
-        message: 'successfully deleted domain',
-      };
-    } else {
-      throw Error('failed to delete domain');
-    }
+    revalidatePath('/')
   } catch (err) {
     console.error(err);
-    return {
-      status: 400,
-      message: err,
-    };
+    throw new Error('failed to delete domain')
   }
 };
 

@@ -10,11 +10,7 @@ const Page = () => {
   useEffect(() => {
     const doSignOut = async () => {
       const a = await signOut();
-      // console.log('signout response')
-      // console.log(a)
-      const user = await getAuthId();
-      // console.log('this is id')
-      // console.log(user)
+      router.push('/')
     };
     doSignOut();
   }, []);

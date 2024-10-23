@@ -12,8 +12,8 @@ const AppointmentsPage = async () => {
     <div className='w-full'>
       <AppSectionHeroContainer>
         <AppPageTitle
-          title='Bookings'
-          description='Organize your customer bookings and track them effectively here'
+          title='Appointments'
+          description='Organize your customer appointments and track them effectively here'
         />
       </AppSectionHeroContainer>
       <AppSectionContainer>

@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
 import { DomainMenu } from './domain/domain-menu';
 import { Domain } from '@prisma/client';
+import OwlLogo from '../app-logo/owl-logo';
 
 type LinkProp = {
   label: string;
@@ -65,8 +66,8 @@ const AppSideBar = ({ user }: Props) => {
     <div className='h-full min-w-[100px] bg-background-secondary lg:min-w-[300px]'>
       <h2 className='row flex w-full items-center justify-center gap-4 p-4 lg:justify-start'>
         <AppLogo />
-        <div className='hidden text-2xl font-black text-text-foreground lg:block'>
-          AI <span className='font-medium'>Campaigner</span>
+        <div className='hidden text-2xl text-text-foreground font-medium lg:block'>
+          Chat <span className='text-2xl font-black'>AI</span>
         </div>
       </h2>
       <Menu pathname={pathname} />

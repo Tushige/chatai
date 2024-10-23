@@ -1,11 +1,8 @@
 'use client';
 import { motion } from 'framer-motion';
-import { Separator } from '@/components/ui/separator';
 import ChatForm from './chat-form';
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/outline';
-import { XIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { CHATBOT_TOKEN_DURATION } from '@/app/constants';
 import useSWR from 'swr';
@@ -85,6 +82,7 @@ const ChatUI = ({ domain, bot }) => {
               conversation={conversation}
               cbkConversationId={cbkConversationId}
               token={token}
+              welcomeMessage={domain.chatBot.welcomeMessage}
             />
           ) : (
             <div>loading</div>

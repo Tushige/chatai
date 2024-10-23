@@ -110,7 +110,8 @@ export const createFreeSubscription = async (customerId: string) => {
 };
 
 /**
- * we update the subscription with the new plan and return payment intent back to the client
+ * we update the subscription with the new plan and return payment intent back to the client.
+ * payment intent allows to defer the payment to later.
  * On the client, we collect the payment info and complete the transaction.
  */
 export const updateSubscription = async (
@@ -140,11 +141,8 @@ export const updateSubscription = async (
     const returnVal = {
       subscriptionId: subscription.id,
       clientSecret: subscription.latest_invoice.payment_intent?.client_secret,
-      payment_intent_status:
-        subscription.latest_invoice.payment_intent?.status ||
-        subscription.latest_invoice.status === 'paid'
-          ? 'succeeded'
-          : null,
+      invoice_status: subscription.latest_invoice.status,
+      payment_intent_status: subscription.latest_invoice.payment_intent?.status
     };
     return returnVal;
   } catch (err) {
@@ -173,7 +171,7 @@ export const createCustomer = async ({ name, email }) => {
   try {
     const customer = await stripeClient.customers.create({
       name,
-      email,
+      email: 'test1@gmail.com',
     });
     return customer;
   } catch (err) {

@@ -30,6 +30,7 @@ function ChatForm({
   conversation,
   cbkConversationId,
   token,
+  welcomeMessage
 }: {
   bot: BotOptions;
   domainId: string;
@@ -38,7 +39,14 @@ function ChatForm({
 }) {
   const { name } = bot;
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: uuidv4(),
+      type: 'bot',
+      text: welcomeMessage,
+      createdAt: (new Date()).getTime()
+    }
+  ]);
   const [assistantOnline, setAssistantOnline] = useState(false)
   const [asyncProgress, setAsyncProgress] = useState(false);
   const {

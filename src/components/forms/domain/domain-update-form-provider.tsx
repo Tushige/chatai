@@ -43,7 +43,7 @@ const DomainUpdateFormProvider = ({
       const { status, message } = await updateDomain(domainId, cleanedData);
       if (status === 200) {
         toast({
-          title: 'Success',
+          title: '⭐Success',
           description: `${data.name} successfully updated`,
         });
       } else {

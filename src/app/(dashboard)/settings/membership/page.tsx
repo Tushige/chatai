@@ -16,22 +16,22 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from '@/components/ui/sheet';
 import Stripe from 'stripe';
 import { StripeElementsOptions } from '@stripe/stripe-js';
 import { AppDate } from '@/components/app-date';
 import { CheckCircle } from 'lucide-react';
-import GridPattern from '@/components/ui/grid-pattern';
 import { ConfettiFireworks } from '@/components/app-fireworks';
 import AppSectionHeroContainer from '@/components/app-section-hero-container';
 import AppSectionContainer from '@/components/app-section-container';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import { selectPlan } from '@/actions/billing.action';
 
-const SUCCEEDED = 'succeeded';
 type PaymentOptionsType = StripeElementsOptions & {
   payment_intent_status: string;
+  invoice_status: string;
 };
+
 const initialPaymentOptions = {
   appearance: {
     theme: 'night',
@@ -43,6 +43,7 @@ const initialPaymentOptions = {
 
 type Price = Stripe.Price;
 type Billing = {
+  id: string;
   customerId: string;
   subscriptionId: string;
   subscriptionItemId: string;
@@ -67,10 +68,11 @@ const MembershipPage = () => {
   const fetchBilling = async () => {
     try {
       const authId = await getAuthId();
-      let billing = await getUserBilling(authId);
-      billing = billing.billing;
+      let {billing} = await getUserBilling(authId);
       const subscription = await getAvailablePrices(billing.stripeCustomerId);
+      subscription.prices.sort((a, b) => a.unit_amount - b.unit_amount);
       setBilling({
+        id: billing.id,
         ...subscription,
         customerId: billing.stripeCustomerId,
       });
@@ -79,30 +81,43 @@ const MembershipPage = () => {
     }
   };
 
-  const checkout = async (price) => {
+  const handlePaymentSuccess = async (price: Price) => {
+    // payment succeded so no need to collect payment info
+    if (price.nickname === 'Premium') {
+      setConfettiActive(true);
+    }
+    // we update our db to reflect the new plan
+    await selectPlan(billing.id, price.nickname);
+    fetchBilling();
+  }
+
+  /**
+   * We update the subscription
+   * 1. if default payment exists, the default payment is charged immediately
+   * 2. if default payment doesn't exist, a payment intent is created. We store the payment intent in a local state and use it to render Stripe Elements to help us collect the payment info.
+   */
+  const checkout = async (price: Price) => {
     setSelectedPrice(price);
     setLoading(true);
     try {
-      const { subscriptionId, clientSecret, payment_intent_status } =
-        await updateSubscription(
-          billing.customerId,
-          billing?.subscriptionId,
-          billing?.subscriptionItemId,
-          price.id
-        );
-
-      // payment options is used by Stripe Elements
+      const stripeResponse = await updateSubscription(
+        billing.customerId,
+        billing?.subscriptionId,
+        billing?.subscriptionItemId,
+        price.id
+      );
+      const { subscriptionId, clientSecret, payment_intent_status, invoice_status } = stripeResponse;
+      // payment options is used by Stripe Elements to display payment form
+      // if payment_intent_status === SUCCEEDED then paymentOptions is irrelevant.
       setPaymentOptions((prev) => ({
         ...prev,
         clientSecret,
         payment_intent_status,
+        invoice_status
       }));
-      if (payment_intent_status === SUCCEEDED) {
+      if (invoice_status === 'paid') {
         // payment succeded so no need to collect payment info
-        if (price.nickname === 'Premium') {
-          setConfettiActive(true);
-        }
-        fetchBilling();
+        handlePaymentSuccess(price);
       }
     } catch (err) {
       console.error(err);
@@ -166,6 +181,7 @@ const MembershipPage = () => {
                     <WithGlow
                       key={d.nickname}
                       className='rounded-xl bg-surface p-4 pb-12 lg:p-8'
+                      glowColor="border-[#c4c4c4]"
                     >
                       <MembershipPlanCard
                         premium
@@ -180,6 +196,26 @@ const MembershipPage = () => {
                       />
                     </WithGlow>
                   );
+                } else if (d.nickname === 'Enterprise') {
+                  return (
+                    <WithGlow
+                      key={d.nickname}
+                      className='rounded-xl bg-surface p-4 pb-12 lg:p-8'
+                      glowColor="border-[#efbf04]"
+                    >
+                      <MembershipPlanCard
+                        premium
+                        priceId={d.id}
+                        name={d.nickname}
+                        unitAmount={d.unit_amount}
+                        features={features}
+                        className='relative z-10'
+                        onClick={() => checkout(d)}
+                        currentPrice={billing.currentPrice}
+                        loading={loading}
+                      />
+                    </WithGlow>
+                  )
                 }
                 return (
                   <MembershipPlanCard
@@ -201,7 +237,7 @@ const MembershipPage = () => {
               <div className='flex h-[90vh] w-full items-center justify-center'>
                 <Loader />
               </div>
-            ) : paymentOptions.payment_intent_status === SUCCEEDED ? (
+            ) : paymentOptions.invoice_status === 'paid' ? (
               <div className='flex size-full flex-col items-center justify-center'>
                 <CheckCircle className='size-24 text-success' />
                 <span className='text-xl text-text'>You're all set!</span>
@@ -220,7 +256,6 @@ const MembershipPage = () => {
             ) : (
               <div className='text-4xl'>Unexpected State</div>
             )}
-            `
           </SheetContent>
         </Sheet>
       </AppSectionContainer>
@@ -241,7 +276,7 @@ const PlanText = ({
   return (
     <div className={cn(className)}>
       <p className='text-text'>
-        Your current plan is{' '}
+        Current plan:{' '}
         <span className='font-bold text-text-foreground'>
           {currentPrice.nickname}
         </span>
@@ -250,9 +285,9 @@ const PlanText = ({
         Next payment: <AppDate timestamp={currentPeriodEnd * 1000} />
       </p>
       <p className='mt-4 text-text'>
-        {currentPrice.nickname === 'Premium'
+        {currentPrice.nickname === 'Enterprise'
           ? 'Congratulations. You have access to all the available features and resources we offer'
-          : 'Upgrade to Premium plan to unlock access to more features and resources'!}
+          : 'Upgrade your plan to unlock access to more features and resources'!}
       </p>
     </div>
   );
