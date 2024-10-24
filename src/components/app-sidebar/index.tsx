@@ -64,12 +64,7 @@ const AppSideBar = ({ user }: Props) => {
   const pathname = usePathname();
   return (
     <div className='h-full min-w-[100px] bg-background-secondary lg:min-w-[300px]'>
-      <h2 className='row flex w-full items-center justify-center gap-4 p-4 lg:justify-start'>
-        <AppLogo />
-        <div className='hidden text-2xl text-text-foreground font-medium lg:block'>
-          Chat <span className='text-2xl font-black'>AI</span>
-        </div>
-      </h2>
+      <AppLogo />
       <Menu pathname={pathname} />
       <DomainMenu user={user} pathname={pathname} />
       <MenuOptions />

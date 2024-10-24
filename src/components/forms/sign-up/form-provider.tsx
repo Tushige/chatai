@@ -58,12 +58,13 @@ const SignupFormProvider = ({ children }: Props) => {
         if (!customer) {
           throw new Error('Failed to create customer');
         }
-        const registered = await createUser(
-          data.fullname,
-          signUp.createdUserId,
-          data.type,
-          customer.id
-        );
+        const registered = await createUser({
+          fullname: data.fullname,
+          email: data.email,
+          clerkId: signUp.createdUserId,
+          type: data.type,
+          stripeCustomerId: customer.id
+        });
         if (registered?.status === 200 && registered?.user) {
           await setActive({
             session: res.createdSessionId,

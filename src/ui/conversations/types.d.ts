@@ -12,7 +12,7 @@ type Conversation = {
   live: boolean,
   createdAt: string
   email: string | null;
-  customerLive: boolean;
+  customerLive?: boolean;
 };
 
 export { Message, Conversation };

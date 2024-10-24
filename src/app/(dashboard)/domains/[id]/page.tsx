@@ -29,7 +29,9 @@ const DomainSettingsPage = async ({ params }) => {
         <DomainCodeIntegration domain={domain} />
         <DomainSettings domain={domain} />
         <DomainChatBotTraining domainId={domainId} />
-        <ChatWindow domain={domain}/>
+        <div className="pb-4 pr-8">
+          <ChatWindow domain={domain}/>
+        </div>
       </AppSectionContainer>
     </div>
   );

@@ -1,6 +1,5 @@
 'use client';
 import { getBookingsByDate } from '@/actions/bookings.action';
-import { timeFormat } from '@/components/app-date';
 import FormBuilder from '@/components/forms/form-builder';
 import Loader from '@/components/loader';
 import { Button } from '@/components/ui/button';
@@ -17,6 +16,7 @@ import React, { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Booking } from '../booking.types';
 import { useToast } from '@/hooks/use-toast';
+import { timeFormat } from '@/lib/date-utils';
 
 const BookAppointmentSteps = ({
   domainId,

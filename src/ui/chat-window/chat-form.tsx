@@ -6,12 +6,12 @@ import { BotOptions } from '@chatbotkit/sdk/bot/v1';
 import { ArrowLeftEndOnRectangleIcon } from '@heroicons/react/24/outline';
 import { useEffect, useRef, useState } from 'react';
 import ChatMessages from './chat-messages';
-import { cn, extractEmailsFromString } from '@/lib/utils';
+import { BOT_DELIMETER, BOT_HELP, cn, extractEmailsFromString } from '@/lib/utils';
 import { createContact } from '@/actions/contact.action';
 import pusherJs from 'pusher-js';
 import { pusher } from '@/lib/pusher-client';
 import { Message } from '../conversations/types';
-import { sendLiveMessage } from '@/actions/chatbot.action';
+import { sendLiveMessage, sendNotificationEmail } from '@/actions/chatbot.action';
 import { Separator } from '@/components/ui/separator';
 import { XIcon } from 'lucide-react';
 import Image from 'next/image';
@@ -27,6 +27,7 @@ function ChatForm({
   setOpen,
   bot,
   domainId,
+  botIcon,
   conversation,
   cbkConversationId,
   token,
@@ -66,9 +67,15 @@ function ChatForm({
         setAsyncProgress(true);
         const lastMessage = botMessages[botMessages.length-1];
         // we extract bot messages and save them to our conversation record in the db
-        if (lastMessage.type === 'bot') {
+        if (lastMessage && lastMessage.type === 'bot') {
+          const found = lastMessage.text.indexOf(BOT_HELP);
+          if (found) {
+            // if customer requested real rep send an email notification
+            sendNotificationEmail(domainId);
+          }
+          const cleanText = lastMessage.text.replace(BOT_DELIMETER, '').replace(BOT_HELP, '');
           // save the bot message in DB and forward it to the assistant
-          await sendLiveMessage({text: lastMessage.text, conversationId: conversation.id, type: lastMessage.type});
+          await sendLiveMessage({text: cleanText, conversationId: conversation.id, type: lastMessage.type});
         }
       } catch (err) {
         console.error(err)
@@ -160,7 +167,7 @@ function ChatForm({
       <div className='relative mb-4 flex flex-row items-center gap-2'>
       <div className='flex h-[80px] w-[80px] items-center justify-center rounded-full bg-background'>
         <Image
-          src='/images/plus.png'
+          src={`https://ucarecdn.com/${botIcon}/-/preview/64x64`}
           width={36}
           height={36}
           alt='chatbot avatar'

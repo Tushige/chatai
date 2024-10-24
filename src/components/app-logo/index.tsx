@@ -10,14 +10,12 @@ const AppLogo = ({
   height?: number;
 }) => {
   return (
-    // <Image
-    //   src='/images/owl-logo.svg'
-    //   width={width}
-    //   height={height}
-    //   alt='App logo'
-    //   className="bg-accent"
-    // />
-    <OwlLogo/>
+    <h2 className='row flex w-full items-center justify-center gap-4 p-4 lg:justify-start'>
+      <OwlLogo/>
+      <div className='hidden text-2xl text-text-foreground font-black lg:block'>
+        Chat <span className='text-2xl font-medium'>AI</span>
+      </div>
+    </h2>
   );
 };
 

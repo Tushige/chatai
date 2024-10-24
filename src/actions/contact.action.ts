@@ -54,7 +54,6 @@ export const createContact = async ({
       },
       select: {
         id: true,
-        conversationIds: true,
       },
     });
     if (contact) {

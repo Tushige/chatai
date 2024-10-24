@@ -11,7 +11,7 @@ import {
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 import { Booking } from '../booking.types';
-import { simpleDate, timeFormat } from '@/components/app-date';
+import { simpleDate, timeFormat } from '@/lib/date-utils';
 
 export const BookingTableColumns: ColumnDef<Booking>[] = [
   {

@@ -14,7 +14,7 @@ export async function POST(req, res) {
     const pusherResponse= pusher.authorizeChannel(socket_id, channel_name, {
       user_id: conversationId || userId,
       user_info: {
-        role: isAssistant ? 'assistant' : 'user',
+        type: isAssistant ? 'assistant' : 'user',
         conversationId: conversationId || null
       }
     });

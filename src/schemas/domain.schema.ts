@@ -9,7 +9,6 @@ export const ACCEPTED_FILE_TYPES = ['image/png', 'image/jpg', 'image/jpeg'];
 export interface DomainProps {
   name: string;
   icon?: any;
-  botName: string;
 }
 
 /**
@@ -28,7 +27,6 @@ export const DomainSchema: ZodType<DomainProps> = z.object({
         /^((?!-)[A-Za-z0-9-]{1,63}(?<!-)\.)+[A-Za-z]{2,3}$/.test(value ?? ''),
       'This is not a valid domain'
     ),
-  botName: z.string().min(1),
   icon: z
     .any()
     .optional()

@@ -49,7 +49,7 @@ const ChatUI = ({ domain, bot }) => {
 
   return (
     <>
-      <div className='fixed bottom-[20px] right-[50px] z-50'>
+      <div className='fixed bottom-0 right-0 z-50'>
         <motion.button
           onClick={() => openChatWindow()}
           className='flex size-[60px] items-center justify-center rounded-full bg-accent p-4 text-text'
@@ -78,6 +78,7 @@ const ChatUI = ({ domain, bot }) => {
             <ChatForm
               setOpen={setOpen} 
               bot={bot}
+              botIcon={domain.icon}
               domainId={domain.id}
               conversation={conversation}
               cbkConversationId={cbkConversationId}

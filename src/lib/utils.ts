@@ -1,6 +1,8 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
+export const BOT_DELIMETER = '[*]';
+export const BOT_HELP = '[help]';
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }

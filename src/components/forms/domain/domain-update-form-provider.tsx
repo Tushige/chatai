@@ -28,6 +28,7 @@ const DomainUpdateFormProvider = ({
       icon: undefined,
     },
   });
+  const { formState: {errors}} = methods;
   const handleSubmit = async (data: DomainUpdateProps) => {
     try {
       setLoading(true);

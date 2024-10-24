@@ -43,7 +43,6 @@ export const getConversations = async (domainId: string) => {
       select: {
         id: true,
         live: true,
-        customerLive: true,
         createdAt: true,
         _count:{
           select: {

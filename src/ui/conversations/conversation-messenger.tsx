@@ -69,7 +69,7 @@ const ConversationMessenger = ( {conversation }: Props) => {
     // subscribe to channel if live mode is on and we're not currently subscribed
     if (!channelRef.current) {
       channelRef.current = pusher.subscribe(`channel-${conversation.id}`);
-      channelRef.current.bind('message', (data: {role: string, message: string}) => {
+      channelRef.current.bind('message', (data: {type: string, message: string}) => {
         setMessages(prev => [...prev, data]);
       })
     }
@@ -153,7 +153,7 @@ const ConversationMessenger = ( {conversation }: Props) => {
         {messages.map((d) => (
           <ChatMessage
             key={d.id}
-            role={d.type}
+            type={d.type}
             message={d.text}
             createdAt={d.createdAt}
           />
@@ -194,16 +194,16 @@ const ConversationMessenger = ( {conversation }: Props) => {
 };
 
 type ChatMessageProps = {
-  role: string;
+  type: string;
   message: string;
   createdAt: number;
 };
 
-function ChatMessage({ role, message, createdAt }: ChatMessageProps) {
+function ChatMessage({ type, message, createdAt }: ChatMessageProps) {
   return (
     <div
       className={cn('flex w-full flex-row items-start justify-end gap-2', {
-        'flex-row-reverse': role === 'bot' || role === 'assistant',
+        'flex-row-reverse': type === 'bot' || type === 'assistant',
       })}
     >
       <div className='flex flex-col justify-start gap-2 p-4 border border-accent rounded-md bg-surface z-[1]'>
@@ -211,9 +211,9 @@ function ChatMessage({ role, message, createdAt }: ChatMessageProps) {
         <p>{message}</p>
       </div>
       {
-        role === 'bot' && (
+        type === 'bot' && (
           <Bot className='size-6 shrink-0' />
-        ) || role === 'assistant' && (
+        ) || type === 'assistant' && (
           <SmileIcon className="size-6 shrink-0" /> 
         ) || (
           <AvatarIcon className='size-6 shrink-0' />

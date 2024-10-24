@@ -16,18 +16,26 @@ const DEFAULT_QUESTIONS = [
 /*
  create a user in the database
 */
-const createUser = async (
+const createUser = async ({
+    fullname,
+    email,
+    clerkId,
+    type,
+    stripeCustomerId,
+  } : {
   fullname: string,
+  email: string,
   clerkId: string,
   type: string,
   stripeCustomerId: string
-) => {
+}) => {
   // every new user will be created on the Free tier
   const freePlan = await getPlan('FREE');
   try {
     const registered = await client.user.create({
       data: {
         fullname,
+        email,
         clerkId,
         type,
         billing: {
@@ -181,7 +189,7 @@ const createDomain = async ({
     }
     // TODO - check if user has reached maximum capacity on their plan.
     // create default bot questions
-    const bot = await createChatbotForDomain(botName, DEFAULT_QUESTIONS);
+    const bot = await createChatbotForDomain(botName, domain.id, domain.name, DEFAULT_QUESTIONS);
 
     if (!bot) {
       throw new Error('Failed to create Bot');

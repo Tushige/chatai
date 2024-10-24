@@ -1,7 +1,6 @@
 import { getBooking } from '@/actions/bookings.action';
-import { dateWithTime } from '@/components/app-date';
-import { ConfettiFireworks } from '@/components/app-fireworks';
 import DotPattern from '@/components/magicui/dot-pattern';
+import { dateWithTime } from '@/lib/date-utils';
 import { cn } from '@/lib/utils';
 import React from 'react';
 
@@ -10,11 +9,11 @@ const BookingPage = async ({ params }) => {
   if (!bookingId) {
     return <div>404</div>;
   }
-  const booking = await getBooking(bookingId);
+  const booking = await getBooking (bookingId);
   if (!booking) {
     return <div>404</div>;
   }
-  const time = dateWithTime(booking.date);
+  const time = dateWithTime (booking.date);
   return (
     <div className='flex h-full w-full flex-col items-center justify-center bg-background text-text'>
       <DotPattern

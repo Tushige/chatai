@@ -17,7 +17,7 @@ const getDomainWithOptions = async (domainId: string, select = {}) => {
     }
     return domain;
   } catch (err) {
-    console.error(err);
+    console.error(err, domainId);
     throw new Error(err);
   }
 };
@@ -96,14 +96,12 @@ const getAllDomains = async () => {
             chatBot: {
               select: {
                 chatBotKitId: true,
-                conversationIds: true,
               },
             },
             contacts: {
               select: {
                 id: true,
                 email: true,
-                conversationIds: true,
               },
             },
           },
@@ -175,6 +173,29 @@ const deleteDomain = async (id) => {
     throw new Error('failed to delete domain')
   }
 };
+const getUserEmailForDomain = async (domainId: string) => {
+  try {
+    const domain = await client.domain.findFirst({
+      where: {
+        id: domainId
+      },
+      select: {
+        user: {
+          select: {
+            email: true
+          }
+        }
+      }
+    });
+    if (!domain) {
+      throw new Error('Domain not found')
+    }
+    return domain.user.email;
+  } catch (err) {
+    console.error(err);
+    throw new Error(err);
+  }
+}
 
 export {
   getDomain,
@@ -182,4 +203,5 @@ export {
   updateDomain,
   deleteDomain,
   getDomainWithContacts,
+  getUserEmailForDomain
 };

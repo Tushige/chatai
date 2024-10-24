@@ -14,14 +14,18 @@ export default function HeroSection() {
         The AI features you need to grow your business fast.
       </p>
       <div className="glass-container mt-8">
-        <div className="absolute inset-0 z-[-1] bg-fuchsia-800/30 blur-2xl filter"/>
+        <div className="absolute inset-0 z-[-1] bg-[#711000] blur-2xl filter"/>
         <Image
-          src="/images/appwrite-dashboard.png"
+          src="/images/desktop-3.png"
+          // src="/images/appwrite-dashboard.png"
           width={1024}
           height={1024}
           alt='product screenshot'
           sizes='30'
-          className="max-w-[100%] z-1"
+          className="max-w-[100%] z-1 p-4"
+          style={{
+            borderRadius: '25px'
+          }}
         />
       </div>
     </section>

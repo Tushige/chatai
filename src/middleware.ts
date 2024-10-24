@@ -6,11 +6,11 @@ export default authMiddleware({
     '/sign-up(.*)',
     '/sign-in(.*)',
     '/sign-out(.*)',
-    '/portal(.*)',
+    '/bookings(.*)',
     '/api/v1(.*)',
     '/api/pusher/auth',
     '/chatbot(.*)',
-    '/api/session'
+    '/api/session',
   ],
   ignoredRoutes: ['/chatbot', '/api/webhooks/(.*)'],
 });
