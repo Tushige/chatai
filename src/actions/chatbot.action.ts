@@ -8,7 +8,7 @@ import { createChatMessage } from './conversations.action';
 import { getUserEmailForDomain } from './domain.action';
 
 function createBackstory(questions: Questions[], domainId: string, domainName: string) {
-  const bookingUrl = process.env.NEXT_PUBLIC_PORTAL_URL + `/${domainId}`;
+  const bookingUrl = process.env.NEXT_PUBLIC_BOOKING_URL + `/${domainId}`;
   const backstory = `
   You are a highly knowledgeable, welcoming, and experienced sales representative working for ${domainName}. 
   You will be provided a list of questions that you must ask the customer. Progress the conversation using those questions. Whenever you ask a question from the provided list, you must add a keyword at the end of the question. This keyword is [*]. 

@@ -1,5 +1,5 @@
 'use client'
-import { AppDate, AppRelativeDate, AppTime } from '@/components/app-date';
+import {  AppTime } from '@/components/app-date';
 import { cn } from '@/lib/utils';
 import { AvatarIcon } from '@radix-ui/react-icons';
 import { Bot, SmileIcon } from 'lucide-react';
@@ -29,7 +29,7 @@ const ConversationMessenger = ( {conversation }: Props) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', inline: 'nearest', block: 'center' });
   }, [messages]);
 
   useEffect(() => {
@@ -130,9 +130,9 @@ const ConversationMessenger = ( {conversation }: Props) => {
   }
 
   return (
-    <div className="max-h-screen min-h-screen grid grid-rows-[100px_1fr_100px] pb-[50px] pt-10">
-      <div className="row-start-1 flex justify-between">
-        <AppSectionTitle title='Conversation' className='mb-8' />
+    <div className="max-h-screen h-full grid grid-rows-[100px_1fr_100px]">
+      <div className="row-start-1 flex justify-between items-center">
+        <AppSectionTitle title='Conversation' />
         {
           conversation && (
             <Toggle

@@ -1,21 +1,38 @@
-import Image from 'next/image';
+
 import React from 'react';
-import OwlLogo from './owl-logo';
+import MessageLogo from './message-logo';
+import { cva, VariantProps } from 'class-variance-authority';
+import { cn } from '@/lib/utils';
+import Link from 'next/link';
+
+
+const appLogoVariants = cva(
+  'text-2xl text-text-foreground font-black lg:block',
+  {
+    variants: {
+      variant: {
+        default: '',
+        navbar: 'hidden'
+      }
+    }
+  }
+)
+
+export interface AppLogoProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof appLogoVariants> {}
 
 const AppLogo = ({
-  width = 64,
-  height = 64,
-}: {
-  width?: number;
-  height?: number;
-}) => {
+  variant,
+  className = ''
+}: AppLogoProps) => {
   return (
-    <h2 className='row flex w-full items-center justify-center gap-4 p-4 lg:justify-start'>
-      <OwlLogo/>
-      <div className='hidden text-2xl text-text-foreground font-black lg:block'>
+    <Link href="/" className={cn('row flex w-full items-center justify-center gap-4 py-4 lg:justify-start', className)}>
+      <MessageLogo/>
+      <div className={cn(appLogoVariants({ variant }))}>
         Chat <span className='text-2xl font-medium'>AI</span>
       </div>
-    </h2>
+    </Link>
   );
 };
 

@@ -27,16 +27,16 @@ const DomainCodeIntegration = ({ domain }) => {
         }
     ')
     
-    iframe.src = "http://localhost:3000/chatbot/${domain.id}"
+    iframe.src = "${process.env.NEXT_PUBLIC_CHATBOT_URL}/${domain.id}"
     iframe.classList.add('chat-frame')
     document.body.appendChild(iframe)
     
     window.addEventListener("message", (e) => {
-        if(e.origin !== "http://localhost:3000") return null
+        if(e.origin !== "${process.env.NEXT_PUBLIC_ORIGIN}") return null
         let dimensions = JSON.parse(e.data)
         iframe.width = dimensions.width
         iframe.height = dimensions.height
-        iframe.contentWindow.postMessage("${domain.id}", "http://localhost:3000/")
+        iframe.contentWindow.postMessage("${domain.id}", "${process.env.NEXT_PUBLIC_ORIGIN}")
     })
   `;
   return (

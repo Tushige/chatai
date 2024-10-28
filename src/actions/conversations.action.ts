@@ -73,6 +73,31 @@ export const getConversations = async (domainId: string) => {
     throw new Error(err);
   }
 }
+export const getConversation = async (conversationId: string) => {
+  try {
+    const conversation = await client.conversation.findFirst({
+      where: {
+        id: conversationId
+      },
+      select: {
+        id: true,
+        createdAt: true,
+        _count: {
+          select: {
+            messages: true
+          }
+        },
+      }
+    })
+    if (!conversation) {
+      throw new Error('failed to fetch conversation');
+    }
+    return conversation;
+  } catch (err) {
+    console.error(err);
+    throw new Error(err);
+  }
+}
 export const getChatMessages = async (conversationId: string) => {
   try {
     const messages = await client.ChatMessage.findMany({

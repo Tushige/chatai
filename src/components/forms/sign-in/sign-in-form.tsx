@@ -12,7 +12,7 @@ const SigninForm = () => {
   return (
     <div>
       <h2 className='text-2xl font-bold text-text md:text-4xl'>
-        Sign in to FINCENT AI
+        Sign in to Chat AI
       </h2>
       <p className='mt-4 text-sm text-text-secondary'>
         Don't have an account?{' '}

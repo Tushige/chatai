@@ -51,37 +51,6 @@ export const getAvailablePrices = async (customerId: string) => {
     throw new Error(err);
   }
 };
-/**
- *
- * We don't have a use case where customer id is null.
- * flow: customer browses available plan and select a plan. We call this method with the select price's id and the customer id.
- * customer will be redirected to stripe hosted checkout page where they'll complete the purchase
- *
- * This is no longer used, we're going with custom form instead
- */
-export const createCheckoutSession = async (
-  priceId: string,
-  customerId: string
-) => {
-  try {
-    const session = await stripeClient.checkout.sessions.create({
-      billing_address_collection: 'auto',
-      customer: customerId,
-      line_items: [
-        {
-          price: priceId,
-          quantity: 1,
-        },
-      ],
-      mode: 'subscription',
-      success_url: `http://localhost:3000/settings/membership/change-plan?success=true&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `http://localhost:3000/settings/membership`,
-    });
-    return session;
-  } catch (err) {
-    throw new Error(err);
-  }
-};
 
 // we subscribe new users to the free plan by default.
 export const createFreeSubscription = async (customerId: string) => {
@@ -157,11 +126,11 @@ export const createPortalSession = async (customerId: string) => {
   try {
     const portalSession = await stripeClient.billingPortal.sessions.create({
       customer: customerId,
-      return_url: `http://localhost:3000/settings/membership`,
+      return_url: process.env.NEXT_PUBLIC_MEMBERSHIP_URL,
     });
     return portalSession;
   } catch (err) {
-    console.error('***Failed creating customer portal session');
+    console.error('Failed creating customer portal session');
     console.error(err);
     throw new Error(err);
   }

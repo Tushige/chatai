@@ -17,8 +17,7 @@ const CheckoutForm = () => {
     const result = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url:
-          'http://localhost:3000/settings/membership/change-plan?success=true',
+        return_url: 'process.env.NEXT_PUBLIC_CHANGE_PLAN_CALLBACK_URL' + '?success=true'
       },
     });
     if (result.error) {

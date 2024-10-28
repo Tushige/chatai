@@ -20,7 +20,7 @@ import { RefreshCcw } from 'lucide-react';
 import ConversationList from './conversation-list';
 import ConversationMessenger from './conversation-messenger';
 
-const ConversationUI = ({ domains }) => {
+const ConversationListMobile = ({ domains }) => {
   const [domainsIdx, setDomainsIdx] = useState<string>('0');
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] =
@@ -57,8 +57,8 @@ const ConversationUI = ({ domains }) => {
     );
   }
   return (
-    <div className='grid min-h-[100vh] max-h-screen w-full grid-cols-12'>
-      <div className='col-span-12 lg:col-span-4 max-h-screen min-h-screen grid grid-rows-[50px_50px_1fr] pb-[50px] pt-10 gap-2'>
+    <div className='grid max-h-screen size-full grid-cols-12'>
+      <div className='col-span-4 grid grid-rows-[50px_50px_1fr] pb-[50px] pt-10 gap-2'>
         <Select onValueChange={onDomainChange}>
           <SelectTrigger className='w-full'>
             <SelectValue placeholder='Pick a Domain' />
@@ -102,33 +102,6 @@ const ConversationUI = ({ domains }) => {
             )
           }
       </div>
-      <div className='hidden col-span-1 lg:flex justify-center'>
-        <Separator orientation='vertical' />
-      </div>
-
-      <div className='hidden col-span-7 lg:flex flex-col'>
-        <div className='relative h-full min-w-[400px] max-w-[960px] px-5'>
-          <DotPattern
-            className={cn(
-              '[mask-image:radial-gradient(800px_circle_at_center,white,transparent)]',
-              'z-0'
-            )}
-          />
-          {
-            selectedConversation ? (
-              <ConversationMessenger
-                conversation={selectedConversation}
-              />
-            ) : (
-              <div className='w-full h-full flex justify-center items-center text-center text-md relative z-1'>  
-                <div className="border border-border rounded-md p-4 bg-background">
-                  Select a conversation to see messages
-                </div>
-              </div>
-            )
-          }
-        </div>
-      </div>
     </div>
   );
 };
@@ -148,4 +121,4 @@ function ListTitle({ domainName }: {domainName: string}) {
   );
 }
 
-export default ConversationUI;
+export default ConversationListMobile;

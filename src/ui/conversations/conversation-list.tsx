@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import { pusher } from '../../lib/pusher-client';
+import Link from 'next/link';
 
 type Props = {
   conversations: Conversation[];
@@ -93,10 +94,11 @@ const ConversationList = ({
   return (
     <ul className="max-h-screen hide-scroll overflow-y-scroll">
       {conversations.map((conversation) =>
+      <>
         <Button
           key={conversation.id}
           onClick={() => selectConversation(conversation)}
-          className={cn('m-0 h-auto w-full bg-background p-0 text-foreground hover:bg-muted', {'bg-surface': conversation.id === selectedConversation?.id})}
+          className={cn('hidden xl:block m-0 h-auto w-full bg-background p-0 text-foreground hover:bg-muted', {'bg-surface': conversation.id === selectedConversation?.id})}
         >
           <MessageCard
             message={conversation.messages && conversation.messages[0]}
@@ -105,6 +107,19 @@ const ConversationList = ({
             live={conversation.customerLive}
           />
         </Button>
+        <Link
+          key={conversation.id}
+          href={`/conversations/${conversation.id}`}
+          className={cn('block xl:hidden m-0 h-auto w-full bg-background p-0 text-foreground hover:bg-muted', {'bg-surface': conversation.id === selectedConversation?.id})}
+        >
+          <MessageCard
+            message={conversation.messages && conversation.messages[0]}
+            createdAt={conversation.createdAt}
+            email={conversation.email}
+            live={conversation.customerLive}
+          />
+        </Link>
+      </>
       )}
     </ul>
   );

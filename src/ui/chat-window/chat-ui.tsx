@@ -7,12 +7,13 @@ import { useToast } from '@/hooks/use-toast';
 import { CHATBOT_TOKEN_DURATION } from '@/app/constants';
 import useSWR from 'swr';
 import Loader from '@/components/loader';
+import { cn } from '@/lib/utils';
 
 function fetcher(...args) {
   return fetch(...args).then((res) => res.json());
 }
 
-const ChatUI = ({ domain, bot }) => {
+const ChatUI = ({ domain, bot, className = '' }) => {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [cbkConversationId, setCbkConversationId] = useState(null);
@@ -49,7 +50,7 @@ const ChatUI = ({ domain, bot }) => {
 
   return (
     <>
-      <div className='fixed bottom-0 right-0 z-50'>
+      <div className={cn('fixed bottom-0 right-0 z-50', className)}>
         <motion.button
           onClick={() => openChatWindow()}
           className='flex size-[60px] items-center justify-center rounded-full bg-accent p-4 text-text'

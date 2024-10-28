@@ -1,6 +1,6 @@
 import { getAuthId } from '@/actions/auth';
 import { getAuthUser } from '@/actions/user.action';
-import AppSideBar from '@/components/app-sidebar';
+import AppNavbar from '@/components/app-navbar';
 import { Separator } from '@/components/ui/separator';
 import { redirect } from 'next/navigation';
 import React from 'react';
@@ -13,13 +13,11 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
     redirect('/');
   }
   return (
-    <div className='flex h-screen w-full overflow-hidden'>
-      <div className='sticky left-0 top-0'>
-        <AppSideBar user={authUser} />
-      </div>
-      <Separator orientation='vertical' />
-      <div className='flex h-screen w-full flex-col overflow-y-scroll bg-background text-text'>
-        <div>{children}</div>
+    <div className='flex flex-col md:flex-row h-screen w-full overflow-hidden'>
+      <AppNavbar user={authUser} />
+      <Separator className="hidden md:block" orientation='vertical' />
+      <div className='flex size-full flex-col hide-scroll overflow-y-scroll bg-background text-text'>
+        {children}
       </div>
     </div>
   );

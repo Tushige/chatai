@@ -1,7 +1,7 @@
 'use client';
 import { Card, CardDescription } from '@/components/ui/card';
 import React, { useState } from 'react';
-import { UserIcon, CheckIcon } from '@heroicons/react/24/outline';
+import { CheckIcon } from '@heroicons/react/24/outline';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { FieldValues, useFormContext, UseFormRegister } from 'react-hook-form';
@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useStepsContext } from '@/context/use-steps-context';
+import { BriefcaseBusiness, SquareUser } from 'lucide-react';
 
 const UserTypeForm = () => {
   const { register } = useFormContext();
@@ -31,6 +32,7 @@ const UserTypeForm = () => {
           selectedUserType={userType}
           setSelectedUserType={setUserType}
           register={register}
+          CardIcon={BriefcaseBusiness}
         />
         <UserTypeCard
           title='Individual'
@@ -39,6 +41,7 @@ const UserTypeForm = () => {
           selectedUserType={userType}
           setSelectedUserType={setUserType}
           register={register}
+          CardIcon={SquareUser}
         />
       </div>
       <div className='mt-4'>
@@ -71,6 +74,7 @@ function UserTypeCard({
   selectedUserType,
   setSelectedUserType,
   register,
+  CardIcon
 }: {
   title: string;
   description: string;
@@ -90,7 +94,7 @@ function UserTypeCard({
         )}
       >
         <div className='flex items-center gap-4 px-4 py-2'>
-          <UserIcon
+          <CardIcon
             className={cn('w-12 text-text', {
               'text-accent': selectedUserType === value,
             })}

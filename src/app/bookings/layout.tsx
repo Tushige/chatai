@@ -1,7 +1,7 @@
 import React from 'react';
 import { getAuthId } from '@/actions/auth';
 import { getAuthUser } from '@/actions/user.action';
-import AppSideBar from '@/components/app-sidebar';
+import AppSideBar from '@/components/app-navbar';
 import { Separator } from '@/components/ui/separator';
 import { redirect } from 'next/navigation';
 import AppPublicNavbar from '@/components/app-public-navbar';

@@ -5,7 +5,7 @@ import React from 'react';
 const ConversationsPage = async () => {
   const domains = await getAllDomains();
   return (
-    <div className='container h-full pl-4 md:pl-8'>
+    <div className='container h-full pr-4 lg:pr-0 pl-4 md:pl-8'>
       <ConversationUI domains={domains} />
     </div>
   );
