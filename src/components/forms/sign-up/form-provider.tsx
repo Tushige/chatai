@@ -12,7 +12,6 @@ import { useToast } from '@/hooks/use-toast';
 import { createUser } from '@/actions/user.action';
 import Loader from '@/components/loader';
 import { createCustomer, createFreeSubscription } from '@/actions/stripe';
-import Stripe from 'stripe';
 
 type Props = {
   children: React.ReactNode;
@@ -32,9 +31,7 @@ const SignupFormProvider = ({ children }: Props) => {
     },
     mode: 'onChange',
   });
-  const {
-    formState: { errors },
-  } = methods;
+
   const handleSubmit = async (data: UserRegistrationProps) => {
     if (!isLoaded) return;
 

@@ -6,9 +6,8 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { CampaignProps, CampaignSchema } from '@/schemas/campaign.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { revalidatePath } from 'next/cache';
 import { useRouter } from 'next/navigation';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 type Props = {
@@ -62,6 +61,12 @@ const CampaignAddForm = ({
     register,
     formState: { errors },
   } = methods;
+
+  if (loading) {
+    <div className='size-full py-12'>
+      <Loader className='h-[30px] w-[30px]' />
+    </div>
+  }
 
   return (
     <FormProvider {...methods}>

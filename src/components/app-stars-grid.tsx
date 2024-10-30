@@ -1,12 +1,13 @@
 'use client'
-import { useEffect, useRef, useState } from "react";
-import {animate, motion, useAnimate} from 'framer-motion';
+import { useRef } from "react";
+import { motion} from 'framer-motion';
 
+const NUM_ROWS = 14;
+const NUM_COLS = 30;
 export default function StarGrid() {
-  const grid = [14, 30] as const;
   const containerRef = useRef(null)
 
-  const getOrder = (rows, cols) => {
+  const getOrder = (rows: number, cols: number) => {
     const order = [];
     const centerRow = Math.floor(rows / 2);
     const centerCol = Math.floor(cols / 2);
@@ -27,7 +28,7 @@ export default function StarGrid() {
     }
     return order;
   };
-  const order = getOrder(14, 30);
+  const order = getOrder(NUM_ROWS, NUM_COLS);
   const variants = {
     hidden: {
       opacity: 0,

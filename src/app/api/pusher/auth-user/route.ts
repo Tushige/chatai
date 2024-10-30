@@ -1,11 +1,10 @@
 import pusher from '@/lib/pusher';
 import { v4 as uuidv4 } from 'uuid';
 
-export async function POST(req, res) {
+export async function POST(req) {
   try {
     const data = await req.formData();
     const socket_id = data.get('socket_id')
-    const channel_name = data.get('channel_name')
     const pusherResponse= pusher.authenticateUser(socket_id, {
       id: uuidv4(),
       user_info: {

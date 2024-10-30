@@ -1,7 +1,6 @@
 'use client';
 import OTPInput from '@/components/otp';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { ErrorMessage } from '@hookform/error-message';
 import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -15,9 +14,11 @@ const OTPForm = () => {
   const { setValue } = useFormContext();
   const [otp, setOtp] = useState('');
   const { isDirty } = getFieldState('otp');
+
   useEffect(() => {
     setValue('otp', otp);
-  }, [otp]);
+  }, [otp, setValue]);
+
   return (
     <div>
       <h2 className='text-2xl font-bold text-text md:text-4xl'>Last Step</h2>

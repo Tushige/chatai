@@ -1,11 +1,6 @@
 import AppLogo from '@/components/app-logo';
-import { AuthContext } from '@/context/use-auth-context';
-import { currentUser } from '@clerk/nextjs';
-import Image from 'next/image';
-import { redirect } from 'next/navigation';
-import React, { useContext } from 'react';
+import React from 'react';
 import {BackgroundWavy} from '@/components/ui/background-wavy';
-import {AuroraBackground} from '@/components/ui/background-aurora';
 
 const layout = async ({ children }: { children: React.ReactNode }) => {
   // TODO - uncomment this to prevent authenticated users from accessing the auth flow

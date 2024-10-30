@@ -32,9 +32,15 @@ export async function createCampaign({
       throw new Error('Failed to create a campaign');
     }
     return campaign;
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to create campaign';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 }
 export async function getCampaign(id: string) {
@@ -65,8 +71,15 @@ export async function getCampaign(id: string) {
       },
     });
     return campaign;
-  } catch (err) {
-    console.error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to fetch campaign';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 }
 export async function getCampaignsByDomainId(domainId: string) {
@@ -89,8 +102,15 @@ export async function getCampaignsByDomainId(domainId: string) {
       },
     });
     return campaigns;
-  } catch (err) {
-    console.error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to fetch campaigns for domain';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 }
 export async function updateCampaignContacts(id: string, contactIds: string[]) {
@@ -108,9 +128,15 @@ export async function updateCampaignContacts(id: string, contactIds: string[]) {
     if (!updated) {
       throw new Error('Failed to add contacts to campaign');
     }
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to update campaign contacts';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 }
 export async function totalEmailCountForUser(userId: string) {
@@ -128,9 +154,15 @@ export async function totalEmailCountForUser(userId: string) {
       },
     });
     return count._sum.count || 0;
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to fetch email count for user';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 }
 export async function totalEmailCountForCampaign(campaignId: string) {
@@ -144,16 +176,25 @@ export async function totalEmailCountForCampaign(campaignId: string) {
       },
     });
     return count._sum.count || 0;
-  } catch (err) {
-    console.error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to get email count for campaign';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 }
+
 type SendEmailProps = {
   subject: string;
   text: string;
   to: string[];
   campaignId: string;
 };
+
 export async function sendEmail({
   subject,
   text,
@@ -176,7 +217,7 @@ export async function sendEmail({
       text,
     };
     return new Promise((resolve, reject) => {
-      transporter.sendMail(mailConfig, async (err, info) => {
+      transporter.sendMail(mailConfig, async (err) => {
         if (err) {
           console.error(err);
           return reject({ message: 'Failed to send email' });
@@ -203,7 +244,14 @@ export async function sendEmail({
         });
       });
     });
-  } catch (err) {
-    console.error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to send email';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 }

@@ -1,9 +1,9 @@
 'use server';
 import { client } from '@/lib/prisma';
-import { DomainProps } from '@/schemas/domain.schema';
 import { currentUser } from '@clerk/nextjs';
 import { createChatbotForDomain } from './chatbot.action';
 import { getPlan } from './plan.action';
+import { createDomainRecord } from './domain.action';
 
 const DEFAULT_QUESTIONS = [
   {
@@ -63,9 +63,15 @@ const createUser = async ({
     } else {
       throw new Error('registration failed');
     }
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to create User';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 };
 
@@ -99,8 +105,15 @@ const getUserBilling = async (clerkId: string) => {
       throw new Error('Failed to get the current user');
     }
     return user;
-  } catch (err) {
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to fetch user billing';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 };
 
@@ -135,9 +148,15 @@ const getAuthUser = async (clerkId: string) => {
       },
     });
     return user;
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to fetch auth user';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 };
 type createDomainReturn = {
@@ -146,24 +165,31 @@ type createDomainReturn = {
 };
 /**
  * add a Domain document to the User
+ * 
+ * 1. create domain
+ * 2. create chatbot
+ * 3. add the chatbot id to the created domain
  */
 const createDomain = async ({
   name,
   botName,
   icon,
-}: DomainProps): Promise<createDomainReturn> => {
+}: {
+  name: string,
+  botName: string,
+  icon: string
+}): Promise<createDomainReturn> => {
   const authUser = await currentUser();
   if (!authUser)
-    return {
-      status: 400,
-      message: 'No Logged in User found',
-    };
+    throw new Error('No logged in user found')
   try {
+    // we need the user record's id so we find a user with matching auth id (i.e. clerk)
     const user = await client.user.findUnique({
       where: {
         clerkId: authUser.id,
       },
       select: {
+        id: true,
         _count: {
           select: {
             domains: true,
@@ -171,64 +197,65 @@ const createDomain = async ({
         },
       },
     });
-    const domain = await client.user.findFirst({
+    // check if we already have a domain with the provided name 
+    const domain = await client.domain.findFirst({
       where: {
-        clerkId: user.id,
-        domains: {
-          some: {
-            name: name,
-          },
-        },
+        userId: user.id,
+        name
       },
-    });
+      select: {
+        id: true
+      }
+    })
     if (domain) {
-      return {
-        status: 400,
-        message: 'Domain already exists',
-      };
+      throw new Error('domain already exists')
+    }
+    let createdDomain = await createDomainRecord(
+      user.id,
+      name,
+      icon,
+      DEFAULT_QUESTIONS
+    );
+    if (!createdDomain) {
+      throw Error('Failed creating Domain');
     }
     // TODO - check if user has reached maximum capacity on their plan.
     // create default bot questions
-    const bot = await createChatbotForDomain(botName, domain.id, domain.name, DEFAULT_QUESTIONS);
-
+    const bot = await createChatbotForDomain(botName, createdDomain.id, createdDomain.name, DEFAULT_QUESTIONS);
     if (!bot) {
       throw new Error('Failed to create Bot');
     }
-
-    const createdDomain = await client.user.update({
+    // add the bot to the domain
+    createdDomain = await client.domain.update({
       where: {
-        clerkId: authUser.id,
+        id: createdDomain.id,
       },
       data: {
-        domains: {
+        chatBot: {
           create: {
-            name,
-            icon,
-            chatBot: {
-              create: {
-                welcomeMessage:
-                  'Hi, how are you? Do you have any questions for us?',
-                chatBotKitId: bot?.id,
-              },
-            },
-            questions: {
-              create: DEFAULT_QUESTIONS,
-            },
+            welcomeMessage: 'Hi, how are you? Do you have any questions for us?',
+            chatBotKitId: bot?.id,
           },
         },
       },
+      select: {
+        id: true
+      }
     });
-    if (createdDomain) {
-      return {
-        status: 200,
-        message: 'Domain Successfully created',
-      };
-    } else {
-      throw Error('Failed creating Domain');
+    if (!createdDomain) {
+      throw new Error('failed to add bot to the domain')
     }
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
+
+    return createdDomain;
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to create domain';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 };
 

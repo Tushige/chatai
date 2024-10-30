@@ -1,6 +1,5 @@
 import AppSectionContainer from '@/components/app-section-container';
 import AppSectionHeroContainer from '@/components/app-section-hero-container';
-import AppSectionTitle from '@/components/app-section-title';
 import { Separator } from '@/components/ui/separator';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';

@@ -2,9 +2,9 @@ import { motion } from 'framer-motion';
 import { GradientText } from '@/components/app-gradient-text';
 import { Separator } from '@/components/ui/separator';
 import { CheckCircleIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { SheetTrigger } from '@/components/ui/sheet';
+import Stripe from 'stripe';
 
 const MembershipPlanCard = ({
   premium,
@@ -21,8 +21,9 @@ const MembershipPlanCard = ({
   name: string;
   unitAmount: number;
   features: string[];
-  onClick: any;
-  currentPrice: any;
+  className: string;
+  onClick: () => void;
+  currentPrice: Stripe.Price;
 }) => {
   const isCurrentPlan = currentPrice && currentPrice.id === priceId;
   return (

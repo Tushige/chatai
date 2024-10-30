@@ -1,5 +1,4 @@
 import { addConversation } from '@/actions/chatbot.action';
-import { client } from '@/lib/prisma';
 
 export async function POST(req) {
   const { id, conversationId } = await req.json();

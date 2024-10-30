@@ -1,9 +1,7 @@
 import { getUserAuth } from '@/actions/auth';
-import { stream } from '@chatbotkit/next/edge';
 import { ChatBotKit } from '@chatbotkit/sdk';
 import { clerkClient } from '@clerk/nextjs';
 
-import { z } from 'zod';
 export { ChatBotKit };
 // const env = z
 //   .object({
@@ -22,7 +20,7 @@ export const cbk = new ChatBotKit({
 export function getCBKUserClient(userId: string) {
   return new ChatBotKit({
     secret: process.env.CHATBOTKIT_API_KEY!,
-    runAsUserId: userId,
+    // runAsUserId: userId,
   });
 }
 

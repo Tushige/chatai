@@ -3,9 +3,9 @@ import { client } from '@/lib/prisma';
 import { getPlan } from './plan.action';
 import { revalidatePath } from 'next/cache';
 
-export const updateBilling = async (id, { ...data }) => {
+export const updateBilling = async (id: string, { ...data }) => {
   try {
-    const billing = await client.billing.update({
+    await client.billing.update({
       where: {
         id,
       },
@@ -13,8 +13,14 @@ export const updateBilling = async (id, { ...data }) => {
         ...data,
       },
     });
-  } catch (err) {
-    console.error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+        console.error(err.message); // Safe to access `message`
+        throw new Error(err.message);
+    } else {
+        console.error('An unknown error occurred');
+        throw new Error('Failed to update billing');
+    }
   }
 };
 
@@ -45,8 +51,13 @@ export const selectPlan = async (billingId: string, planName: string) => {
     }
     revalidatePath('/')
     return billing;
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+        console.error('An unknown error occurred');
+        throw new Error('Failed to select a plan');
+    }
   }
 }

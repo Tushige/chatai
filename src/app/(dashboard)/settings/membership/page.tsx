@@ -26,6 +26,7 @@ import AppSectionHeroContainer from '@/components/app-section-hero-container';
 import AppSectionContainer from '@/components/app-section-container';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { selectPlan } from '@/actions/billing.action';
+import { string } from 'zod';
 
 type PaymentOptionsType = StripeElementsOptions & {
   payment_intent_status: string;
@@ -51,12 +52,20 @@ type Billing = {
   currentPrice: Price;
   currentPeriodEnd: number;
 };
+
+type CustomPaymentOptions = PaymentOptionsType & {
+  appearance: {
+    theme: string,
+    labels: string
+  },
+  clientSecret: string
+}
 /**
  * we fetch products from Stripe to display them for the customer to choose from
  * we fetch subscription to show customers their active subscription
  */
 const MembershipPage = () => {
-  const [paymentOptions, setPaymentOptions] = useState<PaymentOptionsType>(
+  const [paymentOptions, setPaymentOptions] = useState<CustomPaymentOptions>(
     initialPaymentOptions
   );
   const [selectedPrice, setSelectedPrice] = useState<Price | null>(null);
@@ -68,9 +77,11 @@ const MembershipPage = () => {
   const fetchBilling = async () => {
     try {
       const authId = await getAuthId();
-      let {billing} = await getUserBilling(authId);
+      const {billing} = await getUserBilling(authId ?? 'no-id');
       const subscription = await getAvailablePrices(billing.stripeCustomerId);
-      subscription.prices.sort((a, b) => a.unit_amount - b.unit_amount);
+      subscription.prices.sort((a: Price, b: Price) => {
+        return a.unit_amount! - b.unit_amount!;
+      });
       setBilling({
         id: billing.id,
         ...subscription,
@@ -106,7 +117,7 @@ const MembershipPage = () => {
         billing?.subscriptionItemId,
         price.id
       );
-      const { subscriptionId, clientSecret, payment_intent_status, invoice_status } = stripeResponse;
+      const { clientSecret, payment_intent_status, invoice_status } = stripeResponse;
       // payment options is used by Stripe Elements to display payment form
       // if payment_intent_status === SUCCEEDED then paymentOptions is irrelevant.
       setPaymentOptions((prev) => ({
@@ -240,7 +251,7 @@ const MembershipPage = () => {
             ) : paymentOptions.invoice_status === 'paid' ? (
               <div className='flex size-full flex-col items-center justify-center'>
                 <CheckCircle className='size-24 text-success' />
-                <span className='text-xl text-text'>You're all set!</span>
+                <span className='text-xl text-text'>You&apos;re all set!</span>
               </div>
             ) : paymentOptions.clientSecret ? (
               <>

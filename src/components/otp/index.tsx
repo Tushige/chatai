@@ -1,10 +1,11 @@
 import React from 'react';
 import { InputOTP, InputOTPSlot } from '../ui/input-otp';
+import { FieldValues, UseFormRegister } from 'react-hook-form';
 
 type Props = {
   otp: string;
   setOtp: React.Dispatch<React.SetStateAction<string>>;
-  register: any;
+  register: UseFormRegister<FieldValues>;
 };
 
 const OTPInput = ({ otp, setOtp, register }: Props) => {

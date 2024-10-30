@@ -1,12 +1,5 @@
 import React from 'react';
-import { getAuthId } from '@/actions/auth';
-import { getAuthUser } from '@/actions/user.action';
-import AppSideBar from '@/components/app-navbar';
-import { Separator } from '@/components/ui/separator';
-import { redirect } from 'next/navigation';
 import AppPublicNavbar from '@/components/app-public-navbar';
-import DotPattern from '@/components/magicui/dot-pattern';
-import { cn } from '@/lib/utils';
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
   return (

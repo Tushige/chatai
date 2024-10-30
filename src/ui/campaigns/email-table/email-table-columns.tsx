@@ -1,14 +1,11 @@
 'use client';
 import React from 'react';
 import { ColumnDef } from '@tanstack/react-table';
-import { DiscoveryResponses } from '@prisma/client';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,

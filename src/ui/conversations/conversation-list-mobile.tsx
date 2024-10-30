@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import DotPattern from '@/components/magicui/dot-pattern';
 import {
   Select,
   SelectContent,
@@ -10,15 +9,12 @@ import {
   SelectValue,
   SelectItem,
 } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
 import {motion} from 'framer-motion';
 import {  getConversations} from '@/actions/conversations.action';
 import { Conversation } from './types';
 import Loader from '@/components/loader';
-import { cn } from '@/lib/utils';
 import { RefreshCcw } from 'lucide-react';
 import ConversationList from './conversation-list';
-import ConversationMessenger from './conversation-messenger';
 
 const ConversationListMobile = ({ domains }) => {
   const [domainsIdx, setDomainsIdx] = useState<string>('0');
@@ -40,7 +36,7 @@ const ConversationListMobile = ({ domains }) => {
     setLoading(true);
     setSelectedConversation(null)
     try {
-      let conversations = await getConversations(domains[domainsIdx].id);
+      const conversations = await getConversations(domains[domainsIdx].id);
       setConversations(conversations);
     } catch (err) {
       console.error(err);

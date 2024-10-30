@@ -13,15 +13,15 @@ function fetcher(...args) {
   return fetch(...args).then((res) => res.json());
 }
 
-const ChatUI = ({ domain, bot, className = '' }) => {
+const ChatUI = ({ domain, cbkBot, className = '' }) => {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [cbkConversationId, setCbkConversationId] = useState(null);
   const [conversation, setConversation] = useState(null);
   const [token, setToken] = useState(null);
-  const { data, isLoading, error, isValidating } = useSWR(
+  const { data, isLoading, error } = useSWR(
     open
-      ? `/api/session?cbkbotId=${bot.id}&domainBotId=${domain.chatBot.id}&domainId=${domain.id}`
+      ? `/api/session?cbkbotId=${cbkBot.id}&domainBotId=${domain.chatBot.id}&domainId=${domain.id}`
       : null,
     fetcher,
     {
@@ -78,9 +78,10 @@ const ChatUI = ({ domain, bot, className = '' }) => {
           {token && cbkConversationId ? (
             <ChatForm
               setOpen={setOpen} 
-              bot={bot}
+              cbkBot={cbkBot}
               botIcon={domain.icon}
               domainId={domain.id}
+              cbkConversationId={cbkConversationId}
               conversation={conversation}
               cbkConversationId={cbkConversationId}
               token={token}

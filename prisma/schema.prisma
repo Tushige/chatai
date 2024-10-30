@@ -45,13 +45,12 @@ model Domain {
 
 model ChatBot {
   id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  chatBotKitId    String
+  chatBotKitId    String?
   welcomeMessage  String?
   conversationIds String[] @default([])
   icon            String?
   background      String?
   textColor       String?
-  helpdesk        Boolean  @default(false)
   domainId        String?  @unique @db.Uuid
   domain          Domain?  @relation(fields: [domainId], references: [id], onDelete: Cascade)
 }
@@ -108,7 +107,6 @@ model Contact {
 
 model Conversation {
   id        String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  live      Boolean       @default(false)
   messages  ChatMessage[]
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
@@ -124,6 +122,7 @@ model ChatMessage {
   id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   text           String
   type           MessageType?
+  link           Boolean       @default(false)
   seen           Boolean       @default(false)
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt

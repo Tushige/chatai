@@ -25,7 +25,7 @@ const useCopyToClipboard = () => {
       }
     };
     handleCopy();
-  }, []);
+  }, [toast]);
   return [state, copyToClipBoard];
 };
 

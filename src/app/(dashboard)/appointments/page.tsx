@@ -1,5 +1,4 @@
 import { getBookingsSummary } from '@/actions/bookings.action';
-import { getAllDomains } from '@/actions/domain.action';
 import AppPageTitle from '@/components/app-page-title';
 import AppSectionContainer from '@/components/app-section-container';
 import AppSectionHeroContainer from '@/components/app-section-hero-container';

@@ -6,7 +6,7 @@ import { BotOptions } from '@chatbotkit/sdk/bot/v1';
 import { ArrowLeftEndOnRectangleIcon } from '@heroicons/react/24/outline';
 import { useEffect, useRef, useState } from 'react';
 import ChatMessages from './chat-messages';
-import { BOT_DELIMETER, BOT_HELP, cn, extractEmailsFromString } from '@/lib/utils';
+import { BOT_DELIMETER, BOT_HELP, cn, containsLink, extractEmailsFromString } from '@/lib/utils';
 import { createContact } from '@/actions/contact.action';
 import pusherJs from 'pusher-js';
 import { pusher } from '@/lib/pusher-client';
@@ -15,30 +15,31 @@ import { sendLiveMessage, sendNotificationEmail } from '@/actions/chatbot.action
 import { Separator } from '@/components/ui/separator';
 import { XIcon } from 'lucide-react';
 import Image from 'next/image';
+import { Conversation } from '@prisma/client';
 
-type Bot = {
-  datasetId: string;
-  backstory: string;
-  botName: string;
-  model: string;
+const urlPattern = /(https?:\/\/[^\s]+)/g;
+
+type ChatFormProps = {
+  setOpen: () => void,
+  bot: BotOptions,
+  domainId: string,
+  botIcon: string,
+  conversation: Conversation,
+  token: string,
+  welcomeMessage: string
 };
 
 function ChatForm({
   setOpen,
-  bot,
+  cbkBot,
   domainId,
   botIcon,
   conversation,
   cbkConversationId,
   token,
   welcomeMessage
-}: {
-  bot: BotOptions;
-  domainId: string;
-  cbkConversationId: string;
-  token: string;
-}) {
-  const { name } = bot;
+}: ChatFormProps) {
+  const { name } = cbkBot;
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -73,9 +74,19 @@ function ChatForm({
             // if customer requested real rep send an email notification
             sendNotificationEmail(domainId);
           }
-          const cleanText = lastMessage.text.replace(BOT_DELIMETER, '').replace(BOT_HELP, '');
+          let modifiedText = lastMessage.text;
+          const _containsLink = containsLink(modifiedText);
+          if (_containsLink) {
+            modifiedText = lastMessage.text.replace(urlPattern, '<a href="$&" class="text-text text-blue-600 underline underline-offset-1">link</a>');
+          }
+          modifiedText = modifiedText.replace(BOT_DELIMETER, '').replace(BOT_HELP, '');
           // save the bot message in DB and forward it to the assistant
-          await sendLiveMessage({text: cleanText, conversationId: conversation.id, type: lastMessage.type});
+          await sendLiveMessage({
+            text: modifiedText,
+            conversationId: conversation.id,
+            type: lastMessage.type,
+            link: _containsLink
+          });
         }
       } catch (err) {
         console.error(err)
@@ -83,10 +94,10 @@ function ChatForm({
         setAsyncProgress(false);
       }
     }
-    if (messages && messages.length > 0) {
+    if (botMessages && botMessages.length > 0) {
       saveBotMessage();
     }
-  }, [botMessages.length])
+  }, [botMessages.length]);
   /**
    * Subscribing to the presence channel lets the assistant know that the customer is online/offline
    */
@@ -120,12 +131,13 @@ function ChatForm({
   useEffect(() => {
     const channel = pusher.subscribe(`channel-${conversation.id}`);
 
-    channel.bind('message', (data: {type: string, text: string}) => {
+    channel.bind('message', (data: {type: string, text: string, link: boolean}) => {
       // includes messages from others + you
       setMessages(prev => [...prev, {
         id: uuidv4(),
         type: data.type,
-        text: data.text
+        text: data.text,
+        link: data.link
       }]);
     })
     channel.bind('status', (data: {type: string, online: boolean}) => {
@@ -136,7 +148,8 @@ function ChatForm({
           {
             type: 'status',
             name: 'Customer Rep',
-            text: data.online ? 'has joined the chat' : 'has left the chat'
+            text: data.online ? 'has joined the chat' : 'has left the chat',
+            link: false
           }
         ])
       }
@@ -173,7 +186,7 @@ function ChatForm({
           alt='chatbot avatar'
         />
       </div>
-        <p>{bot.name}</p>
+        <p>{cbkBot.name}</p>
         <div className={cn("size-[12px] bg-border rounded-full", {"bg-green-400": assistantOnline})}/>
         <XIcon
           className='absolute right-[10px] top-[10px] size-6 cursor-pointer'
@@ -184,7 +197,6 @@ function ChatForm({
       <ChatContent
         domainId={domainId}
         conversationId={conversation.id}
-        cbkConversationId={cbkConversationId}
         messages={messages}
         botName={name}
         thinking={typing}
@@ -201,7 +213,6 @@ function ChatForm({
 function ChatContent({
   domainId,
   conversationId,
-  cbkConversationId,
   messages,
   botName,
   thinking,
@@ -216,6 +227,7 @@ function ChatContent({
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+  
   const onSubmit = async (e) => {
     e.preventDefault();
     // let's extract email address if available
@@ -224,7 +236,7 @@ function ChatContent({
       if (emailArr && emailArr.length > 0) {
         // found email
         // create contact record with the found email
-        const contact = await createContact({
+        await createContact({
           email: emailArr[0],
           domainId,
           conversationId,

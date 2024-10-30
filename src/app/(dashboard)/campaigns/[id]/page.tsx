@@ -20,8 +20,9 @@ import { getAuthId } from '@/actions/auth';
 import { getAuthUser } from '@/actions/user.action';
 import AppSectionHeroContainer from '@/components/app-section-hero-container';
 import AppSectionContainer from '@/components/app-section-container';
+import { Contact } from '@prisma/client';
 
-const CampaignPage = async ({ params }) => {
+const CampaignPage = async ({ params }: {params: {id: string}}) => {
   const authId = await getAuthId();
   const user = await getAuthUser(authId!);
   const numEmails = await totalEmailCountForUser(user.id);
@@ -32,7 +33,7 @@ const CampaignPage = async ({ params }) => {
   }
   const limitReached = numEmails >= user.billing.plan.emailLimit;
   const domain = await getDomainWithContacts(campaign.domainId);
-  const recipients = campaign.contacts.map((c) => c.email);
+  const recipients = campaign.contacts.map((c: Contact) => c.email);
   return (
     <div className='h-full w-full'>
       <AppSectionHeroContainer>
@@ -88,7 +89,7 @@ const CampaignPage = async ({ params }) => {
             {limitReached ? (
               <div className='mb-8 flex w-fit flex-col gap-4 rounded-lg border border-error p-4'>
                 <p className='text-text'>
-                  You've reached your plan limits. Upgrade your plan to continue
+                  You&apos;ve reached your plan limits. Upgrade your plan to continue
                   your access to campaign tools.
                 </p>
                 <Link

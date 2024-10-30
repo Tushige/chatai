@@ -1,23 +1,8 @@
 'use server'
 import { client } from "@/lib/prisma"
+import { Conversation } from "@prisma/client";
 
-export const updateConversationLive = async (conversationId: string, live: boolean) => {
-  try {
-    const conversation = await client.conversation.update({
-      where: {
-        id: conversationId,
-      }, 
-      data: {
-        live
-      }
-    })
-    return conversation;
-  } catch (err) {
-    console.error(err)
-  }
-}
-
-export const updateConversation = async (conversationId: string, data: Object) => {
+export const updateConversation = async (conversationId: string, data: Conversation) => {
   try {
     const conversation = await client.conversation.update({
       where: {
@@ -28,9 +13,15 @@ export const updateConversation = async (conversationId: string, data: Object) =
     if (!conversation) {
       throw new Error('Failed to updated conversation')
     }
-  } catch (err) {
-    console.error(err)
-    throw new Error(err)
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'update conversation';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 }
 
@@ -42,7 +33,6 @@ export const getConversations = async (domainId: string) => {
       },
       select: {
         id: true,
-        live: true,
         createdAt: true,
         _count:{
           select: {
@@ -68,9 +58,15 @@ export const getConversations = async (domainId: string) => {
       }
     })
     return conversations;
-  } catch (err) {
-    console.error(err)
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to fetch conversations';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 }
 export const getConversation = async (conversationId: string) => {
@@ -93,9 +89,15 @@ export const getConversation = async (conversationId: string) => {
       throw new Error('failed to fetch conversation');
     }
     return conversation;
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to get conversation';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 }
 export const getChatMessages = async (conversationId: string) => {
@@ -111,23 +113,31 @@ export const getChatMessages = async (conversationId: string) => {
         id: true,
         text: true,
         type: true,
+        link: true,
         seen: true,
         createdAt: true
       }
     })
     return messages;
-  } catch (err) {
-    console.error(err);
-    throw new Error(err)
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to fetch messages';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 }
 
-export const createChatMessage = async (conversationId: string, text: string, type: string) => {
+export const createChatMessage = async (conversationId: string, text: string, type: string, link: boolean) => {
   try {
     const chatMessage = await client.ChatMessage.create({
       data: {
         text,
         type,
+        link,
         seen: true,
         conversation: {
           connect: {
@@ -140,8 +150,14 @@ export const createChatMessage = async (conversationId: string, text: string, ty
       throw new Error('Failed to create a new chat message')
     }
     return chatMessage;
-  } catch (err) {
-    console.error(err)
-    throw new Error(err)
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to create a new chat message';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 }

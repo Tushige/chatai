@@ -7,7 +7,6 @@ import {
   SortingState,
   RowSelectionState,
   getCoreRowModel,
-  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
@@ -48,7 +47,6 @@ export default function EmailTable<TData, TValue>({
       return agg;
     }, {});
   }, [campaign]);
-  const [tableData, setTableData] = useState(contacts);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>(
     initialSelectionState
   );
@@ -57,7 +55,7 @@ export default function EmailTable<TData, TValue>({
   const { toast } = useToast();
 
   const table = useReactTable({
-    data: tableData,
+    data: contacts,
     columns,
     enableRowSelection: true,
     getCoreRowModel: getCoreRowModel(),

@@ -9,7 +9,7 @@ import DomainSettings from '@/ui/domain/domain-settings';
 import { redirect } from 'next/navigation';
 import React from 'react';
 
-const DomainSettingsPage = async ({ params }) => {
+const DomainSettingsPage = async ({ params }: {params: {id: string}}) => {
   const domainId = params.id;
   if (!domainId) {
     redirect('/');

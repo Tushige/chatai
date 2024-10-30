@@ -15,7 +15,7 @@ const SigninForm = () => {
         Sign in to Chat AI
       </h2>
       <p className='mt-4 text-sm text-text-secondary'>
-        Don't have an account?{' '}
+        Don&apos;t have an account?{' '}
         <Link href='/sign-up' className='underline hover:text-text-foreground'>
           Sign Up
         </Link>

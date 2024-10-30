@@ -28,7 +28,6 @@ const DomainUpdateFormProvider = ({
       icon: undefined,
     },
   });
-  const { formState: {errors}} = methods;
   const handleSubmit = async (data: DomainUpdateProps) => {
     try {
       setLoading(true);
@@ -38,21 +37,14 @@ const DomainUpdateFormProvider = ({
       }
       const cleanedData = Object.fromEntries(
         Object.entries(data).filter(
-          ([key, value]) => value !== null && value !== undefined
+          ([, value]) => value !== null && value !== undefined
         )
       );
-      const { status, message } = await updateDomain(domainId, cleanedData);
-      if (status === 200) {
-        toast({
-          title: '⭐Success',
-          description: `${data.name} successfully updated`,
-        });
-      } else {
-        toast({
-          title: 'Error',
-          description: message,
-        });
-      }
+      await updateDomain(domainId, cleanedData);
+      toast({
+        title: '⭐Success',
+        description: `${data.name} successfully updated`,
+      });
       router.refresh();
     } catch (err) {
       console.error('failed updating domain with error: ', err);

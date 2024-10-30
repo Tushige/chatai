@@ -7,9 +7,9 @@ import { DocumentDuplicateIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 
 const DomainCodeIntegration = ({ domain }) => {
-  const [copiedText, copyToClipBoard] = useCopyToClipboard();
+  const [, copyToClipBoard] = useCopyToClipboard();
 
-  let snippet = `
+  const snippet = `
     const iframe = document.createElement("iframe");
     
     const iframeStyles = (styleString) => {

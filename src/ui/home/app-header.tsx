@@ -1,6 +1,5 @@
 import { AppCtaButton } from '@/components/app-cta-button'
 import AppLogo from '@/components/app-logo'
-import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import React from 'react'
 

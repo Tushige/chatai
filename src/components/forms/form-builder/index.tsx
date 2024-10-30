@@ -1,6 +1,5 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { strict } from 'assert';
 import { ErrorMessage } from '@hookform/error-message';
 import React from 'react';
 import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form';
@@ -13,7 +12,7 @@ type Props = {
   options?: { value: string; label: string; id: string }[];
   label?: string;
   placeholder: string;
-  register: UseFormRegister<any>;
+  register: UseFormRegister<FieldValues>;
   name: string;
   errors: FieldErrors<FieldValues>;
   lines?: number;

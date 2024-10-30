@@ -1,9 +1,6 @@
-import { getAuthId } from '@/actions/auth';
-import { updateBilling } from '@/actions/billing.action';
 import { stripeClient } from '@/actions/stripe';
-import { getUserBilling } from '@/actions/user.action';
 
-export async function POST(req, res) {
+export async function POST(req) {
   const signature = req.headers.get('stripe-signature');
   const body = await req.text();
   let event;
@@ -18,8 +15,7 @@ export async function POST(req, res) {
     console.error(`Webhook error: ${err}`);
     return new Response(`Webhook error: ${err}`, { status: 400 });
   }
-  let subscription;
-  let status;
+
   switch (event.type) {
     case 'customer.subscription.updated':
       console.log('[webhook] subscription updated');

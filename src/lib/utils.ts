@@ -3,6 +3,7 @@ import { twMerge } from 'tailwind-merge';
 
 export const BOT_DELIMETER = '[*]';
 export const BOT_HELP = '[help]';
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -37,3 +38,8 @@ export const capitalizeWord = (s: string) => {
     return c;
   }).join('');
 }
+
+export const containsLink = (text: string) => {
+  const urlPattern = /\bhttps?:\/\/[^\s/$.?#].[^\s]*\b/;
+  return urlPattern.test(text);
+};

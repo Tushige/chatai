@@ -6,6 +6,7 @@ import { ArrowRight } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import AppSectionContainer from '@/components/app-section-container';
 import AppSectionHeroContainer from '@/components/app-section-hero-container';
+import { Domain } from '@prisma/client';
 
 const CampaignsPage = async () => {
   const domains = await getAllDomains();
@@ -27,10 +28,10 @@ const CampaignsPage = async () => {
             <h3 className='text-secondary'>Select a domain too see campaigns</h3>
             <Separator className='mb-8 mt-4 border-border' />
             <ul className='flex flex-col gap-4'>
-              {domains.map((domain) => {
+              {domains.map((domain: Domain) => {
                 return (
                   <Link
-                    key={domain.key}
+                    key={domain.id}
                     href={`/campaigns/domains/${domain.id}`}
                     className='flex flex-row items-center gap-2'
                   >

@@ -15,7 +15,7 @@ export const BackgroundWavy = ({
   waveOpacity = 0.5,
   ...props
 }: {
-  children?: any;
+  children?: React.ReactNode;
   className?: string;
   containerClassName?: string;
   colors?: string[];
@@ -24,16 +24,17 @@ export const BackgroundWavy = ({
   blur?: number;
   speed?: "slow" | "fast";
   waveOpacity?: number;
-  [key: string]: any;
-}) => {
+  // [key: string]: any;
+} & React.HTMLAttributes<HTMLDivElement>) => {
   const noise = createNoise3D();
+  const animationId = useRef<number | null>(null);
   let w: number,
     h: number,
     nt: number,
     i: number,
     x: number,
-    ctx: any,
-    canvas: any;
+    ctx: CanvasRenderingContext2D | null,
+    canvas: HTMLCanvasElement | null;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const getSpeed = () => {
     switch (speed) {
@@ -75,7 +76,7 @@ export const BackgroundWavy = ({
       ctx.lineWidth = waveWidth || 50;
       ctx.strokeStyle = waveColors[i % waveColors.length];
       for (x = 0; x < w; x += 5) {
-        var y = noise(x / 800, 0.3 * i, nt) * 100;
+        const y = noise(x / 800, 0.3 * i, nt) * 100;
         ctx.lineTo(x, y + h * 0.5); // adjust for height, currently at 50% of the container
       }
       ctx.stroke();
@@ -83,21 +84,20 @@ export const BackgroundWavy = ({
     }
   };
 
-  let animationId: number;
   const render = () => {
     ctx.fillStyle = backgroundFill || "#121212";
     ctx.globalAlpha = waveOpacity || 0.5;
     ctx.fillRect(0, 0, w, h);
     drawWave(5);
-    animationId = requestAnimationFrame(render);
+    animationId.current = requestAnimationFrame(render);
   };
 
   useEffect(() => {
     init();
     return () => {
-      cancelAnimationFrame(animationId);
+      cancelAnimationFrame(animationId.current);
     };
-  }, []);
+  }, [animationId]);
 
   const [isSafari, setIsSafari] = useState(false);
   useEffect(() => {

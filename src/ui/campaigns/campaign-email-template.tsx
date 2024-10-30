@@ -1,6 +1,7 @@
 'use client';
 import { sendEmail } from '@/actions/campaign.action';
 import FormBuilder from '@/components/forms/form-builder';
+import Loader from '@/components/loader';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -8,7 +9,6 @@ import {
   EmailTemplateSchema,
 } from '@/schemas/campaign.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -20,7 +20,6 @@ type Props = {
 const CampaignEmailTemplate = ({ recipients, campaignId }: Props) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState<boolean>(false);
-  const router = useRouter();
   const methods = useForm<EmailTemplateProps>({
     resolver: zodResolver(EmailTemplateSchema),
   });
@@ -53,7 +52,13 @@ const CampaignEmailTemplate = ({ recipients, campaignId }: Props) => {
       setLoading(false);
     }
   };
-
+  if (loading) {
+    return (
+      <div className='size-full py-12'>
+        <Loader className='h-[30px] w-[30px]' />
+      </div>
+    )
+  }
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(handleSubmit)}>

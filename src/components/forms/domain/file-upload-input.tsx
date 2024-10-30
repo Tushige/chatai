@@ -3,10 +3,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ErrorMessage } from '@hookform/error-message';
 import React from 'react';
-import { FieldErrors, FieldValues } from 'react-hook-form';
+import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form';
 
 type Props = {
-  register: any;
+  register: UseFormRegister<FieldValues>;
   errors: FieldErrors<FieldValues>;
 };
 

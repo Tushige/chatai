@@ -31,9 +31,15 @@ export const upsertContact = async ({
       },
     });
     return contact;
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to upsert contact';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 };
 
@@ -48,7 +54,7 @@ export const createContact = async ({
   conversationId: string;
 }) => {
   try {
-    let contact = await client.contact.findFirst({
+    const contact = await client.contact.findFirst({
       where: {
         email,
       },
@@ -89,8 +95,14 @@ export const createContact = async ({
       });
       return newContact;
     }
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to create contact';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 };

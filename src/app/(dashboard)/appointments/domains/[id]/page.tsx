@@ -1,11 +1,4 @@
-import AppPageTitle from '@/components/app-page-title';
-import AppSectionTitle from '@/components/app-section-title';
-import EmailTable from '@/ui/campaigns/email-table';
-import EmailTableColumns from '@/ui/campaigns/email-table/email-table-columns';
-import React, { useState } from 'react';
-import { getCampaign } from '@/actions/campaign.action';
-import { Separator } from '@/components/ui/separator';
-import CampaignEmailTemplate from '@/ui/campaigns/campaign-email-template';
+import React from 'react';
 import {
   Breadcrumb,
   BreadcrumbItem,

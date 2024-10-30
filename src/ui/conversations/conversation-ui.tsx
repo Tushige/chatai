@@ -24,7 +24,7 @@ const ConversationUI = ({ domains }) => {
   const [domainsIdx, setDomainsIdx] = useState<string>('0');
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] =
-    useState<Conversation>(null);
+    useState<Conversation | null>(null);
   const [loading, setLoading] = useState(false);
 
   function onDomainChange(value: string) {
@@ -32,15 +32,11 @@ const ConversationUI = ({ domains }) => {
     setDomainsIdx(value);
   }
 
-  useEffect(() => {
-    fetchConversations();
-  }, [domainsIdx])
-
   const fetchConversations = async () => {
     setLoading(true);
     setSelectedConversation(null)
     try {
-      let conversations = await getConversations(domains[domainsIdx].id);
+      const conversations = await getConversations(domains[domainsIdx].id);
       setConversations(conversations);
     } catch (err) {
       console.error(err);
@@ -48,6 +44,10 @@ const ConversationUI = ({ domains }) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchConversations();
+  }, [domainsIdx])
 
   if (!domains || domains.length < 1) {
     return (

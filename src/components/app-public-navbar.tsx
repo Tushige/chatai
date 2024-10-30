@@ -1,5 +1,4 @@
 import React from 'react';
-import AppLogo from './app-logo';
 import { GradientText } from './app-gradient-text';
 
 const productName = 'ChatAI';

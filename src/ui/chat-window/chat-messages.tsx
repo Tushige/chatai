@@ -1,10 +1,10 @@
-import { ComplexMessage } from '@chatbotkit/react/hooks/useConversationManager';
 import { SparklesIcon, UserIcon } from '@heroicons/react/24/outline';
 import { BotIcon, CircleUser } from 'lucide-react';
 import React from 'react';
+import { Message } from '../conversations/types';
 
 type Props = {
-  messages: ComplexMessage[];
+  messages: Message[];
   botName: string;
   thinking: boolean;
 };
@@ -12,7 +12,7 @@ type Props = {
 const ChatMessages = ({ messages, botName, thinking }: Props) => {
   return (
     <div>
-      {messages.map(({ id, type, text }) => {
+      {messages.map(({ id, type, text, link }) => {
         switch (type) {
           case 'user':
             return (
@@ -57,8 +57,15 @@ const ChatMessages = ({ messages, botName, thinking }: Props) => {
                   </div>
                   <p className='text-sm font-medium'>{botName}</p>
                 </div>
-
-                <p className={`text-sm font-light dark:opacity-80`}>{text}</p>
+                {
+                  link ? (
+                    <div>
+                      <p dangerouslySetInnerHTML={{__html: text}} />
+                    </div>
+                  ) : (
+                    <p className={`text-sm font-light dark:opacity-80`}>{text}</p>
+                  )
+                }
               </div>
             );
           case 'status':

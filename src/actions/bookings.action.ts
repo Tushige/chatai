@@ -1,6 +1,5 @@
 'use server';
 import { client } from '@/lib/prisma';
-import { createContact } from './contact.action';
 /**
  * fetch user
  */
@@ -59,9 +58,14 @@ export const createBooking = async (
       },
     });
     return booking;
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      console.error('An unknown error occurred');
+      throw new Error('Failed to create booking');
+    }
   }
 };
 export const getBooking = async (id: string) => {
@@ -76,16 +80,30 @@ export const getBooking = async (id: string) => {
       },
     });
     return booking;
-  } catch (err) {
-    console.error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      console.error('An unknown error occurred');
+      throw new Error('Failed to fetch booking record');
+    }
   }
 };
 
+/**
+ * returns upcoming bookings
+ */
 export const getBookingsSummary = async () => {
   try {
     const bookings = await client.booking.findMany({
       orderBy: {
         createdAt: 'desc',
+      },
+      where: {
+        date: {
+          gt: new Date()
+        }
       },
       select: {
         id: true,
@@ -107,8 +125,14 @@ export const getBookingsSummary = async () => {
       take: 10,
     });
     return bookings;
-  } catch (err) {
-    console.error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      console.error('An unknown error occurred');
+      throw new Error('Failed to fetch booking summary');
+    }
   }
 };
 
@@ -139,8 +163,14 @@ export const getBookingsByDomain = async (domainId: string) => {
       throw new Error('Failed to get appointments for a domain');
     }
     return bookings;
-  } catch (err) {
-    console.error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message);
+      throw new Error(err.message);
+    } else {
+      console.error('An unknown error occurred');
+      throw new Error('Failed to fetch bookings');
+    }
   }
 };
 
@@ -161,8 +191,13 @@ export const getBookingsByDate = async (domainId: string, date: string) => {
       },
     });
     return bookings;
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      console.error('Failed to get bookings for date');
+      throw new Error('Failed to get bookings for date');
+    }
   }
 };

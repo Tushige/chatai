@@ -1,4 +1,3 @@
-import { StepsProvider } from '@/context/use-steps-context';
 import { cn } from '@/lib/utils';
 import BookAppointmentForm from '@/ui/bookings/booking-form/book-appointment-form';
 import React from 'react';

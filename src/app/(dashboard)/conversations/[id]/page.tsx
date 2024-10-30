@@ -10,7 +10,7 @@ import { IconArrowLeft } from "@tabler/icons-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-const ConversationPage = async ({params}) => {
+const ConversationPage = async ({ params }: {params: {id: string}}) => {
   const {id} = params;
   if (!id) {
     redirect('/conversations');

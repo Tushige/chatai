@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/drawer';
 import { cn } from '@/lib/utils';
 import { PlusIcon } from '@heroicons/react/24/outline';
+import { Billing, Domain, Plan, User } from '@prisma/client';
 import { Close } from '@radix-ui/react-dialog';
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
@@ -21,7 +22,17 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-function DomainMenu({ user, pathname, mobile }: { user: any; pathname: string, mobile: boolean }) {
+interface DomainMenuProps {
+  user: User & {
+    domains: Domain[],
+    billing: Billing & {
+      plan: Plan
+    }
+  }
+  pathname: string,
+  mobile: boolean
+}
+function DomainMenu({ user, pathname, mobile }: DomainMenuProps) {
   const pathSegments = pathname.split('/');
   const domainId = pathSegments[pathSegments.length - 1];
   // if we're on mobile, then the Close tag ensures that the naviation sheet is closed when we select a link to visit.
@@ -45,7 +56,7 @@ function DomainMenu({ user, pathname, mobile }: { user: any; pathname: string, m
                 href={`/domains/${domain.id}`}
                 className='w-full'
               >
-                <LinkContainer className="w-full flex flex-row justify-center gap-2 lg:justify-start">
+                <LinkContainer className="w-full flex flex-row justify-start md:justify-center gap-2 lg:justify-start">
                   <Image
                     src={`https://ucarecdn.com/${domain.icon}/-/preview/64x64`}
                     width='24'
@@ -70,11 +81,10 @@ function DomainCreateForm({ reachedLimit }: { reachedLimit: boolean }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const closeDrawer = () => setOpen(false);
-  const openDrawer = () => setOpen(true);
   return (
     <Drawer open={open}>
       <div className='w-full flex items-center justify-between md:justify-center p-4 lg:justify-between'>
-        <span className='inline-block md:hidden text-text lg:inline-block'>Domains</span>
+        <span className='inline-block md:hidden text-text text-lg lg:inline-block'>Domains</span>
         <Button
           className='rounded-full bg-background p-2 text-text hover:bg-surface hover:text-text-foreground'
           onClick={() => setOpen(true)}
@@ -88,7 +98,7 @@ function DomainCreateForm({ reachedLimit }: { reachedLimit: boolean }) {
             {reachedLimit ? (
               <>
                 <DrawerTitle className='text-text-foreground'>
-                  You've reached your plan limits
+                  You&apos;ve reached your plan limits
                 </DrawerTitle>
                 <p className='text-sm text-text'>
                   Upgrade your plan to get access to more resources

@@ -5,9 +5,10 @@ import cbk from '@/lib/chatbotkit';
 import { Questions } from '@prisma/client';
 import pusher from '@/lib/pusher';
 import { createChatMessage } from './conversations.action';
-import { getUserEmailForDomain } from './domain.action';
+import { getDomainWithOptions, getUserEmailForDomain } from './domain.action';
+import { Message } from '@/ui/conversations/types';
 
-function createBackstory(questions: Questions[], domainId: string, domainName: string) {
+function createBackstory(questions: Partial<Questions>[], domainId: string, domainName: string) {
   const bookingUrl = process.env.NEXT_PUBLIC_BOOKING_URL + `/${domainId}`;
   const backstory = `
   You are a highly knowledgeable, welcoming, and experienced sales representative working for ${domainName}. 
@@ -22,7 +23,7 @@ function createBackstory(questions: Questions[], domainId: string, domainName: s
 }
 async function getCBKChatbot(id: string) {
   try {
-    const bot = cbk.bot.fetch(id);
+    const bot = await cbk.bot.fetch(id);
     if (!bot) {
       throw new Error('Bot not found');
     }
@@ -54,7 +55,7 @@ async function createChatbotForDomain(
   name: string,
   domainId: string,
   domainName: string,
-  defaultQuestions: Questions[]
+  defaultQuestions: Partial<Questions>[]
 ) {
   try {
     const bot = await cbk.bot.create({
@@ -63,15 +64,23 @@ async function createChatbotForDomain(
       backstory: createBackstory(defaultQuestions, domainId, domainName),
     });
     return bot;
-  } catch (err) {
-    console.error(err);
-    return undefined;
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to create chatbot';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 }
-async function updateChatbotBackstory(botId: string, questions: Questions[]) {
+
+async function updateChatbotBackstory(botId: string, questions: Questions[], domainId: string) {
   try {
+    const domain = await getDomainWithOptions(domainId, {name: true});
     const res = await cbk.bot.update(botId, {
-      backstory: createBackstory(questions),
+      backstory: createBackstory(questions, domainId, domain.name),
     });
     if (res.id) {
       return {
@@ -81,8 +90,15 @@ async function updateChatbotBackstory(botId: string, questions: Questions[]) {
     } else {
       throw new Error('Failed to update the bot');
     }
-  } catch (err) {
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to update chatbot backstory';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 }
 /**
@@ -108,9 +124,15 @@ const addConversation = async (id: string, conversationId: string) => {
       status: 200,
       message: 'success',
     };
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to add conversation';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 };
 
@@ -139,47 +161,22 @@ const addContactToConversation = async (
     } else {
       throw new Error('failed to add email to conversation');
     }
-  } catch (err) {
-    console.error(err);
-    return {
-      status: 400,
-      message: 'Failed to add email to conversation meta',
-    };
-  }
-};
-const getConversation = async (conversationId: string) => {
-  try {
-    const res = await cbk.conversation.fetch(conversationId);
-    if (res && res.code) {
-      throw new Error('Failed to fetch conversation');
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to add contact to conversation';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
     }
-    return res;
-  } catch (err) {
-    console.error(err);
-    return {
-      status: 400,
-      message: err,
-    };
   }
 };
-const getMessages = async (conversationId: string) => {
-  try {
-    // const cbk = await getChatBotKitUserClient()
-    const messages = await cbk.conversation.message.list(conversationId, {
-      order: 'asc',
-    });
-    return messages;
-  } catch (err) {
-    console.error(err);
-    return [];
-  }
-};
+
 export {
   getChatbotByDomainId,
   createChatbotForDomain,
   getCBKChatbot,
-  getConversation,
-  getMessages,
   updateChatbotBackstory,
   addConversation,
   addContactToConversation,
@@ -200,9 +197,15 @@ export const createConversation = async (domainId: string) => {
       throw new Error('failed to create a conversation');
     }
     return conversation;
-  } catch (err) {
-    console.error(err)
-    throw new Error(err)
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to create conversation';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 }
 /**
@@ -211,23 +214,29 @@ export const createConversation = async (domainId: string) => {
 export const sendLiveMessage = async ({
   text,
   conversationId,
-  type
-}: {
-  text: string,
-  conversationId: string,
-  type: string
+  type,
+  link
+}: Message & {
+  conversationId: string
 }) => {
   try { 
-    await createChatMessage(conversationId, text, type);
-    const res = await pusher.trigger(`channel-${conversationId}`, 'message', {
+    await createChatMessage(conversationId, text, type, link ?? false);
+    await pusher.trigger(`channel-${conversationId}`, 'message', {
       text,
       conversationId,
       type,
+      link,
       createdAt: new Date()
     })
-  } catch (err) {
-    console.error(err)
-    throw new Error(err)
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to send live message';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 }
 
@@ -235,16 +244,26 @@ export const sendStatus = async ({
   online,
   conversationId,
   type
+}: {
+  online: boolean,
+  conversationId: string,
+  type: string
 }) => {
   try {
-     const res = await pusher.trigger(`channel-${conversationId}`, 'status', {
+    await pusher.trigger(`channel-${conversationId}`, 'status', {
       online,
       conversationId,
       type
-     })
-  } catch (err) {
-    console.error(err)
-    throw new Error(err)
+    });
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to send realtime message';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 }
 
@@ -267,7 +286,7 @@ export async function sendNotificationEmail(domainId: string) {
       text: 'Customer requires your assistance',
     };
     return new Promise((resolve, reject) => {
-      transporter.sendMail(mailConfig, async (err, info) => {
+      transporter.sendMail(mailConfig, async (err) => {
         if (err) {
           console.error(err);
           return reject({ message: 'Failed to send email' });
@@ -278,7 +297,14 @@ export async function sendNotificationEmail(domainId: string) {
         });
       });
     });
-  } catch (err) {
-    console.error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to send notification email';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 }

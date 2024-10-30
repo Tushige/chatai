@@ -12,7 +12,6 @@ import { animate, motion, useInView } from "framer-motion";
 import Image from "next/image";
 import { BotIcon } from "lucide-react";
 import { HomeSectionTitle } from "./home-section-title";
-import { BackgroundWavy } from "@/components/ui/background-wavy";
 
 export function FeaturesSection() {
   const containerRef = useRef (null);
@@ -37,7 +36,7 @@ export function FeaturesSection() {
       </div>
       <BentoGrid className="mt-16 grid max-w-4xl grid-rows-[auto_auto_auto] gap-8 md:grid-cols-2 lg:grid-cols-3 md:gap-10">
         {items.map((item, i) => (
-          <div className="glass-container">
+          <div className="glass-container" key={`${item.title}-${i}`}>
             <BentoGridItem
               key={i}
               title={item.title}

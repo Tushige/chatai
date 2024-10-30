@@ -2,7 +2,7 @@ import pusher from '@/lib/pusher';
 import { v4 as uuidv4 } from 'uuid';
 import { cookies } from 'next/headers'
 
-export async function POST(req, res) {
+export async function POST(req) {
   try {
     const cookieStore = cookies()
     const isAssistant = cookieStore.get('__session');

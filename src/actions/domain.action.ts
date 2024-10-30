@@ -4,6 +4,47 @@ import { DomainProps } from '@/schemas/domain.schema';
 import { getAuthId } from './auth';
 import { revalidatePath } from 'next/cache';
 
+const createDomainRecord = async (
+  userId: string,
+  name: string,
+  icon: string,
+  questions: {question: string}[]
+) => {
+  try {
+    const domain = await client.domain.create({
+      data: {
+        name,
+        icon, 
+        questions: {
+          create: questions
+        },
+        user: {
+          connect: {
+            id: userId
+          }
+        }
+      },
+      select: {
+        id: true,
+        name: true
+      }
+    });
+    if (!domain) {
+      throw new Error('failed to create a new domain');
+    }
+    return domain;
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to get domain with options';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
+  }
+}
+
 const getDomainWithOptions = async (domainId: string, select = {}) => {
   try {
     const domain = await client.domain.findUnique({
@@ -16,9 +57,15 @@ const getDomainWithOptions = async (domainId: string, select = {}) => {
       throw Error('failed to fetch Domain');
     }
     return domain;
-  } catch (err) {
-    console.error(err, domainId);
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to get domain with options';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 };
 /**
@@ -53,11 +100,18 @@ const getDomain = async (domainId: string) => {
       throw new Error('Domain not found');
     }
     return domain;
-  } catch (err) {
-    console.error(err)
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to get domain';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 };
+
 const getDomainWithContacts = async (domainId: string) => {
   try {
     const domain = await getDomainWithOptions(domainId, {
@@ -71,8 +125,15 @@ const getDomainWithContacts = async (domainId: string) => {
       },
     });
     return domain;
-  } catch (err) {
-    console.error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to get domain with contacts';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 };
 /**
@@ -109,12 +170,15 @@ const getAllDomains = async () => {
       },
     });
     return user.domains;
-  } catch (err) {
-    console.error(err);
-    return {
-      status: 400,
-      message: 'Failed to fetch all domains',
-    };
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to fetch all domains';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 };
 
@@ -122,7 +186,7 @@ const getAllDomains = async () => {
  * update domain settings in the Domain Settings UI
  */
 const updateDomain = async (
-  id,
+  id: string,
   { name, icon, welcomeMessage }: DomainProps
 ) => {
   try {
@@ -141,26 +205,26 @@ const updateDomain = async (
           },
         },
       },
+      select: {
+        id: true
+      }
     });
     if (!domain) {
-      return {
-        status: 400,
-        message: 'Domain update failed',
-      };
+      throw new Error('Domain update failed');
     }
-    return {
-      status: 200,
-      message: 'Domain successfully updated',
-    };
-  } catch (err) {
-    console.error(err);
-    return {
-      status: 400,
-      message: err,
-    };
+    return domain;
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to update domain';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 };
-const deleteDomain = async (id) => {
+const deleteDomain = async (id: string) => {
   try {
     await client.domain.delete({
       where: {
@@ -168,9 +232,15 @@ const deleteDomain = async (id) => {
       },
     });
     revalidatePath('/')
-  } catch (err) {
-    console.error(err);
-    throw new Error('failed to delete domain')
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to delete domain';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 };
 const getUserEmailForDomain = async (domainId: string) => {
@@ -191,13 +261,21 @@ const getUserEmailForDomain = async (domainId: string) => {
       throw new Error('Domain not found')
     }
     return domain.user.email;
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to get user email for domain';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 }
 
 export {
+  createDomainRecord,
+  getDomainWithOptions,
   getDomain,
   getAllDomains,
   updateDomain,

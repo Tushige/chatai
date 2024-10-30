@@ -9,9 +9,15 @@ export const getPrices = async (productId: string) => {
       product: productId,
     });
     return prices;
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to fetch prices';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 };
 
@@ -19,8 +25,15 @@ export const getPrice = async (id: string) => {
   try {
     const price = await stripeClient.prices.retrieve(id);
     return price;
-  } catch (err) {
-    console.error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to fetch price';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 };
 export const getAvailablePrices = async (customerId: string) => {
@@ -34,7 +47,7 @@ export const getAvailablePrices = async (customerId: string) => {
     }
     // this is the selected price the user is on. we grab the containing product and fetch all prices associated with this product.
     const price = subscription.data[0].items.data[0].price;
-    const productId = price.product;
+    const productId = price.product as string;
     const prices = await getPrices(productId);
     if (!prices || !prices.data) {
       throw new Error('Expected prices but got nothing');
@@ -46,9 +59,15 @@ export const getAvailablePrices = async (customerId: string) => {
       currentPrice: price,
       currentPeriodEnd: subscription.data[0].current_period_end,
     };
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to fetch available prices';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 };
 
@@ -72,17 +91,31 @@ export const createFreeSubscription = async (customerId: string) => {
       throw new Error('Failed to create a free subscription');
     }
     return subscription;
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to create free subscription';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 };
 
 /**
  * we update the subscription with the new plan and return payment intent back to the client.
- * payment intent allows to defer the payment to later.
+ * payment intent allows us to defer the payment to later.
  * On the client, we collect the payment info and complete the transaction.
+ * if default payment is stored on Stripe already, then no payment intent is returned and the payment is immediately processed
  */
+
+type ExpandedSubscription = Stripe.Subscription & {
+  latest_invoice?: Stripe.Invoice & {
+    payment_intent?: Stripe.PaymentIntent;
+  };
+};
+
 export const updateSubscription = async (
   customerId: string,
   subscriptionId: string,
@@ -106,45 +139,42 @@ export const updateSubscription = async (
         },
         expand: ['latest_invoice.payment_intent'],
       }
-    );
+    ) as ExpandedSubscription;
+    
     const returnVal = {
       subscriptionId: subscription.id,
-      clientSecret: subscription.latest_invoice.payment_intent?.client_secret,
-      invoice_status: subscription.latest_invoice.status,
-      payment_intent_status: subscription.latest_invoice.payment_intent?.status
+      clientSecret: subscription.latest_invoice?.payment_intent?.client_secret,
+      invoice_status: subscription.latest_invoice?.status,
+      payment_intent_status: subscription.latest_invoice?.payment_intent?.status
     };
     return returnVal;
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
-  }
-};
-/**
- *
- */
-export const createPortalSession = async (customerId: string) => {
-  try {
-    const portalSession = await stripeClient.billingPortal.sessions.create({
-      customer: customerId,
-      return_url: process.env.NEXT_PUBLIC_MEMBERSHIP_URL,
-    });
-    return portalSession;
-  } catch (err) {
-    console.error('Failed creating customer portal session');
-    console.error(err);
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to update subscription';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 };
 
-export const createCustomer = async ({ name, email }) => {
+export const createCustomer = async ({ name, email }: {name: string, email: string}) => {
   try {
     const customer = await stripeClient.customers.create({
       name,
-      email: 'test1@gmail.com',
+      email,
     });
     return customer;
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to create customer';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 };

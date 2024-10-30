@@ -9,7 +9,7 @@ import { ArrowLongLeftIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import React from 'react';
 
-const NewQuestionPage = async ({ params }) => {
+const NewQuestionPage = async ({ params }: {params: {id: string}}) => {
   const questions = await getBotQuestionsByDomainId(params.id);
   const bot = await getChatbotByDomainId(params.id);
   return (
@@ -17,7 +17,7 @@ const NewQuestionPage = async ({ params }) => {
       <AppSectionHeroContainer>
         <Link href={`/domains/${params.id}`} className='mb-4 flex'>
           <ArrowLongLeftIcon className='size-6' />
-          Go Back to Settings
+          Back to Settings
         </Link>
         <h1 className='mb-2 text-2xl font-bold'>Bot Training Questions</h1>
         <p className='mb-8 text-sm text-text-secondary'>

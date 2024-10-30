@@ -1,6 +1,4 @@
 import confetti from 'canvas-confetti';
-
-import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
 
 export function ConfettiFireworks({ active }) {

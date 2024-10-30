@@ -1,13 +1,12 @@
 'use client';
 import { getAuthId } from '@/actions/auth';
 import { selectPlan } from '@/actions/billing.action';
-import { createFreeSubscription, getAvailablePrices } from '@/actions/stripe';
+import { getAvailablePrices } from '@/actions/stripe';
 import { getUserBilling } from '@/actions/user.action';
 import { GradientText } from '@/components/app-gradient-text';
 import Loader from '@/components/loader';
-import { Button } from '@/components/ui/button';
 import Confetti, { ConfettiRef } from '@/components/ui/confetti';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 
 const MembershipChangePlan = ({}) => {
@@ -16,22 +15,14 @@ const MembershipChangePlan = ({}) => {
   const confettiRef = useRef<ConfettiRef>(null);
   const [loading, setLoading] = useState(true);
 
-  const addFreeTier = async () => {
-    try {
-      const subscription = await createFreeSubscription('cus_R4uLBjtZ3DFd8T');
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   useEffect(() => {
     if (success) {
       (async () => {
         try {
           const authId = await getAuthId();
-          let {billing} = await getUserBilling(authId!);
+          const {billing} = await getUserBilling(authId!);
           const currentSubscription = await getAvailablePrices(billing.stripeCustomerId);
-          await selectPlan(billing.id, currentSubscription.currentPrice.nickname);
+          await selectPlan(billing.id, currentSubscription.currentPrice.nickname!);
         } catch (err) {
           console.error(err);
         } finally {
@@ -68,9 +59,6 @@ const MembershipChangePlan = ({}) => {
     return (
       <div className="size-full flex justify-center items-center">
         <h1 className="text-xl">Oops! Something went wrong.</h1>
-        <Button className='bg-surface text-text' onClick={addFreeTier}>
-          Add Free Tier
-        </Button>
       </div>
     );
   }

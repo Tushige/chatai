@@ -21,8 +21,8 @@ const BookingPage = async ({ params }) => {
           '[mask-image:radial-gradient(800px_circle_at_center,white,transparent)]'
         )}
       />
-      <h1 className='mb-4 text-4xl'>You're All Set!</h1>
-      <p>You're booked for {time}</p>
+      <h1 className='mb-4 text-4xl'>You&apos;re All Set!</h1>
+      <p>You&apos;re booked for {time}</p>
     </div>
   );
 };

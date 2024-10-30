@@ -4,7 +4,7 @@ import AppSectionHeroContainer from '@/components/app-section-hero-container';
 import { Pickaxe } from 'lucide-react';
 import React from 'react';
 
-const IntegrationsPage = async ({ params }) => {
+const IntegrationsPage = async () => {
   return (
     <div>
       <AppSectionHeroContainer>

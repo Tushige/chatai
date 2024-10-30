@@ -24,13 +24,15 @@ interface BookingTableProps<TData, TValue> {
 export default function BookingTable<TData, TValue>({
   data,
   columns,
-}): BookingTableProps {
+}: BookingTableProps<TData, TValue>) {
+  
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+
   return (
     <div>
       <div className='flex items-center justify-end space-x-2 py-4'>

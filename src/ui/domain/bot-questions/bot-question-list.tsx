@@ -39,7 +39,7 @@ const BotQuestionList = ({ questions, chatBotKitId, domainId }: Props) => {
         deleteQuestionId,
         domainId
       );
-      await updateChatbotBackstory(chatBotKitId, updatedQuestions);
+      await updateChatbotBackstory(chatBotKitId, updatedQuestions, domainId);
       toast({
         title: 'Success',
         description: 'The question has been deleted',

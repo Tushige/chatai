@@ -3,15 +3,18 @@ import DomainUpdateFormProvider from '@/components/forms/domain/domain-update-fo
 import DomainDeleteBox from './domain-delete-box';
 import { Separator } from '@/components/ui/separator';
 import AppSectionTitle from '@/components/app-section-title';
+import { ChatBot, Domain } from '@prisma/client';
 
 type Props = {
-  domain: any;
+  domain: Domain & {
+    chatBot: ChatBot
+  };
 };
 const DomainSettings = ({ domain }: Props) => {
   const initialData = {
     icon: domain.icon,
     name: domain.name,
-    welcomeMessage: domain.chatBot.welcomeMessage,
+    welcomeMessage: domain.chatBot?.welcomeMessage || null,
   };
   return (
     <>

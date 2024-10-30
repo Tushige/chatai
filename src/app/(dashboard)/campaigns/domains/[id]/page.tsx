@@ -11,11 +11,10 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 import { getDomain } from '@/actions/domain.action';
-import { Separator } from '@/components/ui/separator';
 import AppSectionHeroContainer from '@/components/app-section-hero-container';
 import AppSectionContainer from '@/components/app-section-container';
 
-const DomainCampaignsPage = async ({ params }) => {
+const DomainCampaignsPage = async ({ params }: {params: {id: string}}) => {
   const domainId = params.id;
   if (!domainId) redirect('/campaigns');
   const domain = await getDomain(domainId);

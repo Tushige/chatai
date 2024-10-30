@@ -18,6 +18,7 @@ import { DomainMenu } from './domain/domain-menu';
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
 import { Close } from '@radix-ui/react-dialog';
 import { Separator } from '../ui/separator';
+import { User } from '@prisma/client';
 
 type LinkProp = {
   label: string;
@@ -59,7 +60,7 @@ const links: LinkProp[] = [
 ];
 
 type Props = {
-  user: any;
+  user: User;
 };
 
 const AppNavbar = ({ user }: Props) => {
@@ -78,7 +79,7 @@ const AppNavbar = ({ user }: Props) => {
   )
 }
 type NavProps = {
-  user: any,
+  user: User,
   pathname: string
 }
 function DesktopNav({ user, pathname }: NavProps) {
@@ -142,7 +143,7 @@ function MenuItem({ link, pathname, mobile }:
     <li
       key={link.href}
       className={cn('hover:bg-surface w-full p-4', {
-        'bg-surface': pathname === link.href,
+        'bg-surface': pathname.includes(link.href),
       })}
     >
       <Link
@@ -153,7 +154,7 @@ function MenuItem({ link, pathname, mobile }:
       >
         <LinkContainer className="flex grow items-center gap-2 rounded-md text-sm font-medium text-text hover:text-text-foreground justify-start md:justify-center lg:justify-start">
           <Icon className='w-6' />
-          <span className='block md:hidden lg:block'>{link.label}</span>
+          <span className='block md:hidden lg:block text-base'>{link.label}</span>
         </LinkContainer>
       </Link>
     </li>
@@ -162,8 +163,8 @@ function MenuItem({ link, pathname, mobile }:
 
 function MenuOptions() {
   return (
-    <div className='absolute left-0 bottom-0 w-full bg-background p-4'>
-      <Button className='flex-start flex w-full flex-row gap-2 rounded-md bg-background hover:bg-surface'>
+    <div className='absolute left-0 bottom-0 w-full bg-background md:bg-background-secondary p-4'>
+      <Button className='flex-start flex w-full flex-row gap-2 rounded-md bg-background md:bg-background-secondary hover:bg-surface'>
         <ArrowLeftEndOnRectangleIcon className='w-6 text-text' />
         <Link
           href='/sign-out'

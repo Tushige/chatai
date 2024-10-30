@@ -5,10 +5,10 @@ import { AvatarIcon } from '@radix-ui/react-icons';
 import { Bot, SmileIcon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Conversation, Message } from './types';
-import Pusher, { Channel } from 'pusher-js';
+import { Channel } from 'pusher-js';
 import { sendLiveMessage, sendStatus } from '@/actions/chatbot.action';
 import Loader from '@/components/loader';
-import { getChatMessages, updateConversationLive } from '@/actions/conversations.action';
+import { getChatMessages } from '@/actions/conversations.action';
 import AppSectionTitle from '@/components/app-section-title';
 import { Toggle } from '@/components/ui/toggle';
 import { Button } from '@/components/ui/button';
@@ -76,7 +76,7 @@ const ConversationMessenger = ( {conversation }: Props) => {
     return () => {
       cleanupPusher(pusher, channelRef)
     }
-  }, [conversation.id, live])
+  }, [conversation, conversation.id])
 
   async function cleanupPusher(pusher, channelRef) {
     if (channelRef.current) {
@@ -84,8 +84,6 @@ const ConversationMessenger = ( {conversation }: Props) => {
       channelRef.current = null;
     }
     pusher.unsubscribe(`channel-${conversation.id}`);
-    // we turn off live mode automatically if user navigates away
-    await updateConversationLive(conversation.id, false)
   } 
 
   if (!messages || loading) {
@@ -150,12 +148,13 @@ const ConversationMessenger = ( {conversation }: Props) => {
         }
       </div>
       <div className='row-start-2 flex flex-col gap-4 max-h-[100%] overflow-y-scroll chat-window pt-4'>
-        {messages.map((d) => (
+        {messages.map(({id, type, text, createdAt, link}: Message) => (
           <ChatMessage
-            key={d.id}
-            type={d.type}
-            message={d.text}
-            createdAt={d.createdAt}
+            key={id}
+            type={type}
+            message={text}
+            createdAt={createdAt ?? (new Date()).getTime()}
+            link={link ?? false}
           />
         ))}
         <div ref={messagesEndRef} />
@@ -197,9 +196,10 @@ type ChatMessageProps = {
   type: string;
   message: string;
   createdAt: number;
+  link: boolean;
 };
 
-function ChatMessage({ type, message, createdAt }: ChatMessageProps) {
+function ChatMessage({ type, message, createdAt, link }: ChatMessageProps) {
   return (
     <div
       className={cn('flex w-full flex-row items-start justify-end gap-2', {
@@ -208,7 +208,13 @@ function ChatMessage({ type, message, createdAt }: ChatMessageProps) {
     >
       <div className='flex flex-col justify-start gap-2 p-4 border border-accent rounded-md bg-surface z-[1]'>
         <AppTime timestamp={createdAt} className="text-sm text-text-secondary"/>
-        <p>{message}</p>
+        {
+          link ? (
+            <p dangerouslySetInnerHTML={{__html: message}}/>
+          ) : (
+            <p>{message}</p>
+          )
+        }
       </div>
       {
         type === 'bot' && (

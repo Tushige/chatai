@@ -1,6 +1,6 @@
 'use client';
-import { getAuthId } from '@/actions/auth';
-import { currentUser, useClerk } from '@clerk/nextjs';
+import Loader from '@/components/loader';
+import { useClerk } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 
@@ -9,12 +9,20 @@ const Page = () => {
   const router = useRouter();
   useEffect(() => {
     const doSignOut = async () => {
-      const a = await signOut();
-      router.push('/')
+      try {
+        await signOut();
+        router.push('/')
+      } catch (err) {
+        console.error(err);
+      }
     };
     doSignOut();
-  }, []);
-  return <div>Signing out</div>;
+  }, [router]);
+  return (
+    <div className='h-[100vh] w-full items-center justify-center'>
+      <Loader/>
+    </div>
+  )
 };
 
 export default Page;

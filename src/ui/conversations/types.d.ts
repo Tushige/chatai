@@ -1,11 +1,12 @@
 type Message = {
-  id: string;
+  id?: string;
   type: string;
   text: string;
-  createdAt: number;
-  updatedAt: number;
-  meta: any;
+  createdAt?: number;
+  updatedAt?: number;
+  link?: boolean
 };
+
 type Conversation = {
   id: string;
   messages: Message[];

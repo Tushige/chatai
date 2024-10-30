@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 const BookingsSummaryUI = ({ bookings }: { bookings: Booking[] }) => {
   if (!bookings || bookings.length < 1) {
-    return <div>You have no appointments</div>;
+    return <div className="text-text">😖 You have no upcoming appointments</div>;
   }
   return (
     <>

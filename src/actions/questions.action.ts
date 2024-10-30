@@ -23,8 +23,15 @@ export const createBotQuestion = async (question: string, domainId: string) => {
     const questions = await getBotQuestionsByDomainId(domainId);
     revalidatePath('/');
     return questions;
-  } catch (err) {
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to create bot question';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 };
 
@@ -36,8 +43,15 @@ export const getBotQuestionsByDomainId = async (domainId: string) => {
       },
     });
     return questions;
-  } catch (err) {
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to get bot questions for domain';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 };
 
@@ -62,7 +76,14 @@ export const deleteBotQuestion = async (id: string, domainId: string) => {
     });
     revalidatePath('/');
     return questions;
-  } catch (err) {
-    throw new Error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message); // Safe to access `message`
+      throw new Error(err.message);
+    } else {
+      const errorMsg = 'Failed to delete bot question';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
   }
 };

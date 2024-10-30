@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import UserTypeForm from '@/components/forms/sign-up/user-type-form';
 import { useStepsContext } from '@/context/use-steps-context';
 import UserDetailsForm from './user-details-form';

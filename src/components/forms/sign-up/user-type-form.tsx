@@ -14,7 +14,7 @@ import { BriefcaseBusiness, SquareUser } from 'lucide-react';
 
 const UserTypeForm = () => {
   const { register } = useFormContext();
-  const { setCurrentStep, currentStep } = useStepsContext();
+  const { setCurrentStep } = useStepsContext();
   const [userType, setUserType] = useState<UserType>('individual');
   return (
     <div>

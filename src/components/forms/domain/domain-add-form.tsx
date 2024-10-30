@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, {useState } from 'react';
 import { createDomain } from '@/actions/user.action';
 import Loader from '@/components/loader';
 import { useToast } from '@/hooks/use-toast';
@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button';
 
 type Props = {
   initialData?: DomainProps;
-  onSuccess: Function;
+  onSuccess: () => void;
   closeDrawer: () => void;
 };
 
@@ -36,26 +36,18 @@ const DomainAddForm = ({ initialData, onSuccess, closeDrawer }: Props) => {
         const uploadCareImage = await uploadCareUpload(data.icon[0]);
         iconId = uploadCareImage.uuid;
       }
-      const { status, message } = await createDomain({
+      await createDomain({
         name: data.name,
         botName: data.botName,
         icon: iconId,
       });
-      if (status === 200) {
-        toast({
-          title: '⭐Success',
-          description: `${data.name} successfully added`,
-          className: 'text-success',
-        });
-        onSuccess();
-        router.refresh();
-      } else {
-        toast({
-          title: 'Error',
-          description: message,
-          className: 'text-error',
-        });
-      }
+      toast({
+        title: '⭐Success',
+        description: `${data.name} successfully added`,
+        className: 'text-success',
+      });
+      onSuccess();
+      router.refresh();
     } catch (err) {
       console.error('failed creating domain with error: ', err);
       toast({

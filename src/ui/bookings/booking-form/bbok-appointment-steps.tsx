@@ -141,7 +141,8 @@ function BookAppointmentDay({ domainId, times, time, setTime, loading }) {
       }
     }
     getAvailableTimes();
-  }, [domainId, getValues]);
+  }, [domainId, getValues, toast]);
+
   if (loading || !ready) {
     return (
       <div className='py-12'>

@@ -20,7 +20,7 @@ export const AppRelativeDate = ({ timestamp }: Props) => {
     setInterval(() => {
       setDateValue(diffForHumans(timestamp));
     }, REFRESH_PERIOD);
-  }, []);
+  }, [timestamp]);
   return (
     <span title={humanFriendlyDate (timestamp)}>{dateValue}</span>
   );
@@ -32,7 +32,7 @@ export const AppTime = ({ timestamp, className }: Props) => {
     setInterval(() => {
       setDateValue(formattedTime(timestamp));
     }, REFRESH_PERIOD);
-  }, []);
+  }, [timestamp]);
   return <span className={cn(className)}>{dateValue}</span>;
 };
 

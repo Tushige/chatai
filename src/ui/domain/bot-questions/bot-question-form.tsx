@@ -5,11 +5,10 @@ import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { BotQuestionProps, BotQuestionSchema } from './bot-question.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowLongLeftIcon } from '@heroicons/react/24/outline';
 import { createBotQuestion } from '@/actions/questions.action';
 import { updateChatbotBackstory } from '@/actions/chatbot.action';
+import Loader from '@/components/loader';
 
 type Props = {
   domainId: string;
@@ -30,12 +29,11 @@ const BotQuestionForm = ({ domainId, chatBotKitId }: Props) => {
     try {
       setLoading(true);
       const updatedQuestions = await createBotQuestion(data.question, domainId);
-      await updateChatbotBackstory(chatBotKitId, updatedQuestions);
+      await updateChatbotBackstory(chatBotKitId, updatedQuestions, domainId);
       toast({
         title: 'Success',
         description: 'Added new question',
       });
-      // TODO - save the question to chatbotkit
     } catch (err) {
       console.error(err);
       toast({
@@ -46,7 +44,13 @@ const BotQuestionForm = ({ domainId, chatBotKitId }: Props) => {
       setLoading(false);
     }
   };
-
+  if (loading) {
+    return (
+      <div className='py-12'>
+        <Loader className='h-[30px] w-[30px]' />
+      </div>
+    );
+  }
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(handleSubmit)}>

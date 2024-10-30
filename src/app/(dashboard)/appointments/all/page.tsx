@@ -3,6 +3,7 @@ import AppPageTitle from '@/components/app-page-title';
 import AppSectionContainer from '@/components/app-section-container';
 import AppSectionHeroContainer from '@/components/app-section-hero-container';
 import { Separator } from '@/components/ui/separator';
+import { Domain } from '@prisma/client';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
@@ -29,10 +30,10 @@ const AppointmentsAllPage = async () => {
             </h3>
             <Separator className='mb-8 mt-4 border-border' />
             <ul className='flex flex-col gap-4'>
-              {domains.map((domain) => {
+              {domains.map((domain: Domain) => {
                 return (
                   <Link
-                    key={domain.key}
+                    key={domain.id}
                     href={`/appointments/domains/${domain.id}`}
                     className='flex flex-row items-center gap-2'
                   >
