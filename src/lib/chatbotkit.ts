@@ -20,7 +20,7 @@ export const cbk = new ChatBotKit({
 export function getCBKUserClient(userId: string) {
   return new ChatBotKit({
     secret: process.env.CHATBOTKIT_API_KEY!,
-    // runAsUserId: userId,
+    runAsUserId: userId,
   });
 }
 

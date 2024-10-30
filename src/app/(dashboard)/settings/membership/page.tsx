@@ -26,7 +26,6 @@ import AppSectionHeroContainer from '@/components/app-section-hero-container';
 import AppSectionContainer from '@/components/app-section-container';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { selectPlan } from '@/actions/billing.action';
-import { string } from 'zod';
 
 type PaymentOptionsType = StripeElementsOptions & {
   payment_intent_status: string;

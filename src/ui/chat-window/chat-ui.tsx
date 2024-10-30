@@ -83,7 +83,6 @@ const ChatUI = ({ domain, cbkBot, className = '' }) => {
               domainId={domain.id}
               cbkConversationId={cbkConversationId}
               conversation={conversation}
-              cbkConversationId={cbkConversationId}
               token={token}
               welcomeMessage={domain.chatBot.welcomeMessage}
             />
