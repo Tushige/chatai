@@ -9,7 +9,6 @@ import {
 import AppSectionContainer from '@/components/app-section-container';
 import AppSectionHeroContainer from '@/components/app-section-hero-container';
 import { capitalizeWord } from '@/lib/utils';
-import AppSectionTitle from '@/components/app-section-title';
 import AppPageTitle from '@/components/app-page-title';
 
 const page = async () => {

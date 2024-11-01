@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import { v4 as uuidv4 } from 'uuid';
 import { useConversationManager } from '@chatbotkit/react';
 import { BotOptions } from '@chatbotkit/sdk/bot/v1';
-import { ArrowLeftEndOnRectangleIcon } from '@heroicons/react/24/outline';
 import { useEffect, useRef, useState } from 'react';
 import ChatMessages from './chat-messages';
 import { BOT_DELIMETER, BOT_HELP, cn, containsLink, extractEmailsFromString } from '@/lib/utils';
