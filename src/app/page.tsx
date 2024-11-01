@@ -1,3 +1,4 @@
+'use client';
 import AppHeader from '@/ui/home/app-header';
 import { FeaturesSection } from '@/ui/home/features-section';
 import HeroSection from '@/ui/home/hero-section';
@@ -5,13 +6,15 @@ import Link from 'next/link';
 import {AppCtaButton} from '@/components/app-cta-button';
 import AppLogo from '@/components/app-logo';
 import { cn } from '@/lib/utils';
+import { useContext } from 'react';
+import { AuthContext } from '@/context/use-auth-context';
 
 export default function Home() {
+  const {authId} = useContext(AuthContext)
   return (
-    <div className='bg-background text-text grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-[family-name:var(--font-dm-sans)] sm:p-20 overflow-x-hidden'>
+    <div className='text-text grid items-center justify-items-center gap-16 font-[family-name:var(--font-dm-sans)] overflow-x-hidden px-8 lg:p-0'>
       <AppHeader />
-      <main className="container row-start-2 flex flex-col items-start sm:items-center">
-        <SectionSeparator className="mt-12 lg:hidden" />
+      <main className="container flex flex-col items-start sm:items-center">
         <HeroSection/>
         <SectionSeparator />
         <FeaturesSection />
@@ -26,9 +29,17 @@ export default function Home() {
             Get Started
           </Button> */}
           <AppCtaButton>
-            <Link href="/sign-up">
-              Get Started
-            </Link>
+            {
+              authId ? (
+                <Link href="/dashboard">
+                  Dashboard
+                </Link>
+              ) : (
+                <Link href="/sign-up">
+                  Get Started
+                </Link>
+              )
+            }
           </AppCtaButton>
         </div>
       </footer>

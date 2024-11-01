@@ -1,9 +1,13 @@
+'use client';
 import { AppCtaButton } from '@/components/app-cta-button'
 import AppLogo from '@/components/app-logo'
+import { AuthContext } from '@/context/use-auth-context';
 import Link from 'next/link'
-import React from 'react'
+import React, { useContext } from 'react'
 
 export default function AppHeader() {
+  const {authId} = useContext(AuthContext)
+
   return (
     <header className="container">
       <nav className="flex justify-between items-center">
@@ -14,9 +18,17 @@ export default function AppHeader() {
           Get Started
         </Button> */}
         <AppCtaButton>
-          <Link href="/sign-up">
-            Get Started
-          </Link>
+          {
+            authId ? (
+              <Link href="/dashboard">
+                Dashboard
+              </Link>
+            ) : (
+                <Link href="/sign-up">
+                Get Started
+              </Link>
+            )
+          }
         </AppCtaButton>
       </nav>
     </header>

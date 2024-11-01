@@ -2,10 +2,11 @@
 import { GradientText } from '@/components/app-gradient-text'
 import StarGrid from '@/components/app-stars-grid'
 import Image from 'next/image'
-import React from 'react'
+import React, { useContext } from 'react'
 import {motion} from 'framer-motion';
 import { AppCtaButton } from '@/components/app-cta-button'
 import Link from 'next/link'
+import { AuthContext } from '@/context/use-auth-context'
 
 const TITLE_DELAY = 0;
 const TITLE_DURATION = 1;
@@ -17,8 +18,9 @@ const HERO_DELAY = CTA_DELAY + CTA_DURATION;
 const HERO_DURATION = 1;
 
 export default function HeroSection() {
+  const {authId} = useContext(AuthContext);
   return (
-    <section className="relative flex flex-col justify-start items-start sm:items-center sm:justify-center gap-4">
+    <section className="relative w-full flex flex-col justify-start items-start sm:items-center sm:justify-center gap-4">
       <StarGrid/>
       <motion.h1
         initial={{
@@ -74,9 +76,17 @@ export default function HeroSection() {
           }}
         >
           <AppCtaButton>
-            <Link href="/sign-up">
-              Get Started
-            </Link>
+            {
+              authId ? (
+                <Link href="/dashboard">
+                  Dashboard
+                </Link>
+              ) : (
+              <Link href="/sign-up">
+                Get Started
+              </Link>
+              )
+            }
           </AppCtaButton>
         </motion.div>
       </div>
@@ -100,7 +110,7 @@ export default function HeroSection() {
             ease: [0.33, 1, 0.68, 1]
           }
         }}
-        className="glass-container mt-8"
+        className="w-full glass-container mt-8"
       >
         <div className="absolute inset-0 z-[-1] bg-[#711000] blur-2xl filter"/>
         <Image

@@ -35,7 +35,7 @@ const MembershipChangePlan = ({}) => {
   }, [success])
   if (loading) {
     <div className='size-full py-12'>
-      <Loader className='h-[30px] w-[30px]' />
+      <Loader className='size-[30px]' />
     </div>
   }
   // TODO - upon successful purchase, we need to save stripe client id in our DB so that later the same customer can change their plans

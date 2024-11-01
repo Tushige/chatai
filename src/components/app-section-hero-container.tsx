@@ -10,7 +10,7 @@ export default function AppSectionHeroContainer({
   className?: string
 }) {
   return (
-    <div className={cn("relative flex flex-col px-4 py-8 lg:px-8 bg-background-secondary", className)}>
+    <div className={cn("relative flex flex-col px-4 py-4 lg:py-8 lg:px-8 bg-background-secondary", className)}>
       <GridPattern
         width={20}
         height={20}

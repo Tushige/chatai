@@ -135,11 +135,11 @@ type MessageCardProps = {
 function MessageCard({ message, createdAt, email, live }: MessageCardProps) {
   return (
     <div className={cn('grid w-full grid-cols-3 items-center justify-between gap-4 rounded-md border p-2 hover:bg-surface')}>
-      <div className='col-span-2 grid grid-cols-8 items-center'>
-        <div className='col-span-1'>
+      <div className='col-span-2 grid grid-cols-12 items-center'>
+        <div className='col-span-2'>
           <AvatarIcon className='size-8' />
         </div>
-        <div className='col-span-7 flex max-w-[100%] flex-col text-left'>
+        <div className='col-span-10 flex max-w-[100%] flex-col text-left'>
           <div className='text-sm font-semibold flex gap-2 items-center'>
             <span>{email ? email : 'Anonymous'}</span>
             <div className={cn('size-2 rounded-full animate-pulse', {'bg-success': live})} />

@@ -9,7 +9,7 @@ export function HomeSectionTitle({title, description}: {
     <div 
       className="w-full"
     >
-      <h2 className="text-center font-bold text-4xl tracking-tighter lg:text-5xl">
+      <h2 className="text-center font-bold text-3xl tracking-tighter lg:text-5xl">
         {title} 
       </h2>
       <p className="text-text-secondary mt-2 text-center">

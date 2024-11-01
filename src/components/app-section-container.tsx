@@ -9,7 +9,7 @@ export default function AppSectionContainer({
   className?: string
 }) {
   return (
-    <div className={cn("container flex flex-col px-4 py-8 lg:px-8", className)}>
+    <div className={cn("container flex flex-col px-4 py-4 lg:py-8 lg:px-8", className)}>
       {children}
     </div>
   )

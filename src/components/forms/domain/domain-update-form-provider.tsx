@@ -62,7 +62,7 @@ const DomainUpdateFormProvider = ({
         <form onSubmit={methods.handleSubmit(handleSubmit)}>
           {loading ? (
             <div className='py-12'>
-              <Loader className='h-[30px] w-[30px]' />
+              <Loader className='size-[30px]' />
             </div>
           ) : (
             children

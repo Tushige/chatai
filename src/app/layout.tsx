@@ -5,6 +5,7 @@ import { DM_Sans } from "next/font/google";
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/context/use-auth-context';
+import Head from 'next/head';
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -36,9 +37,12 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang='en'>
+        <Head>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        </Head>
         <AuthProvider>
           <body
-            className={`${geistSans.variable} ${geistMono.variable} ${dmSans.variable} antialiased font-[family-name:var(--font-geist-sans)]`}
+            className={`${geistSans.variable} ${geistMono.variable} ${dmSans.variable} antialiased font-[family-name:var(--font-geist-sans)] bg-background`}
           >
             {children}
             <Toaster />

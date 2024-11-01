@@ -28,7 +28,7 @@ const FileUploadInput = ({ register, errors }: Props) => {
           // className="hidden"
         />
       </Label>
-      <p className='mt-2 text-sm text-text'>
+      <p className='mt-2 text-sm text-text-secondary'>
         Recommended size is 300px * 300px, size <br /> less than 2MB
       </p>
       <ErrorMessage

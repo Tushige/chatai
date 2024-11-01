@@ -33,10 +33,10 @@ const DomainUpdateForm = ({ className }: Props) => {
         name='name'
         errors={errors}
       />
-      <div className='mt-4'>
+      <div className='mt-8'>
         <FileUploadInput register={register} errors={errors} />
       </div>
-      <div className='mt-2'>
+      <div className='mt-4'>
         <Label htmlFor='welcomeMessage'>
           Chatbot Greeting Message
           <p className='text-sm text-muted'>

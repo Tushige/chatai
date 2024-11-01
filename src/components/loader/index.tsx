@@ -10,7 +10,7 @@ const Loader = ({ className }: Props) => {
   return (
     <div className='flex h-full w-full items-center justify-center'>
       <motion.div
-        className={cn('h-[100px] w-[100px] bg-accent', className)}
+        className={cn('size-[50px] bg-accent', className)}
         animate={{
           scale: [1, 2, 2, 1, 1],
           rotate: [0, 0, 270, 270, 0],

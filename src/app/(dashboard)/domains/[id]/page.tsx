@@ -16,7 +16,7 @@ const DomainSettingsPage = async ({ params }: {params: {id: string}}) => {
   }
   const domain = await getDomain(params.id);
   return (
-    <div>
+    <>
       <AppSectionHeroContainer>
         <AppPageTitle
           title={domain.name}
@@ -31,7 +31,7 @@ const DomainSettingsPage = async ({ params }: {params: {id: string}}) => {
           <ChatWindow domain={domain} className="bottom-10 right-10"/>
         </div>
       </AppSectionContainer>
-    </div>
+    </>
   );
 };
 

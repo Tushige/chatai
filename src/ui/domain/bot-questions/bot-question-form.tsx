@@ -47,7 +47,7 @@ const BotQuestionForm = ({ domainId, chatBotKitId }: Props) => {
   if (loading) {
     return (
       <div className='py-12'>
-        <Loader className='h-[30px] w-[30px]' />
+        <Loader className='size-[30px]' />
       </div>
     );
   }

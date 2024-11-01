@@ -164,15 +164,15 @@ function MenuItem({ link, pathname, mobile }:
 function MenuOptions() {
   return (
     <div className='absolute left-0 bottom-0 w-full bg-background md:bg-background-secondary p-4'>
-      <Button className='flex-start flex w-full flex-row gap-2 rounded-md bg-background md:bg-background-secondary hover:bg-surface'>
-        <ArrowLeftEndOnRectangleIcon className='w-6 text-text' />
+      {/* <Button className='flex-start flex w-full flex-row gap-2 rounded-md bg-background md:bg-background-secondary hover:bg-surface'> */}
         <Link
           href='/sign-out'
-          className='text-medium inline-block md:hidden text-text lg:inline-block'
+          className='w-full flex flex-row flex-start gap-2 rounded-md p-4 px-6 bg-background-secondary md:bg-background-secondary hover:bg-surface text-medium text-text'
         >
-          Sign Out
+          <ArrowLeftEndOnRectangleIcon className='w-6 text-text' />
+          <span className="inline-block md:hidden lg:inline-block">Sign Out</span>
         </Link>
-      </Button>
+      {/* </Button> */}
     </div>
   );
 }

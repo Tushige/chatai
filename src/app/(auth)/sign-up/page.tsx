@@ -6,7 +6,7 @@ import React from 'react';
 
 const page = () => {
   return (
-    <div className='flex h-full w-full flex-col gap-3 py-36 md:px-16'>
+    <div className='flex h-full w-full flex-col gap-3 py-8 lg:py-36 md:px-16'>
       <SignupFormProvider>
         <StepsProvider>
           <div className='mb-8 w-full'>

@@ -89,7 +89,7 @@ const ConversationMessenger = ( {conversation }: Props) => {
   if (!messages || loading) {
     return (
       <div className='size-full py-12'>
-        <Loader className='h-[30px] w-[30px]' />
+        <Loader className='size-[30px]' />
       </div>
     );
   }

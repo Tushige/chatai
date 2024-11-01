@@ -40,6 +40,7 @@ body {
 
     --background: #121212;
     --background-secondary: #0e0e0e;
+    --foreground: white;
     --surface: #1e1e1e;
     --border: #292929;
     --text: #e0e0e0;
@@ -51,7 +52,7 @@ body {
     --warning: #fbc02d;
     --error: #cf6679;
     --hover: #333333;
-
+    --muted: #333333;
     --primary-foreground: 'white';
     --muted-foreground: 'white';
     --accent-foreground: 'white';
@@ -172,6 +173,7 @@ body {
 }
 
 .glass-container {
+  touch-action: auto;
   position: relative;
   z-index: 1;
 }

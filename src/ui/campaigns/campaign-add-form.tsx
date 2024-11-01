@@ -64,7 +64,7 @@ const CampaignAddForm = ({
 
   if (loading) {
     <div className='size-full py-12'>
-      <Loader className='h-[30px] w-[30px]' />
+      <Loader className='size-[30px]' />
     </div>
   }
 

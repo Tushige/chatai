@@ -24,9 +24,9 @@ const DomainSettings = ({ domain }: Props) => {
       />
       <Separator className='mb-8 mt-4' />
       <DomainUpdateFormProvider initialData={initialData} domainId={domain.id}>
-        <DomainUpdateForm className='w-[400px]' />
+        <DomainUpdateForm className='sm:w-[400px]' />
       </DomainUpdateFormProvider>
-      <DomainDeleteBox className='w-[400px]' id={domain.id} />
+      <DomainDeleteBox className='sm:w-[400px]' id={domain.id} />
     </>
   );
 };

@@ -9,13 +9,13 @@ type AuthContextProps = {
 const AuthContext = createContext<AuthContextProps | null>(null);
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [authId, setAuthId] = useState<string | null>(null);
+  const [authId, setAuthId] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
     const fetchUser = async () => {
       setLoading(true);
       const userId = await getAuthId();
-      setAuthId(userId);
+      setAuthId(userId ?? '');
       setLoading(false);
     };
     fetchUser();

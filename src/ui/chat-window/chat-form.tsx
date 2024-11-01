@@ -13,7 +13,7 @@ import { pusher } from '@/lib/pusher-client';
 import { Message } from '../conversations/types';
 import { sendLiveMessage, sendNotificationEmail } from '@/actions/chatbot.action';
 import { Separator } from '@/components/ui/separator';
-import { XIcon } from 'lucide-react';
+import { SendIcon, XIcon } from 'lucide-react';
 import Image from 'next/image';
 import { Conversation } from '@prisma/client';
 
@@ -177,19 +177,21 @@ function ChatForm({
   }
   return (
     <>
-      <div className='relative mb-4 flex flex-row items-center gap-2'>
-      <div className='flex h-[80px] w-[80px] items-center justify-center rounded-full bg-background'>
-        <Image
-          src={`https://ucarecdn.com/${botIcon}/-/preview/64x64`}
-          width={36}
-          height={36}
-          alt='chatbot avatar'
-        />
-      </div>
-        <p>{cbkBot.name}</p>
-        <div className={cn("size-[12px] bg-border rounded-full", {"bg-green-400": assistantOnline})}/>
+      <div className='relative flex flex-row items-center gap-2'>
+        <div className="flex gap-2 items-center">
+          <div className='flex gap-2 w-full p-4 items-center rounded-full bg-background'>
+            <Image
+              src={`https://ucarecdn.com/${botIcon}/-/preview/64x64`}
+              width={36}
+              height={36}
+              alt='chatbot avatar'
+            />
+            <p>{cbkBot.name}</p>
+          </div>
+          <div className={cn("size-[12px] bg-border rounded-full", {"bg-green-400": assistantOnline})}/>
+        </div>
         <XIcon
-          className='absolute right-[10px] top-[10px] size-6 cursor-pointer'
+          className='absolute right-[25px] top-[15px] size-6 cursor-pointer'
           onClick={() => setOpen(false)}
         />
       </div>
@@ -248,8 +250,8 @@ function ChatContent({
     }
   };
   return (
-    <form onSubmit={onSubmit} className='bg-background'>
-      <div className='scrollbar-hi chat-window h-[25rem] overflow-y-scroll bg-background'>
+    <form onSubmit={onSubmit} className='h-full grid grid-rows-12 bg-transparent'>
+      <div className='row-span-10 chat-window overflow-y-auto bg-background'>
         <ChatMessages 
           messages={messages}
           botName={botName}
@@ -258,11 +260,11 @@ function ChatContent({
         <div ref={messagesEndRef} />
       </div>
 
-      <div className='relative p-6'>
+      <div className='row-span-2 relative px-4 flex items-center rounded-lg'>
         <input
           value={message}
           className='flex h-12 w-full rounded-lg border border-border bg-background px-3 py-2 pr-12 text-sm text-text shadow ring-offset-white transition duration-150 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-text-secondary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50'
-          placeholder='Say something4...'
+          placeholder='Ask us anything...'
           onChange={(e) => {
             setMessage(e.target.value);
             setText(e.target.value);
@@ -271,9 +273,9 @@ function ChatContent({
         <Button
           type='submit'
           disabled={!text}
-          className='absolute right-8 top-1/2 h-8 w-8 -translate-y-1/2 transform hover:bg-surface'
+          className='bg-surface p-2 absolute right-8 top-1/2 h-8 w-8 -translate-y-1/2 transform hover:bg-surface cursor-pointer'
         >
-          <ArrowLeftEndOnRectangleIcon className='min-h-[0.75rem] min-w-[0.75rem]' />
+          <SendIcon className='size-[24px] min-w-[24px]' />
         </Button>
       </div>
     </form>

@@ -1,3 +1,4 @@
+import AppPageTitle from '@/components/app-page-title';
 import AppSectionContainer from '@/components/app-section-container';
 import AppSectionHeroContainer from '@/components/app-section-hero-container';
 import { Separator } from '@/components/ui/separator';
@@ -23,7 +24,9 @@ const SettingsPage = () => {
   return (
     <div className='w-full'>
       <AppSectionHeroContainer>
-        <h1 className='text-4xl font-bold'>Settings</h1>
+        <AppPageTitle
+          title="Settings"
+        />
       </AppSectionHeroContainer>
       <AppSectionContainer>
         <h2 className='text-secondary mb-4 mt-4 font-medium'>Quick Links</h2>

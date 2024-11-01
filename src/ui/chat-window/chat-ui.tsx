@@ -69,28 +69,26 @@ const ChatUI = ({ domain, cbkBot, className = '' }) => {
           )}
         </motion.button>
       </div>
-      <div className='z-51 fixed bottom-0 right-0 text-text'>
-        <motion.div
-          initial={{y: 1000}}
-          animate={open && !isLoading ? { y: 0 } : { y: 1000 }}
-          className='relative h-[600px] w-[400px] rounded-xl border border-zinc-200 bg-background shadow-md'
-        >
-          {token && cbkConversationId ? (
-            <ChatForm
-              setOpen={setOpen} 
-              cbkBot={cbkBot}
-              botIcon={domain.icon}
-              domainId={domain.id}
-              cbkConversationId={cbkConversationId}
-              conversation={conversation}
-              token={token}
-              welcomeMessage={domain.chatBot.welcomeMessage}
-            />
-          ) : (
-            <div>loading</div>
-          )}
-        </motion.div>
-      </div>
+      <motion.div
+        initial={{y: 2000}}
+        animate={open && !isLoading ? { y: 0 } : { y: 2000 }}
+        className='fixed bottom-0 right-0 w-screen h-full flex flex-col md:h-[600px] md:w-[400px] sm:rounded-xl bg-background shadow-md sm:border sm:border-border'
+      >
+        {token && cbkConversationId ? (
+          <ChatForm
+            setOpen={setOpen} 
+            cbkBot={cbkBot}
+            botIcon={domain.icon}
+            domainId={domain.id}
+            cbkConversationId={cbkConversationId}
+            conversation={conversation}
+            token={token}
+            welcomeMessage={domain.chatBot.welcomeMessage}
+          />
+        ) : (
+          <div>loading</div>
+        )}
+      </motion.div>
     </>
   );
 };

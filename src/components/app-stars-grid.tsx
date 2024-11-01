@@ -56,7 +56,7 @@ export default function StarGrid() {
       xmlns="http://www.w3.org/2000/svg"
       fill="blue"
       viewBox="0 0 935 425"
-      className="absolute -top-14 -z-0"
+      className="absolute -top-16 -z-0"
       id="star-grid"
       ref={containerRef}
       opacity={1}

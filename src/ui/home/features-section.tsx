@@ -30,10 +30,10 @@ export function FeaturesSection() {
   }, [isInView]);
 
   return (
-    <motion.div ref={containerRef} initial={{opacity: 0, y:100}}>
-      <div className="relative">
+    <div>
+      <motion.div className="relative" ref={containerRef} initial={{opacity: 0, y:100}}>
         <HomeSectionTitle title="Features" description="Introducing a new way of generating leads for your businesses"/>
-      </div>
+      </motion.div>
       <BentoGrid className="mt-16 grid max-w-4xl grid-rows-[auto_auto_auto] gap-8 md:grid-cols-2 lg:grid-cols-3 md:gap-10">
         {items.map((item, i) => (
           <div className="glass-container" key={`${item.title}-${i}`}>
@@ -48,7 +48,7 @@ export function FeaturesSection() {
           </div>
         ))}
       </BentoGrid>
-    </motion.div>
+    </div>
     // <BentoGrid className="max-w-4xl mx-auto md:auto-rows-[20rem]">
   );
 }
