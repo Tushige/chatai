@@ -70,17 +70,18 @@ const DomainCodeIntegration = ({ domain }) => {
           }
         \`;
     
-        iframe.src = \`http://localhost:3000/chatbot/\${domainId}\`;
+        iframe.src = "${process.env.NEXT_PUBLIC_CHATBOT_URL}/${domain.id}"
         iframe.className = "chat-frame";
     
         document.head.appendChild(style);
         document.body.appendChild(iframe);
     
         window.addEventListener("message", (e) => {
-          if (e.origin !== "http://localhost:3000") return;
+          if (e.origin !== "${process.env.NEXT_PUBLIC_ORIGIN}") return;
           let dimensions = JSON.parse(e.data);
           iframe.width = dimensions.width;
           iframe.height = dimensions.height;
+          iframe.contentWindow.postMessage("${domain.id}", "${process.env.NEXT_PUBLIC_ORIGIN}")
         });
     
         return () => {
