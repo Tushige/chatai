@@ -11,6 +11,7 @@ const AuthContext = createContext<AuthContextProps | null>(null);
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [authId, setAuthId] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
+
   useEffect(() => {
     const fetchUser = async () => {
       setLoading(true);

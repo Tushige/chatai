@@ -12,6 +12,7 @@ import React from 'react';
 const DomainSettingsPage = async ({ params }: {params: {id: string}}) => {
   const domainId = params.id;
   if (!domainId) {
+    console.log('no domain id found')
     redirect('/');
   }
   const domain = await getDomain(params.id);
