@@ -15,7 +15,7 @@ const DomainSettingsPage = async ({ params }: {params: {id: string}}) => {
     console.log('no domain id found')
     redirect('/');
   }
-  const domain = await getDomain(params.id);
+  const domain = await getDomain(domainId);
   return (
     <>
       <AppSectionHeroContainer>

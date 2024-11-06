@@ -25,7 +25,7 @@ async function getCBKChatbot(id: string) {
   try {
     const bot = await cbk.bot.fetch(id);
     if (!bot) {
-      throw new Error('Bot not found');
+      throw new Error(`Bot not found for bot id: ${id}`);
     }
     return bot;
   } catch (err) {

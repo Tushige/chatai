@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 const ChatWindow = async ({ domain, className = ''}) => {
   const cbkBot = await getCBKChatbot(domain.chatBot.chatBotKitId);
   if (!cbkBot) {
-    console.error('bot not found');
+    console.error(`bot not found for bot id ${domain.chatBot.chatBotKidId}`);
     redirect('/');
   }
   return <ChatUI cbkBot={cbkBot} domain={domain} className={cn(className)} />;

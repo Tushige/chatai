@@ -93,7 +93,7 @@ const MembershipPage = () => {
 
   const handlePaymentSuccess = async (price: Price) => {
     // payment succeded so no need to collect payment info
-    if (price.nickname === 'Premium') {
+    if (price.nickname === 'Premium' || price.nickname === 'Enterprise') {
       setConfettiActive(true);
     }
     // we update our db to reflect the new plan
@@ -181,7 +181,7 @@ const MembershipPage = () => {
         />
         <Sheet>
           <div className='mt-8 w-full'>
-            <ul className='z-[2] flex flex-col gap-4 lg:flex-row lg:gap-8'>
+            <ul className='z-[2] grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 xl:gap-8'>
               {billing.prices.map((d) => {
                 const features = JSON.parse(
                   d.metadata.features.replace(/'/g, '"')
@@ -197,12 +197,11 @@ const MembershipPage = () => {
                         premium
                         priceId={d.id}
                         name={d.nickname}
-                        unitAmount={d.unit_amount}
+                        unitAmount={d.unit_amount ?? 0}
                         features={features}
                         className='relative z-10'
                         onClick={() => checkout(d)}
                         currentPrice={billing.currentPrice}
-                        loading={loading}
                       />
                     </WithGlow>
                   );
@@ -222,7 +221,6 @@ const MembershipPage = () => {
                         className='relative z-10'
                         onClick={() => checkout(d)}
                         currentPrice={billing.currentPrice}
-                        loading={loading}
                       />
                     </WithGlow>
                   )
