@@ -163,12 +163,10 @@ function ChatForm({
     if (!message) return;
     try {
       await sendLiveMessage({text: message, conversationId: conversation.id, type: 'user'})
-      console.log('[chat-form] sent live message')
       // we only send messages to the bot if real rep is offline
       if (!assistantOnline) {
         sendMessageToBot();
       }
-      console.log('[chat-form] sent bot messaeg')
     } catch (err) {
       console.error('failed to send message with error');
       console.error(err);

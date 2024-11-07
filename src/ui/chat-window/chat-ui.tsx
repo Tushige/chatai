@@ -50,7 +50,7 @@ const ChatUI = ({ domain, cbkBot, className = '' }) => {
 
   return (
     <>
-      <div className={cn('fixed bottom-0 right-0 z-50', className)}>
+      <div className={cn('fixed bottom-10 right-10 z-50', className)}>
         <motion.button
           onClick={() => openChatWindow()}
           className='flex size-[60px] items-center justify-center rounded-full bg-accent p-4 text-text'

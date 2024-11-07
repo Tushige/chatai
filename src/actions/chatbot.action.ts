@@ -221,7 +221,6 @@ export const sendLiveMessage = async ({
 }) => {
   try { 
     await createChatMessage(conversationId, text, type, link ?? false);
-    console.log('[sendlivemessage] created chat message')
     await pusher.trigger(`channel-${conversationId}`, 'message', {
       text,
       conversationId,
@@ -229,7 +228,6 @@ export const sendLiveMessage = async ({
       link,
       createdAt: new Date()
     })
-    console.log('[sendlivemessage] pusher triggered')
   } catch (err: unknown) {
     if (err instanceof Error) {
       console.error(err.message); // Safe to access `message`
