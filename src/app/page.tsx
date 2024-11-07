@@ -12,7 +12,7 @@ import { AuthContext } from '@/context/use-auth-context';
 export default function Home() {
   const {authId} = useContext(AuthContext)
   return (
-    <div className='text-text grid items-center justify-items-center gap-16 font-[family-name:var(--font-dm-sans)] overflow-x-hidden px-8 pb-8 lg:px-4'>
+    <div className='bg-background text-text grid items-center justify-items-center gap-16 font-[family-name:var(--font-dm-sans)] overflow-x-hidden px-8 pb-8 lg:px-4'>
       <AppHeader />
       <main className="container flex flex-col items-start sm:items-center">
         <HeroSection/>
