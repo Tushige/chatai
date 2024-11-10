@@ -195,6 +195,7 @@ export const getBookingsByDate = async (domainId: string, date: string) => {
     return bookings;
   } catch (err: unknown) {
     if (err instanceof Error) {
+      console.log('getBookingsByDate - failed to fetch bookings')
       console.error(err.message); // Safe to access `message`
       throw new Error(err.message);
     } else {
