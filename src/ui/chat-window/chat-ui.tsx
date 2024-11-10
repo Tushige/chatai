@@ -72,7 +72,7 @@ const ChatUI = ({ domain, cbkBot, className = '' }) => {
       <motion.div
         initial={{y: 2000}}
         animate={open && !isLoading ? { y: 0 } : { y: 2000 }}
-        className='fixed bottom-0 right-0 w-screen h-full flex flex-col md:h-[600px] md:w-[400px] sm:rounded-xl bg-background shadow-md sm:border sm:border-border'
+        className='fixed bottom-0 right-0 w-screen h-full flex flex-col md:h-[600px] md:w-[400px] rounded-xl bg-background shadow-md border border-border'
       >
         {token && cbkConversationId ? (
           <ChatForm

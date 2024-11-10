@@ -190,6 +190,8 @@ export const getBookingsByDate = async (domainId: string, date: string) => {
         date: true,
       },
     });
+    console.log('***bookings are')
+    console.log(bookings)
     return bookings;
   } catch (err: unknown) {
     if (err instanceof Error) {

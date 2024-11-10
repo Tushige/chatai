@@ -130,7 +130,7 @@ function BookAppointmentDay({ domainId, times, time, setTime, loading }) {
           const val = timeFormat(booking.date, true);
           return val;
         });
-        setTakenTimes(takenTimes);
+        setTakenTimes(takenTimes || []);
         setReady(true);
       } catch (err) {
         console.error(err);

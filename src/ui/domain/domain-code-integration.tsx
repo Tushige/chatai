@@ -21,33 +21,48 @@ const DomainCodeIntegration = ({ domain }) => {
 
   const javascriptSnippet = `
     const iframe = document.createElement("iframe");
-    
-    const iframeStyles = (styleString) => {
-      const style = document.createElement('style');
-      style.textContent = styleString;
-      document.head.append(style);
-    }
-    
-    iframeStyles('
+    const style = document.createElement('style');
+
+    style.textContent = \`
+      .chat-frame {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        border: none;
+        width: 100%;
+        height: 100%;
+        z-index: 1000;
+      }
+      @media (min-width: 769px) {
         .chat-frame {
-            position: fixed;
-            bottom: 50px;
-            right: 50px;
-            border: none;
+          right: 50px;
+          bottom: 50px;
+          width: 400px;
+          height: 600px;
         }
-    ')
+      }
+    \`;
     
     iframe.src = "${process.env.NEXT_PUBLIC_CHATBOT_URL}/${domain.id}"
-    iframe.classList.add('chat-frame')
-    document.body.appendChild(iframe)
-    
-    window.addEventListener("message", (e) => {
-        if(e.origin !== "${process.env.NEXT_PUBLIC_ORIGIN}") return null
-        let dimensions = JSON.parse(e.data)
-        iframe.width = dimensions.width
-        iframe.height = dimensions.height
-        iframe.contentWindow.postMessage("${domain.id}", "${process.env.NEXT_PUBLIC_ORIGIN}")
-    })
+    iframe.className = "chat-frame";
+
+    document.head.appendChild(style);
+    document.body.appendChild(iframe);
+  
+    function messageListener(e) {
+      if (e.origin !== "${process.env.NEXT_PUBLIC_ORIGIN}") return;
+      let dimensions = JSON.parse(e.data);
+      iframe.width = dimensions.width;
+      iframe.height = dimensions.height;
+      iframe.contentWindow.postMessage("${domain.id}", "${process.env.NEXT_PUBLIC_ORIGIN}")
+    }
+    window.addEventListener("message", messageListener);
+    function cleanup() {
+      document.body.removeChild(iframe);
+      document.header.removeChild(style);
+      window.removeEventListener("message", messageListener);
+    }
+    window.addEventListener("beforeunload", cleanup);
   `;
   const reactSnippet = `
     import { useEffect } from 'react';
@@ -61,12 +76,20 @@ const DomainCodeIntegration = ({ domain }) => {
         style.textContent = \`
           .chat-frame {
             position: fixed;
-            bottom: 50px;
-            right: 50px;
+            right: 0;
+            bottom: 0;
             border: none;
-            width: 400px; /* Set a default width */
-            height: 600px; /* Set a default height */
-            z-index: 1000; /* Ensure it appears on top */
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+          }
+          @media (min-width: 769px) {
+            .chat-frame {
+              right: 50px;
+              bottom: 50px;
+              width: 400px;
+              height: 600px;
+            }
           }
         \`;
     
