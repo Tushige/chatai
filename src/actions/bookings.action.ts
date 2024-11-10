@@ -175,7 +175,6 @@ export const getBookingsByDomain = async (domainId: string) => {
 };
 
 export const getBookingsByDate = async (domainId: string, date: string) => {
-  console.log('[getBookingsByDate] called!')
   const dateObj = new Date(Date.parse(date));
   try {
     const bookings = await client.booking.findMany({
@@ -191,12 +190,9 @@ export const getBookingsByDate = async (domainId: string, date: string) => {
         date: true,
       },
     });
-    console.log('***bookings are')
-    console.log(bookings)
     return bookings;
   } catch (err: unknown) {
     if (err instanceof Error) {
-      console.log('getBookingsByDate - failed to fetch bookings')
       console.error(err.message); // Safe to access `message`
       throw new Error(err.message);
     } else {
