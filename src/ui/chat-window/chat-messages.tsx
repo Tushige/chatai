@@ -11,7 +11,7 @@ type Props = {
 
 const ChatMessages = ({ messages, botName, thinking }: Props) => {
   return (
-    <div>
+    <>
       {messages.map(({ id, type, text, link }) => {
         switch (type) {
           case 'user':
@@ -97,7 +97,7 @@ const ChatMessages = ({ messages, botName, thinking }: Props) => {
           <p className={`text-sm font-light dark:opacity-80`}>Thinking...</p>
         </div>
       ) : null}
-    </div>
+    </>
   );
 };
 

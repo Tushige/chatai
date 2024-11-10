@@ -249,7 +249,7 @@ function ChatContent({
     }
   };
   return (
-    <form onSubmit={onSubmit} className='h-full grid grid-rows-12 bg-transparent'>
+    <form onSubmit={onSubmit} className='h-full grid grid-rows-12 bg-transparent overflow-hidden'>
       <div className='row-span-10 chat-window overflow-y-auto bg-background'>
         <ChatMessages 
           messages={messages}
