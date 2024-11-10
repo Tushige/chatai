@@ -167,7 +167,7 @@ function MenuOptions() {
       {/* <Button className='flex-start flex w-full flex-row gap-2 rounded-md bg-background md:bg-background-secondary hover:bg-surface'> */}
         <Link
           href='/sign-out'
-          className='w-full flex flex-row flex-start gap-2 rounded-md p-4 px-6 bg-background-secondary md:bg-background-secondary hover:bg-surface text-medium text-text'
+          className='w-full flex flex-row justify-center gap-2 rounded-md p-4 px-6 bg-background-secondary md:bg-background-secondary hover:bg-surface text-medium text-text'
         >
           <ArrowLeftEndOnRectangleIcon className='w-6 text-text' />
           <span className="inline-block md:hidden lg:inline-block">Sign Out</span>

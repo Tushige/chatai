@@ -59,7 +59,7 @@ const ChatMessages = ({ messages, botName, thinking }: Props) => {
                 </div>
                 {
                   link ? (
-                    <div>
+                    <div className="text-sm font-light">
                       <p dangerouslySetInnerHTML={{__html: text}} />
                     </div>
                   ) : (
