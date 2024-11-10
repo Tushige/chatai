@@ -122,15 +122,18 @@ function BookAppointmentDay({ domainId, times, time, setTime, loading }) {
     async function getAvailableTimes() {
       try {
         const selectedDate = getValues('date');
+        console.log("attempting to fetch bookings")
         const existingBookings = await getBookingsByDate(
           domainId,
           selectedDate
-        );
+        ) || [];
+        console.log('bookings are ')
+        console.log(existingBookings)
         const takenTimes = existingBookings.map((booking: Booking) => {
           const val = timeFormat(booking.date, true);
           return val;
         });
-        setTakenTimes(takenTimes || []);
+        setTakenTimes(takenTimes);
         setReady(true);
       } catch (err) {
         console.error(err);

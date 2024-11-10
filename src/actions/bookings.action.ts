@@ -175,6 +175,7 @@ export const getBookingsByDomain = async (domainId: string) => {
 };
 
 export const getBookingsByDate = async (domainId: string, date: string) => {
+  console.log('[getBookingsByDate] called!')
   const dateObj = new Date(Date.parse(date));
   try {
     const bookings = await client.booking.findMany({
