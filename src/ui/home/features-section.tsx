@@ -10,7 +10,7 @@ import {
 import {BentoGrid, BentoGridItem} from '@/components/ui/bento-grid';
 import { animate, motion, useInView } from "framer-motion";
 import Image from "next/image";
-import { BotIcon, Pickaxe } from "lucide-react";
+import { BotIcon } from "lucide-react";
 import { HomeSectionTitle } from "./home-section-title";
 
 export function FeaturesSection() {

@@ -18,6 +18,7 @@ function createBackstory(questions: Partial<Questions>[], domainId: string, doma
   Do not write anything after the link including a period or a comma.
   If the customer is unhappy or demands to speak to a real person, tell them you will get a real person to speak to them and add the keyword (help) at the end of your message. Then, don't speak to them unless they ask you a question.
   Additionally, keep your responses under 3 sentences.`
+  return backstory;
 }
 async function getCBKChatbot(id: string) {
   try {
