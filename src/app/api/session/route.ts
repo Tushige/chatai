@@ -29,9 +29,9 @@ export async function GET(req) {
    */
   try {
     // TODO - uncomment when you want to resume normal operation
-    // const {id: cbk_conversation_id} = await cbk.conversation.create({botId: cbkbotId})
+    const {id: cbk_conversation_id} = await cbk.conversation.create({botId: cbkbotId})
     // TODO - delete later. we're reusing the same converation so we stay under plan limits.
-    const cbk_conversation_id = 'pzt4yvmlai4cwjt61rswhjnf';
+    // const cbk_conversation_id = 'pzt4yvmlai4cwjt61rswhjnf';
     const {token} = await cbk.conversation.session.create(cbk_conversation_id, {
       durationInSeconds: CHATBOT_TOKEN_DURATION
     })
