@@ -76,7 +76,7 @@ function ChatForm({
           let modifiedText = lastMessage.text;
           const _containsLink = containsLink(modifiedText);
           if (_containsLink) {
-            modifiedText = lastMessage.text.replace(urlPattern, '<a href="$&" class="text-text text-blue-600 underline underline-offset-1">link</a>');
+            modifiedText = lastMessage.text.replace(urlPattern, '<a href="$&" class="text-text text-blue-600 underline underline-offset-1">book your appointment</a>');
           }
           modifiedText = modifiedText.replace(BOT_DELIMETER, '').replace(BOT_HELP, '');
           // save the bot message in DB and forward it to the assistant
