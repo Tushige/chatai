@@ -31,8 +31,9 @@ const BotQuestionForm = ({ domainId, chatBotKitId }: Props) => {
       const updatedQuestions = await createBotQuestion(data.question, domainId);
       await updateChatbotBackstory(chatBotKitId, updatedQuestions, domainId);
       toast({
-        title: 'Success',
+        title: <span className='text-success'>⭐Success</span>,
         description: 'Added new question',
+        className: 'text-success',
       });
     } catch (err) {
       console.error(err);

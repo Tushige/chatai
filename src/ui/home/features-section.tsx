@@ -10,7 +10,7 @@ import {
 import {BentoGrid, BentoGridItem} from '@/components/ui/bento-grid';
 import { animate, motion, useInView } from "framer-motion";
 import Image from "next/image";
-import { BotIcon } from "lucide-react";
+import { BotIcon, Pickaxe } from "lucide-react";
 import { HomeSectionTitle } from "./home-section-title";
 
 export function FeaturesSection() {
@@ -57,9 +57,21 @@ const items = [
   {
     title: "Realtime chat support",
     description: (
-      <span className="text-sm text-text-secondary">
+      <div className="flex flex-col gap-2 justify-center">
+        <span className="text-sm text-text-secondary">
         Our bot will notify you when customers require assistance, allowing you to engage in real-time conversations and provide timely support.
-      </span>
+        </span>
+        <a href="https://youtu.be/bAmtsxzDKPY" className="flex flex-row items-center gap-2">
+          <Image
+            src="/images/icons8-youtube.svg"
+            width="48"
+            height="48"
+            alt="youtube icon"
+            className="relative bg-background"
+          />
+          <span>Watch DEMO</span>
+        </a>
+      </div>
     ),
     header: (
       <div className="relative flex flex-1 w-full h-full min-h-[6rem] rounded-xl">
@@ -78,9 +90,11 @@ const items = [
   {
     title: "Email Campaigns",
     description: (
-      <span className="text-sm text-text-secondary">
-        Efficiently manage your contacts and streamline your email campaigns from a centralized platform.
-      </span>
+      <div className="flex flex-col gap-2 justify-center">
+        <span className="text-sm text-text-secondary">
+          Efficiently manage your contacts and streamline your email campaigns from a centralized platform.
+        </span>
+      </div>
     ),
     header: (
       <div className="relative flex flex-1 w-full h-full min-h-[6rem] rounded-xl">
@@ -99,9 +113,11 @@ const items = [
   {
     title: "Chat History",
     description: (
-      <span className="text-sm text-text-secondary">
-        View all your conversations and monitor online presence.
-      </span>
+      <div className="flex flex-col gap-2 justify-center">
+        <span className="text-sm text-text-secondary">
+          View all your conversations and monitor online presence.
+        </span>
+      </div>
     ),
     header: (
       <div className="relative flex flex-1 w-full h-full min-h-[6rem] rounded-xl">
@@ -120,9 +136,21 @@ const items = [
   {
     title: "Appointments",
     description: (
+    <div className="flex flex-col gap-2 justify-center">
       <span className="text-sm text-text-secondary">
-        Schedule product demo appointments and easily access them through your dashboard
+      Schedule product demo appointments and easily access them through your dashboard
       </span>
+      <a href="https://www.youtube.com/watch?v=N9sLKH5Nlko" className="flex flex-row items-center gap-2">
+        <Image
+          src="/images/icons8-youtube.svg"
+          width="48"
+          height="48"
+          alt="youtube icon"
+          className="relative bg-background"
+        />
+        <span>Watch DEMO</span>
+      </a>
+    </div>
     ),
     header: (
       <div className="relative flex flex-1 w-full h-full min-h-[6rem] rounded-xl">
@@ -142,9 +170,11 @@ const items = [
   {
     title: "Chatbot",
     description: (
-      <span className="text-sm text-text-secondary">
+      <div className="flex flex-col gap-2 justify-center">
+        <span className="text-sm text-text-secondary">
         Configure your bot to engage customers with personalized questions and represent your business.
-      </span>
+        </span>
+      </div>
     ),
     header: (
       <div className="relative flex flex-1 w-full h-full min-h-[6rem] rounded-xl">

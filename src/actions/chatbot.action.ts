@@ -15,12 +15,9 @@ function createBackstory(questions: Partial<Questions>[], domainId: string, doma
   You will be provided a list of questions that you must ask the customer. Progress the conversation using those questions. Whenever you ask a question from the provided list, you must add a keyword at the end of the question. This keyword is [*]. 
   The list of questions are as follows: ${questions.map(q => q.question).join(', ')}. 
   If the customer wishes to book a product demo, then provide the following link: ${bookingUrl}
-  Do not add period or comma at the end of the link.
-  If the customer is unhappy or demands to speak to a real person, tell them you will get a real person to speak to them and add the keyword (help) at the end of your message.
+  Do not write anything after the link including a period or a comma.
+  If the customer is unhappy or demands to speak to a real person, tell them you will get a real person to speak to them and add the keyword (help) at the end of your message. Then, don't speak to them unless they ask you a question.
   Additionally, keep your responses under 3 sentences.`
-  return backstory;
-  // use this backstory for when you want to be frugal with your tokens
-  return `Limit your responses to one sentence. Immediately ask the following questions from customers as soon as they send you a message. Add [Q] at the end of each question. The questions are ${questions.map((q) => q.question).join(', ')}`;
 }
 async function getCBKChatbot(id: string) {
   try {

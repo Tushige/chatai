@@ -69,7 +69,7 @@ function ChatForm({
         // we extract bot messages and save them to our conversation record in the db
         if (lastMessage && lastMessage.type === 'bot') {
           const found = lastMessage.text.indexOf(BOT_HELP);
-          if (found) {
+          if (found > -1) {
             // if customer requested real rep send an email notification
             sendNotificationEmail(domainId);
           }
