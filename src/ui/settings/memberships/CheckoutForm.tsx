@@ -17,7 +17,7 @@ const CheckoutForm = () => {
     const result = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: 'process.env.NEXT_PUBLIC_CHANGE_PLAN_CALLBACK_URL' + '?success=true'
+        return_url: process.env.NEXT_PUBLIC_CHANGE_PLAN_CALLBACK_URL + '?success=true'
       },
     });
     if (result.error) {
